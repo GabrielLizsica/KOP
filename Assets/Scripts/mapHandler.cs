@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -16,6 +17,7 @@ public class mapHandler : MonoBehaviour
     private Vector2Int baseTilePos;
     private Vector2Int enemyTilePos;
     private mapQuarters baseQuarter;
+    private mapEdges enemyEdge;
     
     private enum mapQuarters
     {
@@ -24,6 +26,15 @@ public class mapHandler : MonoBehaviour
         TOP_LEFT,
         BOTTOM_LEFT,
         BOTTOM_RIGHT
+    }
+    
+    private enum mapEdges
+    {
+        DEFAULT,
+        RIGHT,
+        TOP,
+        LEFT,
+        BOTTOM
     }
     
     public void createMap()
@@ -84,23 +95,65 @@ public class mapHandler : MonoBehaviour
     
     private Vector2Int selectEnemyTile()
     {
-        Vector2Int _enemyTilePos;
+        Vector2Int _enemyTilePos = new Vector2Int();
+        int selectSide = UnityEngine.Random.Range(0, 2);
         
-        if (baseQuarter == mapQuarters.TOP_RIGHT)
+        switch (baseQuarter)
         {
-            _enemyTilePos = new Vector2Int((int)UnityEngine.Random.Range(0, mapSize.x / 2), (int)UnityEngine.Random.Range(0, mapSize.y / 2));
-        }
-        else if (baseQuarter == mapQuarters.TOP_LEFT)
-        {
-            _enemyTilePos = new Vector2Int((int)UnityEngine.Random.Range(mapSize.x / 2, mapSize.x), (int)UnityEngine.Random.Range(0, mapSize.y / 2));
-        }
-        else if (baseQuarter == mapQuarters.BOTTOM_LEFT)
-        {
-            _enemyTilePos = new Vector2Int((int)UnityEngine.Random.Range(mapSize.x / 2, mapSize.x), (int)UnityEngine.Random.Range(mapSize.y / 2, mapSize.y));
-        }
-        else
-        {
-            _enemyTilePos = new Vector2Int((int)UnityEngine.Random.Range(0, mapSize.x / 2), (int)UnityEngine.Random.Range(mapSize.y / 2, mapSize.y));
+            case mapQuarters.TOP_RIGHT:
+                if (selectSide == 1)
+                {
+                    enemyEdge = mapEdges.BOTTOM;
+                    _enemyTilePos = new Vector2Int(UnityEngine.Random.Range(0, mapSize.x / 2), 0);
+                }
+                else
+                {
+                    enemyEdge = mapEdges.LEFT;
+                    _enemyTilePos = new Vector2Int(0, UnityEngine.Random.Range(0, mapSize.y / 2));
+                }
+                
+                break;
+            case mapQuarters.TOP_LEFT:
+                if (selectSide == 1)
+                {
+                    enemyEdge = mapEdges.BOTTOM;
+                    _enemyTilePos = new Vector2Int(UnityEngine.Random.Range(mapSize.x / 2, mapSize.x), 0);
+                }
+                else
+                {
+                    enemyEdge = mapEdges.RIGHT;
+                    _enemyTilePos = new Vector2Int(mapSize.x - 1, UnityEngine.Random.Range(0, mapSize.y / 2));
+                }
+                
+                break;
+            case mapQuarters.BOTTOM_LEFT:
+                if (selectSide == 1)
+                {
+                    enemyEdge = mapEdges.TOP;
+                    _enemyTilePos = new Vector2Int(UnityEngine.Random.Range(mapSize.x / 2, mapSize.x), mapSize.y - 1);
+                }
+                else
+                {
+                    enemyEdge = mapEdges.RIGHT;
+                    _enemyTilePos = new Vector2Int(mapSize.x - 1, UnityEngine.Random.Range(mapSize.y / 2, mapSize.y));
+                }
+                
+                break;
+            case mapQuarters.BOTTOM_RIGHT:
+                if (selectSide == 1)
+                {
+                    enemyEdge = mapEdges.TOP;
+                    _enemyTilePos = new Vector2Int(UnityEngine.Random.Range(0, mapSize.x / 2), mapSize.y - 1);
+                }
+                else
+                {
+                    enemyEdge = mapEdges.LEFT;
+                    _enemyTilePos = new Vector2Int(0, UnityEngine.Random.Range(mapSize.y / 2, mapSize.y));
+                }
+                
+                break;
+            default:
+                break;
         }
 
         return _enemyTilePos;
