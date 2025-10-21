@@ -332,10 +332,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSize: {x: 18, y: 10}
+  waypointCount: 5
   tilemapGround: {fileID: 2138761579}
   tileEmpty: {fileID: 11400000, guid: a461a4511bee94845b6561dc8276a118, type: 2}
   tileBase: {fileID: 11400000, guid: 2f16c27ada76ced41988a0d339efe821, type: 2}
   tileEnemy: {fileID: 11400000, guid: c79e02654ddb00349a3adb900681ccd4, type: 2}
+  tileWaypoint: {fileID: 11400000, guid: 403f3711e3a553a4ab0d7c59dbc4bb17, type: 2}
 --- !u!114 &971234574
 MonoBehaviour:
   m_ObjectHideFlags: 0
