@@ -331,8 +331,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9bebc723d576647a64e27c39f11331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: {x: 18, y: 10}
-  waypointCount: 5
+  mapSize: {x: 36, y: 20}
+  waypointCount: 4
   tilemapGround: {fileID: 2138761579}
   tileEmpty: {fileID: 11400000, guid: a461a4511bee94845b6561dc8276a118, type: 2}
   tileBase: {fileID: 11400000, guid: 2f16c27ada76ced41988a0d339efe821, type: 2}

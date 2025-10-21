@@ -205,9 +205,4 @@ public class mapHandler : MonoBehaviour
 
         return nextWaypoint;
     }
-    
-    private void orderWaypoints()
-    {
-        
-    }
 }
