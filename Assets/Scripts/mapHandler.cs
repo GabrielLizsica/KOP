@@ -69,6 +69,8 @@ public class mapHandler : MonoBehaviour
         {
             tilemapGround.SetTile(new Vector3Int(waypoints[i].x, waypoints[i].y, 0), tileWaypoint);
         }
+
+        sortWaypoints();
     }
     
     private mapQuarters getMapQuarter(Vector2Int tileChoords)
@@ -204,5 +206,47 @@ public class mapHandler : MonoBehaviour
         } while (!validPoint);
 
         return nextWaypoint;
+    }
+    
+    private void sortWaypoints()
+    {
+        float lastDistance = Vector2Int.Distance(baseTilePos, enemyTilePos);
+        int closestIndex = new int();
+        Vector2Int temp = new Vector2Int();
+        
+        for (int i = 0; i < waypointCount; i++)
+        {
+            if (Vector2Int.Distance(enemyTilePos, waypoints[i]) < lastDistance)
+            {
+                temp = waypoints[0];
+                waypoints[0] = waypoints[i];
+                waypoints[i] = temp;
+
+                lastDistance = Vector2Int.Distance(waypoints[0], enemyTilePos);
+            }
+        }
+        
+        for (int i = 0; i < waypointCount - 1; i++)
+        {
+            lastDistance = Vector2Int.Distance(baseTilePos, enemyTilePos);
+            
+            for (int j = i + 1; j < waypointCount; j++)
+            {
+                if (Vector2Int.Distance(waypoints[i], waypoints[j]) < lastDistance)
+                {
+                    closestIndex = j;
+                    lastDistance = Vector2Int.Distance(waypoints[i], waypoints[j]);
+                }
+            }
+
+            temp = waypoints[i + 1];
+            waypoints[i + 1] = waypoints[closestIndex];
+            waypoints[closestIndex] = temp;
+        }
+        
+        for (int i = 0; i < waypointCount; i++)
+        {
+            Debug.Log(i + ". waypoint: " + waypoints[i].x + ", " + waypoints[i].y);
+        }
     }
 }
