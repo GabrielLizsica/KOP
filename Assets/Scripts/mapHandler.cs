@@ -263,6 +263,6 @@ public class mapHandler : MonoBehaviour
             freeNeighbors++;
         }
 
-        return 0;
+        return freeNeighbors;
     }
 }
