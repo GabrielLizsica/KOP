@@ -213,19 +213,22 @@ public class mapHandler : MonoBehaviour
             {
                 Debug.Log("Tile already occupied");
                 
-                for (int i = _path.Count - 1; i >= 0; i--)
+                if (freeNeighborCount(_path, _path.Count - 1) == 0)
                 {
                     Debug.Log("Looking for last valid tile");
                     
-                    if (freeNeighborCount(_path, i) <= 2)
+                    for (int i = _path.Count - 1; i >= 0; i--)
                     {
-                        _path.RemoveAt(i);
-                        Debug.Log("Deleted tile at: " + i);
-                    }
-                    else if (freeNeighborCount(_path, i) > 2)
-                    {
-                        currentTile = _path[i];
-                        break;
+                        if (freeNeighborCount(_path, i) <= 2)
+                        {
+                            _path.RemoveAt(i);
+                            Debug.Log("Deleted tile at: " + i);
+                        }
+                        else if (freeNeighborCount(_path, i) > 2)
+                        {
+                            currentTile = _path[i];
+                            break;
+                        }
                     }
                 }
             }
@@ -260,6 +263,6 @@ public class mapHandler : MonoBehaviour
             freeNeighbors++;
         }
 
-        return freeNeighbors;
+        return 0;
     }
 }
