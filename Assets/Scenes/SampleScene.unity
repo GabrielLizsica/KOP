@@ -338,6 +338,10 @@ MonoBehaviour:
   tileBase: {fileID: 11400000, guid: 2f16c27ada76ced41988a0d339efe821, type: 2}
   tileEnemy: {fileID: 11400000, guid: c79e02654ddb00349a3adb900681ccd4, type: 2}
   tileWaypoint: {fileID: 11400000, guid: 403f3711e3a553a4ab0d7c59dbc4bb17, type: 2}
+  pathStartPos: {x: 0, y: 0}
+  pathEndPos: {x: 0, y: 0}
+  windingChance: 0.5
+  path: []
 --- !u!114 &971234574
 MonoBehaviour:
   m_ObjectHideFlags: 0
