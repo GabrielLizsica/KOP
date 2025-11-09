@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class mapHandler : MonoBehaviour
 {
+    [Header("Map settings")]
     [SerializeField] private Vector2Int mapSize;
     [SerializeField] private int waypointCount;
     [SerializeField] private Tilemap tilemapGround;
@@ -14,7 +15,11 @@ public class mapHandler : MonoBehaviour
     [SerializeField] private Tile tileBase;
     [SerializeField] private Tile tileEnemy;
     [SerializeField] private Tile tileWaypoint;
-    
+
+    [Header("Path Settings")]
+    [SerializeField] private Vector2Int startPos;
+    [SerializeField] private Vector2Int endPos;
+    [SerializeField][Range(0, 1)] private float windingChance; 
     
     public Vector2Int MapSize
     {
@@ -62,15 +67,6 @@ public class mapHandler : MonoBehaviour
         tilemapGround.SetTile(new Vector3Int(baseTilePos.x, baseTilePos.y, 0), tileBase);
         tilemapGround.SetTile(new Vector3Int(enemyTilePos.x, enemyTilePos.y, 0), tileEnemy);
         Debug.Log("Base quarter: " + baseQuarter);
-
-        createPath();
-        
-        for (int i = 0; i < waypointCount; i++)
-        {
-            tilemapGround.SetTile(new Vector3Int(waypoints[i].x, waypoints[i].y, 0), tileWaypoint);
-        }
-
-        sortWaypoints();
     }
     
     private mapQuarters getMapQuarter(Vector2Int tileChoords)
@@ -166,87 +162,6 @@ public class mapHandler : MonoBehaviour
                 break;
             default:
                 break;
-        }
-    }
-    
-    private void createPath()
-    {
-        float mainDistance = Vector2Int.Distance(baseTilePos, enemyTilePos);
-        float lastDistance = mainDistance;
-
-        for (int i = 0; i < waypointCount; i++)
-        {
-            waypoints.Add(createWaypoint(mainDistance, ref lastDistance));
-            Debug.Log("Next waypoint: " + waypoints[i].x + ", " + waypoints[i].y);
-        }
-    }
-    
-    private Vector2Int createWaypoint(float mainDistance, ref float lastDistance)
-    {
-        Vector2Int nextWaypoint = new Vector2Int();
-        float baseDistance, enemyDistance;
-        bool validPoint;
-
-        do
-        {
-            nextWaypoint = new Vector2Int(UnityEngine.Random.Range(0, mapSize.x), UnityEngine.Random.Range(0, mapSize.y));
-
-            baseDistance = Vector2Int.Distance(baseTilePos, nextWaypoint);
-            enemyDistance = Vector2Int.Distance(enemyTilePos, nextWaypoint);
-            
-            if (baseDistance < mainDistance && enemyDistance < mainDistance)
-            {
-                lastDistance = Vector2Int.Distance(baseTilePos, nextWaypoint);
-                validPoint = true;
-            }
-            else
-            {
-                validPoint = false;
-            }
-        } while (!validPoint);
-
-        return nextWaypoint;
-    }
-    
-    private void sortWaypoints()
-    {
-        float lastDistance = Vector2Int.Distance(baseTilePos, enemyTilePos);
-        int closestIndex = new int();
-        Vector2Int temp = new Vector2Int();
-        
-        for (int i = 0; i < waypointCount; i++)
-        {
-            if (Vector2Int.Distance(enemyTilePos, waypoints[i]) < lastDistance)
-            {
-                temp = waypoints[0];
-                waypoints[0] = waypoints[i];
-                waypoints[i] = temp;
-
-                lastDistance = Vector2Int.Distance(waypoints[0], enemyTilePos);
-            }
-        }
-        
-        for (int i = 0; i < waypointCount - 1; i++)
-        {
-            lastDistance = Vector2Int.Distance(baseTilePos, enemyTilePos);
-            
-            for (int j = i + 1; j < waypointCount; j++)
-            {
-                if (Vector2Int.Distance(waypoints[i], waypoints[j]) < lastDistance)
-                {
-                    closestIndex = j;
-                    lastDistance = Vector2Int.Distance(waypoints[i], waypoints[j]);
-                }
-            }
-
-            temp = waypoints[i + 1];
-            waypoints[i + 1] = waypoints[closestIndex];
-            waypoints[closestIndex] = temp;
-        }
-        
-        for (int i = 0; i < waypointCount; i++)
-        {
-            Debug.Log(i + ". waypoint: " + waypoints[i].x + ", " + waypoints[i].y);
         }
     }
 }
