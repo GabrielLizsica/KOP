@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Transactions;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -183,12 +184,12 @@ public class mapHandler : MonoBehaviour
         pathStartPos = baseTilePos;
         pathEndPos = enemyTilePos;
 
-        List<Vector2Int> _path = new List<Vector2Int>();
-        _path.Add(Vector2Int.zero);
         Vector2Int currentTile = pathStartPos;
-
+        Vector2Int nextTile = new Vector2Int();
+        Vector2Int preferredTile = new Vector2Int();
         Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
-
+        List<Vector2Int> _path = new List<Vector2Int>();
+        _path.Add(currentTile);
         int safety = 0;
         
         while (currentTile != pathEndPos && safety < 200)
@@ -206,61 +207,96 @@ public class mapHandler : MonoBehaviour
                 preferredDir = (pathEndPos.y > currentTile.y) ? Vector2Int.up : Vector2Int.down;
             }
 
-            Vector2Int moveDir = (Random.value < windingChance) ? dirs[Random.Range(0, dirs.Length)] : preferredDir;
-            Vector2Int nextTile = currentTile + moveDir;
+            List<Vector2Int> freeNeighbors = getFreeNeighbors(currentTile, _path);
+            preferredTile = currentTile + preferredDir;
 
-            if (_path.Contains(nextTile))
+            if (freeNeighbors.Count > 1)
             {
-                Debug.Log("Tile already occupied");
-                
-                if (freeNeighborCount(_path, _path.Count - 1) == 0)
-                {
-                    Debug.Log("Looking for last valid tile");
-                    
-                    for (int i = _path.Count - 1; i >= 0; i--)
-                    {
-                        if (freeNeighborCount(_path, i) <= 2)
-                        {
-                            _path.RemoveAt(i);
-                            Debug.Log("Deleted tile at: " + i);
-                        }
-                        else if (freeNeighborCount(_path, i) > 2)
-                        {
-                            currentTile = _path[i];
-                            break;
-                        }
-                    }
-                }
+                Debug.Log("More than 1 neighbor (" + freeNeighbors.Count + ") of tile: " + currentTile.x + ", " + currentTile.y);
+                nextTile = (Random.value < windingChance || !freeNeighbors.Contains(preferredTile)) ? freeNeighbors[Random.Range(0, freeNeighbors.Count)] : preferredTile;
             }
-            else
+            else if (freeNeighbors.Count == 1)
             {
-                _path.Add(nextTile);
-                currentTile = nextTile;
+                Debug.Log("Exactly 1 neighbor of tile: " + currentTile.x + ", " + currentTile.y);
+                nextTile = freeNeighbors[0];
             }
+            else if (freeNeighbors.Count == 0)
+            {
+                Debug.Log("No neighbor of tile: " + currentTile.x + ", " + currentTile.y);
+                Debug.Log("Starting bactracking:");
+                freeNeighbors = backtrackPath(ref _path, ref currentTile);
+                nextTile = freeNeighbors[Random.Range(0, freeNeighbors.Count)];
+            }
+
+            _path.Add(nextTile);
+            currentTile = nextTile;
         }
 
+        Debug.LogWarning("Finished generation");
         return _path;
     }
     
-    private int freeNeighborCount(List<Vector2Int> tileList, int tileIndex)
+    private List<Vector2Int> getFreeNeighbors(Vector2Int tile, List<Vector2Int> list)
     {
-        int freeNeighbors = 0;
+        List<Vector2Int> freeNeighbors = new List<Vector2Int>();
+        Vector2Int checkNeighbor;
+        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
         
-        if (!path.Contains(tileList[tileIndex] + Vector2Int.up))
+        foreach (Vector2Int dir in directions)
         {
-            freeNeighbors++;
+            checkNeighbor = tile + dir;
+            
+            if (!list.Contains(checkNeighbor))
+            {
+                freeNeighbors.Add(checkNeighbor);
+            }
         }
-        if (!path.Contains(tileList[tileIndex] + Vector2Int.down))
+
+        return freeNeighbors;
+    }
+
+    private bool checkOutOfBounds(Vector2Int tile)
+    {
+        if (tile.x > mapSize.x - 1 || tile.y > mapSize.y - 1 || tile.x < 0 || tile.y < 0)
         {
-            freeNeighbors++;
+            return true;
         }
-        if (!path.Contains(tileList[tileIndex] + Vector2Int.right))
+        else
         {
-            freeNeighbors++;
+            return false;
         }
-        if (!path.Contains(tileList[tileIndex] + Vector2Int.left))
+    }
+    
+    private List<Vector2Int> backtrackPath(ref List<Vector2Int> list, ref Vector2Int currentTile)
+    {
+        List<Vector2Int> freeNeighbors = new List<Vector2Int>();
+        Vector2Int badTile = new Vector2Int();
+    
+        for (int i = list.Count - 1; i >= 0; i--)
         {
-            freeNeighbors++;
+            freeNeighbors = getFreeNeighbors(list[i], list);
+            Debug.Log("Free neighbors of tile: " + list[i].x + ", " + list[i].y + " --> " + freeNeighbors.Count);
+            
+            if (freeNeighbors.Count < 2)
+            {
+                badTile = list[i];
+                Debug.Log("removed bad tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " )");
+                list.RemoveAt(i);
+            }
+            else
+            {
+                Debug.Log("Found good tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " ) - Breaking backtrack");
+                currentTile = list[i];
+                break;
+            }
+        }
+        
+        for (int i = 0; i < freeNeighbors.Count; i++)
+        {
+            if (freeNeighbors.Contains(badTile))
+            {
+                freeNeighbors.Remove(badTile);
+            }
         }
 
         return freeNeighbors;
