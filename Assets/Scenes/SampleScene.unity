@@ -340,7 +340,7 @@ MonoBehaviour:
   tileWaypoint: {fileID: 11400000, guid: 403f3711e3a553a4ab0d7c59dbc4bb17, type: 2}
   pathStartPos: {x: 0, y: 0}
   pathEndPos: {x: 0, y: 0}
-  windingChance: 0.4
+  windingChance: 0.35
   path: []
 --- !u!114 &971234574
 MonoBehaviour:
