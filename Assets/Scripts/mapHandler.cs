@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Transactions;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -33,8 +34,7 @@ public class mapHandler : MonoBehaviour
     private Vector2Int enemyTilePos;
     private mapQuarters baseQuarter;
     private mapEdges enemyEdge;
-    private List<mapQuarters> occupiedQuarters;
-    
+    [SerializeField] private List<mapQuarters> occupiedQuarters = new List<mapQuarters>();
     
     private enum mapQuarters
     {
@@ -175,7 +175,15 @@ public class mapHandler : MonoBehaviour
     
     private void generatePath()
     {
-        path = createPath();
+        List<Vector2Int> waypoints = createPathWaypoints();
+        
+        for (int i = 0; i < waypoints.Count; i++)
+            Debug.LogWarning("Waypoint " + i + ": " + waypoints[i]);
+        
+        for (int i = 1; i < waypoints.Count; i++)
+        {
+            createPath(waypoints[i - 1], waypoints[i]);
+        }
         
         foreach (var tile in path)
         {
@@ -183,18 +191,12 @@ public class mapHandler : MonoBehaviour
         }
     }
     
-    private List<Vector2Int> createPath()
+    private void createPath(Vector2Int pathStartPos, Vector2Int pathEndPos)
     {
-        pathStartPos = baseTilePos;
-        pathEndPos = enemyTilePos;
-
         Vector2Int currentTile = pathStartPos;
-        Vector2Int nextTile = new Vector2Int();
-        Vector2Int preferredTile = new Vector2Int();
-        Vector2Int wrongTile = new Vector2Int();
-        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
-        List<Vector2Int> _path = new List<Vector2Int>();
-        _path.Add(currentTile);
+        Vector2Int nextTile  = new Vector2Int();
+        Vector2Int preferredTile  = new Vector2Int();
+        path.Add(currentTile);
         int safety = 0;
         
         while (currentTile != pathEndPos && safety < 200)
@@ -214,13 +216,8 @@ public class mapHandler : MonoBehaviour
             }
 
             wrongDir = preferredDir * -1;
-            List<Vector2Int> freeNeighbors = getFreePathNeighbors(currentTile, _path, wrongDir);
+            List<Vector2Int> freeNeighbors = getFreePathNeighbors(currentTile,  path, wrongDir);
             preferredTile = currentTile + preferredDir;
-
-            if (freeNeighbors.Contains(wrongTile))
-            {
-                freeNeighbors.Remove(wrongTile);
-            }
 
             if (freeNeighbors.Count > 1)
             {
@@ -236,34 +233,77 @@ public class mapHandler : MonoBehaviour
             {
                 Debug.Log("No neighbor of tile: " + currentTile.x + ", " + currentTile.y);
                 Debug.Log("Starting bactracking:");
-                freeNeighbors = backtrackPath(ref _path, ref currentTile);
+                freeNeighbors = backtrackPath(ref   path, ref currentTile);
                 nextTile = freeNeighbors[Random.Range(0, freeNeighbors.Count)];
             }
 
-            _path.Add(nextTile);
+            path.Add(nextTile);
             currentTile = nextTile;
         }
 
         Debug.LogWarning("Finished generation");
-        return _path;
     }
 
-    private List<Vector2Int> createWaypoints()
+    private List<Vector2Int> createPathWaypoints()
     {
+        List<Vector2Int> waypoints = new List<Vector2Int>();
+        waypoints.Add(baseTilePos);
         
+        if (!occupiedQuarters.Contains(mapQuarters.TOP_RIGHT))
+        {
+            waypoints.Add(placePathWaypoint(mapQuarters.TOP_RIGHT));
+        }
+        if (!occupiedQuarters.Contains(mapQuarters.TOP_LEFT))
+        {
+            waypoints.Add(placePathWaypoint(mapQuarters.TOP_LEFT));
+        }
+        if (!occupiedQuarters.Contains(mapQuarters.BOTTOM_LEFT))
+        {
+            waypoints.Add(placePathWaypoint(mapQuarters.BOTTOM_LEFT));
+        }
+        if (!occupiedQuarters.Contains(mapQuarters.BOTTOM_RIGHT))
+        {
+            waypoints.Add(placePathWaypoint(mapQuarters.BOTTOM_RIGHT));
+        }
+
+        waypoints.Add(enemyTilePos);
+        return waypoints;
+    }
+    
+    private Vector2Int placePathWaypoint(mapQuarters quarter)
+    {
+        Vector2Int waypoint = new Vector2Int();
+        
+        if (quarter == mapQuarters.TOP_RIGHT)
+        {
+            waypoint = new Vector2Int(Random.Range(mapSize.x / 2, mapSize.x), Random.Range(mapSize.y / 2, mapSize.y));
+        }
+        else if (quarter == mapQuarters.TOP_LEFT)
+        {
+            waypoint = new Vector2Int(Random.Range(0, mapSize.x / 2), Random.Range(mapSize.y / 2, mapSize.y));
+        }
+        else if (quarter == mapQuarters.BOTTOM_LEFT)
+        {
+            waypoint = new Vector2Int(Random.Range(0, mapSize.x / 2), Random.Range(0, mapSize.y / 2));
+        }
+        else if (quarter == mapQuarters.BOTTOM_RIGHT)
+        {
+            waypoint = new Vector2Int(Random.Range(mapSize.x / 2, mapSize.x), Random.Range(0, mapSize.y / 2));
+        }
+
+        return waypoint;
     }
     
     private List<Vector2Int> getFreePathNeighbors(Vector2Int tile, List<Vector2Int> list, Vector2Int wrongDir)
     {
         List<Vector2Int> freeNeighbors = new List<Vector2Int>();
         Vector2Int checkNeighbor;
-        Vector2Int wrongTile;
+        Vector2Int wrongTile = tile + wrongDir;
         Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
         
         foreach (Vector2Int dir in directions)
         {
             checkNeighbor = tile + dir;
-            wrongTile = tile + wrongDir;
             
             if (!list.Contains(checkNeighbor) && checkNeighbor != wrongTile)
             {
@@ -320,6 +360,4 @@ public class mapHandler : MonoBehaviour
 
         return freeNeighbors;
     }
-
-
 }
