@@ -23,7 +23,6 @@ public class mapHandler : MonoBehaviour
     [Header("Path Settings")]
     [SerializeField] private Vector2Int pathStartPos;
     [SerializeField] private Vector2Int pathEndPos;
-    [SerializeField][Range(0, 1)] private float windingChance; 
     [SerializeField] private List<Vector2Int> path;
     
     public Vector2Int MapSize
@@ -177,13 +176,15 @@ public class mapHandler : MonoBehaviour
     {
         List<Vector2Int> waypoints = createPathWaypoints();
         
-        for (int i = 0; i < waypoints.Count; i++)
-            Debug.LogWarning("Waypoint " + i + ": " + waypoints[i]);
-        
-        for (int i = 1; i < waypoints.Count; i++)
+        Debug.LogWarning("Waypoints count: " + waypoints.Count);
+        for (int i = 0; i < waypoints.Count - 1; i++)
         {
-            createPath(waypoints[i - 1], waypoints[i]);
+            Debug.LogWarning("Waypoint " + i + ": " + waypoints[i]);
+            createPath(waypoints[i], waypoints[i + 1]);
         }
+            
+        Debug.LogWarning("Waypoints count: " + waypoints.Count);
+        
         
         foreach (var tile in path)
         {
@@ -195,34 +196,40 @@ public class mapHandler : MonoBehaviour
     {
         Vector2Int currentTile = pathStartPos;
         Vector2Int nextTile  = new Vector2Int();
-        Vector2Int preferredTile  = new Vector2Int();
         path.Add(currentTile);
         int safety = 0;
         
-        while (currentTile != pathEndPos && safety < 200)
+        while (currentTile != pathEndPos && safety < 2000)
         {
             safety++;
             
-            Vector2Int preferredDir = Vector2Int.zero;
+            Vector2Int[] preferredDirs = new Vector2Int[2];
             Vector2Int wrongDir = Vector2Int.zero;
-            
-            if (Mathf.Abs(pathEndPos.x - currentTile.x) > Mathf.Abs(pathEndPos.y - currentTile.y))
+
+            if (pathEndPos.x != currentTile.x)
             {
-                preferredDir = (pathEndPos.x > currentTile.x) ? Vector2Int.right : Vector2Int.left;
+                preferredDirs[0] = (pathEndPos.x > currentTile.x) ? Vector2Int.right : Vector2Int.left;
             }
             else
             {
-                preferredDir = (pathEndPos.y > currentTile.y) ? Vector2Int.up : Vector2Int.down;
+                preferredDirs[0] = Vector2Int.zero;
             }
-
-            wrongDir = preferredDir * -1;
-            List<Vector2Int> freeNeighbors = getFreePathNeighbors(currentTile,  path, wrongDir);
-            preferredTile = currentTile + preferredDir;
-
-            if (freeNeighbors.Count > 1)
+            
+            if (pathEndPos.y != currentTile.y)
             {
-                Debug.Log("More than 1 neighbor (" + freeNeighbors.Count + ") of tile: " + currentTile.x + ", " + currentTile.y);
-                nextTile = (Random.value < windingChance || !freeNeighbors.Contains(preferredTile)) ? freeNeighbors[Random.Range(0, freeNeighbors.Count)] : preferredTile;
+                preferredDirs[1] = (pathEndPos.y > currentTile.y) ? Vector2Int.up : Vector2Int.down;
+            }
+            else
+            {
+                preferredDirs[1] = Vector2Int.zero;
+            }
+            
+            List<Vector2Int> freeNeighbors = checkFreeDir(currentTile, preferredDirs);
+
+            if (freeNeighbors.Count == 2)
+            {
+                Debug.Log("Exactly 2 neighbors of tile: " + currentTile.x + ", " + currentTile.y);
+                nextTile = freeNeighbors[Random.Range(0, 2)];
             }
             else if (freeNeighbors.Count == 1)
             {
@@ -231,10 +238,18 @@ public class mapHandler : MonoBehaviour
             }
             else if (freeNeighbors.Count == 0)
             {
-                Debug.Log("No neighbor of tile: " + currentTile.x + ", " + currentTile.y);
-                Debug.Log("Starting bactracking:");
-                freeNeighbors = backtrackPath(ref   path, ref currentTile);
-                nextTile = freeNeighbors[Random.Range(0, freeNeighbors.Count)];
+                Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
+                freeNeighbors = checkFreeDir(currentTile, dirs);
+                
+                if (freeNeighbors.Count > 1)
+                {
+                    nextTile = freeNeighbors[Random.Range(0, freeNeighbors.Count)];
+                }
+                else
+                {
+                    Debug.LogWarning("Dead end. Cannot continue path.");
+                    break;
+                }
             }
 
             path.Add(nextTile);
@@ -246,28 +261,28 @@ public class mapHandler : MonoBehaviour
 
     private List<Vector2Int> createPathWaypoints()
     {
-        List<Vector2Int> waypoints = new List<Vector2Int>();
-        waypoints.Add(baseTilePos);
+        List<Vector2Int> _waypoints = new List<Vector2Int>();
+        _waypoints.Add(baseTilePos);
         
         if (!occupiedQuarters.Contains(mapQuarters.TOP_RIGHT))
         {
-            waypoints.Add(placePathWaypoint(mapQuarters.TOP_RIGHT));
+            _waypoints.Add(placePathWaypoint(mapQuarters.TOP_RIGHT));
         }
         if (!occupiedQuarters.Contains(mapQuarters.TOP_LEFT))
         {
-            waypoints.Add(placePathWaypoint(mapQuarters.TOP_LEFT));
+            _waypoints.Add(placePathWaypoint(mapQuarters.TOP_LEFT));
         }
         if (!occupiedQuarters.Contains(mapQuarters.BOTTOM_LEFT))
         {
-            waypoints.Add(placePathWaypoint(mapQuarters.BOTTOM_LEFT));
+            _waypoints.Add(placePathWaypoint(mapQuarters.BOTTOM_LEFT));
         }
         if (!occupiedQuarters.Contains(mapQuarters.BOTTOM_RIGHT))
         {
-            waypoints.Add(placePathWaypoint(mapQuarters.BOTTOM_RIGHT));
+            _waypoints.Add(placePathWaypoint(mapQuarters.BOTTOM_RIGHT));
         }
 
-        waypoints.Add(enemyTilePos);
-        return waypoints;
+        _waypoints.Add(enemyTilePos);
+        return _waypoints;
     }
     
     private Vector2Int placePathWaypoint(mapQuarters quarter)
@@ -294,20 +309,21 @@ public class mapHandler : MonoBehaviour
         return waypoint;
     }
     
-    private List<Vector2Int> getFreePathNeighbors(Vector2Int tile, List<Vector2Int> list, Vector2Int wrongDir)
+    private List<Vector2Int> checkFreeDir(Vector2Int currentTile, Vector2Int[] dirs)
     {
         List<Vector2Int> freeNeighbors = new List<Vector2Int>();
         Vector2Int checkNeighbor;
-        Vector2Int wrongTile = tile + wrongDir;
-        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
         
-        foreach (Vector2Int dir in directions)
+        foreach (Vector2Int dir in dirs)
         {
-            checkNeighbor = tile + dir;
-            
-            if (!list.Contains(checkNeighbor) && checkNeighbor != wrongTile)
+            if (dir != Vector2Int.zero)
             {
-                freeNeighbors.Add(checkNeighbor);
+                checkNeighbor = currentTile + dir;
+            
+                if (!path.Contains(checkNeighbor) && !checkOutOfBounds(checkNeighbor) && tileHasEscape(checkNeighbor))
+                {
+                    freeNeighbors.Add(checkNeighbor);
+                }
             }
         }
 
@@ -326,6 +342,38 @@ public class mapHandler : MonoBehaviour
         }
     }
     
+    private bool tileHasEscape(Vector2Int tile)
+    {
+        int escapes = 0;
+        
+        if (!path.Contains(tile + Vector2Int.up) && !checkOutOfBounds(tile + Vector2Int.up))
+        {
+            escapes++;
+        }
+        if (!path.Contains(tile + Vector2Int.down) && !checkOutOfBounds(tile + Vector2Int.down))
+        {
+            escapes++;
+        }
+        if (!path.Contains(tile + Vector2Int.right) && !checkOutOfBounds(tile + Vector2Int.right))
+        {
+            escapes++;
+        }
+        if (!path.Contains(tile + Vector2Int.left) && !checkOutOfBounds(tile + Vector2Int.left))
+        {
+            escapes++;
+        }
+        
+        if (escapes >= 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    /*
     private List<Vector2Int> backtrackPath(ref List<Vector2Int> list, ref Vector2Int currentTile)
     {
         List<Vector2Int> freeNeighbors = new List<Vector2Int>();
@@ -333,7 +381,7 @@ public class mapHandler : MonoBehaviour
     
         for (int i = list.Count - 1; i >= 0; i--)
         {
-            freeNeighbors = getFreePathNeighbors(list[i], list, new Vector2Int(-1, -1));
+            freeNeighbors = checkFreeDir(list[i], list, new Vector2Int(-1, -1));
             Debug.Log("Free neighbors of tile: " + list[i].x + ", " + list[i].y + " --> " + freeNeighbors.Count);
             
             if (freeNeighbors.Count < 2)
@@ -360,4 +408,5 @@ public class mapHandler : MonoBehaviour
 
         return freeNeighbors;
     }
+    */
 }
