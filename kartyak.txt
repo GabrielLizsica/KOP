@@ -1,0 +1,25 @@
+1. Torony - epitheto, megy bele egy gyemant (turret) / vagy maganak a toronynak van elettartama
+	  - tobbet sebez, de nem ad effekteket
+2. Csapda - az uitra lehet letenni
+	  - kevesebbet sebez, de vegtelen az attack speed es ad effekteket
+	  - van elettartama
+3. Varazsalat - akarhova leteheto
+	      - egy bizonyos korzetben van hatasa az ellensegekre
+4. Gyemant? - toronyba rakhato
+	    - van elettartama
+
+Varazslatok / csapdak fajtai:
+- sebzes
+- sebzes bizonyos ido alatt
+- lassitas
+- lefagyasztas
+- gyengites (egy adag sebzesre megy egy szorzo)
+
+Varazslatok fajtai:
+- torony attack speed novelo
+- torony sebzes novelo
+- torony range novelo
+- bazis gyogyito
+- (esetleg) torony dupla loves egy tuzelessel egy celpontra
+- (esetleg) torony torony egyszerre tobb celpontra loves
+
