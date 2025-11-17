@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 971234575}
   - component: {fileID: 971234574}
   - component: {fileID: 971234573}
+  - component: {fileID: 971234576}
   m_Layer: 0
   m_Name: MainGameObject
   m_TagString: Untagged
@@ -340,7 +341,6 @@ MonoBehaviour:
   tileWaypoint: {fileID: 11400000, guid: 403f3711e3a553a4ab0d7c59dbc4bb17, type: 2}
   pathStartPos: {x: 0, y: 0}
   pathEndPos: {x: 0, y: 0}
-  windingChance: 0.5
   path: []
   occupiedQuarters: 
 --- !u!114 &971234574
@@ -356,6 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapHandler: {fileID: 971234573}
+  waveHandler: {fileID: 0}
 --- !u!4 &971234575
 Transform:
   m_ObjectHideFlags: 0
@@ -371,6 +372,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &971234576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971234572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d901d5df4e042fe4fb84d91773ea644c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 2809751106004314397, guid: b5ada1a65e80d0c48bac50e7ad88d505, type: 3}
+  mapHandler: {fileID: 971234573}
 --- !u!1 &2138761578
 GameObject:
   m_ObjectHideFlags: 0

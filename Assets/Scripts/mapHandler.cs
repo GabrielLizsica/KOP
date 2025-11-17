@@ -24,11 +24,10 @@ public class mapHandler : MonoBehaviour
     [SerializeField] private Vector2Int pathStartPos;
     [SerializeField] private Vector2Int pathEndPos;
     [SerializeField] private List<Vector2Int> path;
-    
-    public Vector2Int MapSize
-    {
-        get{return mapSize;}
-    }
+
+    public Vector2Int MapSize { get { return mapSize; } }
+    public List<Vector2Int> Path { get { return path; } }
+    public Vector2Int EnemyTilePos { get { return enemyTilePos; } }
     private Vector2Int baseTilePos;
     private Vector2Int enemyTilePos;
     private mapQuarters baseQuarter;
