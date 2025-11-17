@@ -241,7 +241,7 @@ public class mapHandler : MonoBehaviour
                 Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
                 freeNeighbors = checkFreeDir(currentTile, dirs);
                 
-                if (freeNeighbors.Count > 1)
+                if (freeNeighbors.Count > 0)
                 {
                     nextTile = freeNeighbors[Random.Range(0, freeNeighbors.Count)];
                 }
