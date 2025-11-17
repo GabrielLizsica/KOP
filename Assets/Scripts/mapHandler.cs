@@ -71,7 +71,7 @@ public class mapHandler : MonoBehaviour
 
         tilemapGround.SetTile(new Vector3Int(baseTilePos.x, baseTilePos.y, 0), tileBase);
         tilemapGround.SetTile(new Vector3Int(enemyTilePos.x, enemyTilePos.y, 0), tileEnemy);
-        Debug.Log("Base quarter: " + baseQuarter);
+        //Debug.Log("Base quarter: " + baseQuarter);
 
         generatePath();
     }
@@ -175,15 +175,21 @@ public class mapHandler : MonoBehaviour
     private void generatePath()
     {
         List<Vector2Int> waypoints = createPathWaypoints();
-        
-        Debug.LogWarning("Waypoints count: " + waypoints.Count);
-        for (int i = 0; i < waypoints.Count - 1; i++)
+
+        do
         {
-            Debug.LogWarning("Waypoint " + i + ": " + waypoints[i]);
-            createPath(waypoints[i], waypoints[i + 1]);
-        }
+            //Debug.LogWarning("Waypoints count: " + waypoints.Count);
+            for (int i = 0; i < waypoints.Count - 1; i++)
+            {
+                //Debug.LogWarning("Waypoint " + i + ": " + waypoints[i]);
+                createPath(waypoints[i], waypoints[i + 1]);
+            }
+
+            //Debug.LogWarning("Waypoints count: " + waypoints.Count);
             
-        Debug.LogWarning("Waypoints count: " + waypoints.Count);
+            //if (path[path.Count - 1] != enemyTilePos) { Debug.LogError("Dead End - regenerating path!"); }
+        } while (path[path.Count - 1] != enemyTilePos);
+        
         
         
         foreach (var tile in path)
@@ -228,12 +234,12 @@ public class mapHandler : MonoBehaviour
 
             if (freeNeighbors.Count == 2)
             {
-                Debug.Log("Exactly 2 neighbors of tile: " + currentTile.x + ", " + currentTile.y);
+                //Debug.Log("Exactly 2 neighbors of tile: " + currentTile.x + ", " + currentTile.y);
                 nextTile = freeNeighbors[Random.Range(0, 2)];
             }
             else if (freeNeighbors.Count == 1)
             {
-                Debug.Log("Exactly 1 neighbor of tile: " + currentTile.x + ", " + currentTile.y);
+                //Debug.Log("Exactly 1 neighbor of tile: " + currentTile.x + ", " + currentTile.y);
                 nextTile = freeNeighbors[0];
             }
             else if (freeNeighbors.Count == 0)
@@ -247,7 +253,7 @@ public class mapHandler : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("Dead end. Cannot continue path.");
+                    //Debug.LogWarning("Dead end. Cannot continue path.");
                     break;
                 }
             }
@@ -256,7 +262,7 @@ public class mapHandler : MonoBehaviour
             currentTile = nextTile;
         }
 
-        Debug.LogWarning("Finished generation");
+        //Debug.LogWarning("Finished generation");
     }
 
     private List<Vector2Int> createPathWaypoints()
@@ -382,17 +388,17 @@ public class mapHandler : MonoBehaviour
         for (int i = list.Count - 1; i >= 0; i--)
         {
             freeNeighbors = checkFreeDir(list[i], list, new Vector2Int(-1, -1));
-            Debug.Log("Free neighbors of tile: " + list[i].x + ", " + list[i].y + " --> " + freeNeighbors.Count);
+            //Debug.Log("Free neighbors of tile: " + list[i].x + ", " + list[i].y + " --> " + freeNeighbors.Count);
             
             if (freeNeighbors.Count < 2)
             {
                 badTile = list[i];
-                Debug.Log("removed bad tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " )");
+                //Debug.Log("removed bad tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " )");
                 list.RemoveAt(i);
             }
             else
             {
-                Debug.Log("Found good tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " ) - Breaking backtrack");
+                //Debug.Log("Found good tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " ) - Breaking backtrack");
                 currentTile = list[i];
                 break;
             }
