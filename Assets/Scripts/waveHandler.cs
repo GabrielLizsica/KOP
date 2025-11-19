@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class waveHandler : MonoBehaviour
+public class WaveHandler : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
 
-    [SerializeField] private mapHandler mapHandler;
+    [SerializeField] private MapHandler mapHandler;
     
     private void Start()
     {
-        mapHandler = GetComponent<mapHandler>();
+        mapHandler = GetComponent<MapHandler>();
     }
     
     public void spawnWave(int waveCount, int enemyCount)
@@ -17,7 +17,7 @@ public class waveHandler : MonoBehaviour
         {
             for (int j = 0; j < enemyCount; j++)
             {
-                Instantiate(enemy, new Vector3Int(mapHandler.EnemyTilePos.x, mapHandler.EnemyTilePos.y, 1), Quaternion.identity).name = "Enemy" + j;
+                Instantiate(enemy, new Vector3Int(mapHandler.EnemyTilePos.x, mapHandler.EnemyTilePos.y, 0), Quaternion.identity).name = "Enemy" + j;
             }
         }
     }

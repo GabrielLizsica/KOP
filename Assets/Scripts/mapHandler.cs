@@ -9,7 +9,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class mapHandler : MonoBehaviour
+public class MapHandler : MonoBehaviour
 {
     [Header("Map settings")]
     [SerializeField] private Vector2Int mapSize;
@@ -187,7 +187,7 @@ public class mapHandler : MonoBehaviour
             //Debug.LogWarning("Waypoints count: " + waypoints.Count);
             
             //if (path[path.Count - 1] != enemyTilePos) { Debug.LogError("Dead End - regenerating path!"); }
-        } while (path[path.Count - 1] != enemyTilePos);
+        } while (path[path.Count - 1] != baseTilePos);
         
         
         
@@ -267,7 +267,7 @@ public class mapHandler : MonoBehaviour
     private List<Vector2Int> createPathWaypoints()
     {
         List<Vector2Int> _waypoints = new List<Vector2Int>();
-        _waypoints.Add(baseTilePos);
+        _waypoints.Add(enemyTilePos);
         
         if (!occupiedQuarters.Contains(mapQuarters.TOP_RIGHT))
         {
@@ -286,7 +286,7 @@ public class mapHandler : MonoBehaviour
             _waypoints.Add(placePathWaypoint(mapQuarters.BOTTOM_RIGHT));
         }
 
-        _waypoints.Add(enemyTilePos);
+        _waypoints.Add(baseTilePos);
         return _waypoints;
     }
     
