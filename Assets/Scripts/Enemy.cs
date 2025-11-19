@@ -6,9 +6,13 @@ using UnityEngine.Tilemaps;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("RFeferences")]
     [SerializeField] private GameObject mainGameObject;
     [SerializeField] private MapHandler mapHandler;
+    
+    [Header("Enemy variables")]
     [SerializeField] private List<Vector2Int> path;
+    [SerializeField] private float speed;
 
     private Vector3 targetTile;
     private int targetIndex = 0;
@@ -39,6 +43,6 @@ public class Enemy : MonoBehaviour
     
     private void moveAlongPath(Vector3 targetPos)
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime * 2f);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime * speed);
     }
 }

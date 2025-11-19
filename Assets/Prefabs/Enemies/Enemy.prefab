@@ -48,6 +48,7 @@ MonoBehaviour:
   mainGameObject: {fileID: 0}
   mapHandler: {fileID: 0}
   path: []
+  speed: 2
 --- !u!1 &2823360637724819315
 GameObject:
   m_ObjectHideFlags: 0
