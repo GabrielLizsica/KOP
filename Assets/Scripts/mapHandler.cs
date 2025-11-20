@@ -14,7 +14,7 @@ public class MapHandler : MonoBehaviour
     [Header("Map settings")]
     [SerializeField] private Vector2Int mapSize;
     [SerializeField] private int waypointCount;
-    [SerializeField] private Tilemap tilemapGround;
+    [SerializeField] public Tilemap tilemapGround;
     [SerializeField] private Tile tileEmpty;
     [SerializeField] private Tile tileBase;
     [SerializeField] private Tile tileEnemy;
