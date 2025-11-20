@@ -15,6 +15,6 @@ public class MainGameLogic : MonoBehaviour
         waveHandler = GetComponent<WaveHandler>();
         
         mapHandler.createMap();
-        waveHandler.spawnWave(1, 1);
+        StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
     }
 }

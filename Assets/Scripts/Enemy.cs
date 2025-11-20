@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -14,6 +15,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private List<Vector2Int> path;
     [SerializeField] private float speed;
 
+    public event EventHandler<OnBaseReachedEventArgs> OnBaseReached;
+    public class OnBaseReachedEventArgs : EventArgs 
+    {
+        public GameObject enemyObject;
+    }
+    
     private Vector3 targetTile;
     private int targetIndex = 0;
     private int posX;
@@ -38,6 +45,10 @@ public class Enemy : MonoBehaviour
             }
             
             moveAlongPath(targetTile);
+        }
+        else
+        {
+            OnBaseReached?.Invoke(this, new OnBaseReachedEventArgs { enemyObject = transform.gameObject } );
         }
     }
     
