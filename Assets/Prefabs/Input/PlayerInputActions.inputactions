@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "PlayerInputActions",
+    "maps": [
+        {
+            "name": "InBattle",
+            "id": "331958ee-aa9e-4414-95fd-8d6f77151143",
+            "actions": [
+                {
+                    "name": "Place",
+                    "type": "Button",
+                    "id": "fa9972b3-6885-486f-8e3f-4c2c76e8a784",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "afe5fdf4-074b-4681-971a-22f8d24f6a4f",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

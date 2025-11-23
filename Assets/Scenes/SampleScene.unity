@@ -310,9 +310,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 971234575}
+  - component: {fileID: 971234578}
   - component: {fileID: 971234574}
   - component: {fileID: 971234573}
   - component: {fileID: 971234576}
+  - component: {fileID: 971234579}
   m_Layer: 0
   m_Name: MainGameObject
   m_TagString: Untagged
@@ -388,6 +390,65 @@ MonoBehaviour:
   enemyObject: {fileID: 2809751106004314397, guid: b5ada1a65e80d0c48bac50e7ad88d505, type: 3}
   mapHandler: {fileID: 971234573}
   enemy: {fileID: 1104436837558702296, guid: b5ada1a65e80d0c48bac50e7ad88d505, type: 3}
+--- !u!114 &971234578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971234572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 175bf82e315234a4097a00b7956e3e7f, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 971234579}
+        m_TargetAssemblyTypeName: BuildingHandler, Assembly-CSharp
+        m_MethodName: placeNewBuilding
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fa9972b3-6885-486f-8e3f-4c2c76e8a784
+    m_ActionName: 'InBattle/Interact[/Mouse/press]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: InBattle
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &971234579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971234572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9206a8f88b5804fbb2d5e901b68779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  building: {fileID: 7878685954530570598, guid: 3dbeb87a7d0fab849ae70a7b4aa03bbc, type: 3}
 --- !u!1 &2138761578
 GameObject:
   m_ObjectHideFlags: 0

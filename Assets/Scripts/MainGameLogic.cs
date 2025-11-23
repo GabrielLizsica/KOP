@@ -12,6 +12,10 @@ public class MainGameLogic : MonoBehaviour
 
     [Header("Grid")]
     [SerializeField] private Tilemap tilemapGround;
+
+    private Vector3 mousePosTile;
+
+    public Vector3 MousePosTile { get { return mousePosTile; } }
     
     private void Start()
     {
@@ -26,7 +30,7 @@ public class MainGameLogic : MonoBehaviour
     
     private void Update()
     {
-        Vector3Int mousePosTile = tilemapGround.WorldToCell(getMousePosTile());
+        mousePosTile = tilemapGround.WorldToCell(getMousePosTile());
 
         Debug.Log(mousePosTile);
     }
@@ -37,5 +41,10 @@ public class MainGameLogic : MonoBehaviour
         mouseWorldPos.z = 0f;
 
         return mouseWorldPos;
+    }
+    
+    public void OnPlace()
+    {
+        Debug.LogWarning("Placed (LMB)");
     }
 }
