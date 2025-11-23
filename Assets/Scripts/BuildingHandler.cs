@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
@@ -7,6 +8,13 @@ public class BuildingHandler : MonoBehaviour
     [SerializeField] private GameObject building;
     private MainGameLogic mainGameLogic;
     private GameObject newBuilding;
+    private enum BuildingType
+    {
+        DEFAULT,
+        TOWER,
+        TRAP,
+        GEM,
+    }
 
 
     private void Start()
