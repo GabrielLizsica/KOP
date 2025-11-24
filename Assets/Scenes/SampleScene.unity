@@ -448,7 +448,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a9206a8f88b5804fbb2d5e901b68779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 7878685954530570598, guid: 3dbeb87a7d0fab849ae70a7b4aa03bbc, type: 3}
+  tower: {fileID: 7878685954530570598, guid: 3dbeb87a7d0fab849ae70a7b4aa03bbc, type: 3}
+  towerBlueprintValid: {fileID: 7336079284677968311, guid: f02ec1200746c6844901e2b3e351ee2c, type: 3}
+  towerBlueprintInvalid: {fileID: 6929616166028194890, guid: 65ec5672dde51f648b3981a45d2e0418, type: 3}
 --- !u!1 &2138761578
 GameObject:
   m_ObjectHideFlags: 0
