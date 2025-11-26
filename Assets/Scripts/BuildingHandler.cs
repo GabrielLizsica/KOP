@@ -10,6 +10,7 @@ public class BuildingHandler : MonoBehaviour
     private MainGameLogic mainGameLogic;
     private MapHandler mapHandler;
     private List<Vector2Int> path;
+    private List<Vector2Int> occupiedTiles = new List<Vector2Int>();
     private Vector3 prevPos;
     private Dictionary<BuildingAssetType, GameObject> newBuildingAssets;
     private Dictionary<BuildingAssetType, GameObject> usedBlueprints;
@@ -73,6 +74,7 @@ public class BuildingHandler : MonoBehaviour
         {
             Vector3 adjustedPos = new Vector3(mainGameLogic.MousePosTile.x + 0.5f, mainGameLogic.MousePosTile.y + 0.5f, mainGameLogic.MousePosTile.z);
             builtBuilding = Instantiate(newBuildingAssets[BuildingAssetType.BUILDING], adjustedPos, Quaternion.identity);
+            occupiedTiles.Add(new Vector2Int((int)mainGameLogic.MousePosTile.x, (int)mainGameLogic.MousePosTile.y));
             finishBuilding();
         }
     }
@@ -121,7 +123,7 @@ public class BuildingHandler : MonoBehaviour
             switch (buildingType)
             {
                 case BuildingType.TOWER:
-                    if (path.Contains(mouseTile))
+                    if (path.Contains(mouseTile) || occupiedTiles.Contains(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
                         usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
@@ -138,19 +140,19 @@ public class BuildingHandler : MonoBehaviour
                     
                     break;
                 case BuildingType.TRAP:
-                    if (path.Contains(mouseTile))
-                    {
-                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
-                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
-
-                        canBuild = true;
-                    }
-                    else
+                    if (!path.Contains(mouseTile) || occupiedTiles.Contains(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
                         usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
 
                         canBuild = false;
+                    }
+                    else
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
+
+                        canBuild = true;
                     }
 
                     break;
