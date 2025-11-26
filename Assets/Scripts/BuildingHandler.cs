@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
@@ -10,12 +11,18 @@ public class BuildingHandler : MonoBehaviour
     private MapHandler mapHandler;
     private List<Vector2Int> path;
     private Vector3 prevPos;
-    private List<GameObject> newBuilding;
+    private Dictionary<BuildingAssetType, GameObject> newBuildingAssets;
+    private Dictionary<BuildingAssetType, GameObject> usedBlueprints;
     private GameObject builtBuilding;
+    [Header("Tower Assets")]
     [SerializeField] private GameObject tower;
     [SerializeField] private GameObject towerBlueprintValid;
     [SerializeField] private GameObject towerBlueprintInvalid;
-    private GameObject[] usedBlueprints;
+    
+    [Header("Trap Assets")]
+    [SerializeField] private GameObject trap;
+    [SerializeField] private GameObject trapBlueprintValid;
+    [SerializeField] private GameObject trapBlueprintInvalid;
     private bool isBuilding;
     private bool canBuild;
     private BuildingType buildingType;
@@ -24,9 +31,16 @@ public class BuildingHandler : MonoBehaviour
         DEFAULT,
         TOWER,
         TRAP,
-        GEM,
+        GEM
     }
-
+    
+    private enum BuildingAssetType
+    {
+        DEFAULT,
+        BUILDING,
+        BLUEPRINT_INVALID,
+        BLUEPRINT_VALID
+    }
 
     private void Start()
     {
@@ -37,9 +51,14 @@ public class BuildingHandler : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !isBuilding)
         {
             usedBlueprints = beginBuilding(BuildingType.TOWER);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !isBuilding)
+        {
+            usedBlueprints = beginBuilding(BuildingType.TRAP);
         }
         
         if (isBuilding)
@@ -53,7 +72,8 @@ public class BuildingHandler : MonoBehaviour
         if (context.performed && canBuild)
         {
             Vector3 adjustedPos = new Vector3(mainGameLogic.MousePosTile.x + 0.5f, mainGameLogic.MousePosTile.y + 0.5f, mainGameLogic.MousePosTile.z);
-            builtBuilding = Instantiate(newBuilding[0], adjustedPos, Quaternion.identity);
+            builtBuilding = Instantiate(newBuildingAssets[BuildingAssetType.BUILDING], adjustedPos, Quaternion.identity);
+            finishBuilding();
         }
     }
     
@@ -62,47 +82,77 @@ public class BuildingHandler : MonoBehaviour
         switch (type)
         {
             case BuildingType.TOWER:
-                newBuilding = new List<GameObject>() { tower, towerBlueprintInvalid, towerBlueprintValid};
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, tower}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, towerBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, towerBlueprintValid}
+                };
+                
                 break;
             case BuildingType.TRAP:
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, trap}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, trapBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, trapBlueprintValid}
+                };
+            
                 break;
             case BuildingType.GEM:
                 break;
             default:
-                newBuilding = null;
+                newBuildingAssets = null;
                 buildingType = BuildingType.DEFAULT;
                 break;
         }
     }
     
-    private void updateBlueprint(GameObject[] usedBlueprints)
+    private void updateBlueprint(Dictionary<BuildingAssetType, GameObject> usedBlueprints)
     {
         Vector2Int mouseTile = new Vector2Int((int)mainGameLogic.MousePosTile.x, (int)mainGameLogic.MousePosTile.y);
         
         if (prevPos != mainGameLogic.MousePosTile)
         {
             Vector3 adjustedPos = new Vector3(mainGameLogic.MousePosTile.x + 0.5f, mainGameLogic.MousePosTile.y + 0.5f, mainGameLogic.MousePosTile.z);
-            usedBlueprints[0].transform.position = adjustedPos;
-            usedBlueprints[1].transform.position = adjustedPos;
+            usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].transform.position = adjustedPos;
+            usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].transform.position = adjustedPos;
                     
             switch (buildingType)
             {
                 case BuildingType.TOWER:
-                    if (!path.Contains(mouseTile))
+                    if (path.Contains(mouseTile))
                     {
-                        usedBlueprints[0].SetActive(false);
-                        usedBlueprints[1].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
+
+                        canBuild = false;
+                    }
+                    else
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
+
+                        canBuild = true;
+                    }
+                    
+                    break;
+                case BuildingType.TRAP:
+                    if (path.Contains(mouseTile))
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
 
                         canBuild = true;
                     }
                     else
                     {
-                        usedBlueprints[0].SetActive(true);
-                        usedBlueprints[1].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
 
                         canBuild = false;
                     }
-                    
+
                     break;
                 default:
                     break;
@@ -112,21 +162,31 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
-    private GameObject[] beginBuilding(BuildingType toBuild)
+    private Dictionary<BuildingAssetType, GameObject> beginBuilding(BuildingType toBuild)
     {
         isBuilding = true;
         buildingType = toBuild;
         setBuilding(toBuild);
         prevPos = new Vector3(-1, -1, -1);
 
-        GameObject blueprintInvalid = Instantiate(newBuilding[1], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
-        blueprintInvalid.name = newBuilding[1].name;
+        GameObject blueprintInvalid = Instantiate(newBuildingAssets[BuildingAssetType.BLUEPRINT_INVALID], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
+        blueprintInvalid.name = newBuildingAssets[BuildingAssetType.BLUEPRINT_INVALID].name;
         blueprintInvalid.SetActive(false);
         
-        GameObject blueprintValid = Instantiate(newBuilding[2], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
-        blueprintValid.name = newBuilding[2].name;
+        GameObject blueprintValid = Instantiate(newBuildingAssets[BuildingAssetType.BLUEPRINT_VALID], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
+        blueprintValid.name = newBuildingAssets[BuildingAssetType.BLUEPRINT_VALID].name;
         blueprintValid.SetActive(false);
 
-        return new GameObject[] { blueprintInvalid, blueprintValid };
+        return new Dictionary<BuildingAssetType, GameObject> { { BuildingAssetType.BLUEPRINT_INVALID, blueprintInvalid }, { BuildingAssetType.BLUEPRINT_VALID, blueprintValid } };
+    }
+    
+    private void finishBuilding()
+    {
+        newBuildingAssets = null;
+        Destroy(usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID]);
+        Destroy(usedBlueprints[BuildingAssetType.BLUEPRINT_VALID]);
+        usedBlueprints = null;
+        buildingType = BuildingType.DEFAULT;
+        isBuilding = false;
     }
 }

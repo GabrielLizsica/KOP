@@ -451,6 +451,9 @@ MonoBehaviour:
   tower: {fileID: 7878685954530570598, guid: 3dbeb87a7d0fab849ae70a7b4aa03bbc, type: 3}
   towerBlueprintValid: {fileID: 7336079284677968311, guid: f02ec1200746c6844901e2b3e351ee2c, type: 3}
   towerBlueprintInvalid: {fileID: 6929616166028194890, guid: 65ec5672dde51f648b3981a45d2e0418, type: 3}
+  trap: {fileID: 8622800852297107663, guid: ccb00df0a20a69345b131425c26b9c68, type: 3}
+  trapBlueprintValid: {fileID: 255577515866052427, guid: 347b67e018e3f6548b330ac3aafd8646, type: 3}
+  trapBlueprintInvalid: {fileID: 6674484069045843340, guid: 26822e8305d9c55428b3553955c0ef2c, type: 3}
 --- !u!1 &2138761578
 GameObject:
   m_ObjectHideFlags: 0
