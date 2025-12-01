@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
@@ -10,11 +11,12 @@ public class BuildingHandler : MonoBehaviour
     private MainGameLogic mainGameLogic;
     private MapHandler mapHandler;
     private List<Vector2Int> path;
-    private List<Vector2Int> occupiedTiles = new List<Vector2Int>();
+    private List<OccupiedPlot> occupiedTiles = new List<OccupiedPlot>();
     private Vector3 prevPos;
     private Dictionary<BuildingAssetType, GameObject> newBuildingAssets;
     private Dictionary<BuildingAssetType, GameObject> usedBlueprints;
     private GameObject builtBuilding;
+    
     [Header("Tower Assets")]
     [SerializeField] private GameObject tower;
     [SerializeField] private GameObject towerBlueprintValid;
@@ -24,9 +26,21 @@ public class BuildingHandler : MonoBehaviour
     [SerializeField] private GameObject trap;
     [SerializeField] private GameObject trapBlueprintValid;
     [SerializeField] private GameObject trapBlueprintInvalid;
+    
     private bool isBuilding;
     private bool canBuild;
     private BuildingType buildingType;
+    private struct OccupiedPlot
+    {
+        public OccupiedPlot(Vector2Int _pos, BuildingType _type)
+        {
+            pos = _pos;
+            type = _type;
+        }
+
+        public Vector2Int pos { get; }
+        public BuildingType type { get; }
+    }
     private enum BuildingType
     {
         DEFAULT,
@@ -74,7 +88,7 @@ public class BuildingHandler : MonoBehaviour
         {
             Vector3 adjustedPos = new Vector3(mainGameLogic.MousePosTile.x + 0.5f, mainGameLogic.MousePosTile.y + 0.5f, mainGameLogic.MousePosTile.z);
             builtBuilding = Instantiate(newBuildingAssets[BuildingAssetType.BUILDING], adjustedPos, Quaternion.identity);
-            occupiedTiles.Add(new Vector2Int((int)mainGameLogic.MousePosTile.x, (int)mainGameLogic.MousePosTile.y));
+            occupiedTiles.Add(new OccupiedPlot(new Vector2Int((int)mainGameLogic.MousePosTile.x, (int)mainGameLogic.MousePosTile.y), buildingType));
             finishBuilding();
         }
     }
@@ -123,7 +137,7 @@ public class BuildingHandler : MonoBehaviour
             switch (buildingType)
             {
                 case BuildingType.TOWER:
-                    if (path.Contains(mouseTile) || occupiedTiles.Contains(mouseTile))
+                    if (path.Contains(mouseTile) || checkOccupied(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
                         usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
@@ -140,7 +154,7 @@ public class BuildingHandler : MonoBehaviour
                     
                     break;
                 case BuildingType.TRAP:
-                    if (!path.Contains(mouseTile) || occupiedTiles.Contains(mouseTile))
+                    if (!path.Contains(mouseTile) || checkOccupied(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
                         usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
@@ -190,5 +204,18 @@ public class BuildingHandler : MonoBehaviour
         usedBlueprints = null;
         buildingType = BuildingType.DEFAULT;
         isBuilding = false;
+    }
+    
+    private bool checkOccupied(Vector2Int pos)
+    {
+        for (int i = 0; i < occupiedTiles.Count; i++)
+        {
+            if (occupiedTiles[i].pos == pos)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
