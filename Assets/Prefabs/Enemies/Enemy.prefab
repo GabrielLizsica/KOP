@@ -49,7 +49,7 @@ MonoBehaviour:
   mapHandler: {fileID: 0}
   path: []
   speed: 2
-  health: 50
+  health: 100
   weakness: 1
 --- !u!1 &2823360637724819315
 GameObject:
