@@ -45,11 +45,11 @@ public class Tower : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        targets.Remove(other.transform);
+        targets.Remove(collision.transform.parent);
     }
-    
+
     private void Enemy_OnEnemyDeath(object sender, Enemy.OnEnemyDeathEventArgs e)
     {
         targets.Remove(e.enemyObject.transform);
