@@ -84,7 +84,7 @@ public class BuildingHandler : MonoBehaviour
     
     public void placeNewBuilding(InputAction.CallbackContext context)
     {
-        if (context.performed && canBuild)
+        if (context.performed && canBuild && isBuilding)
         {
             Vector3 adjustedPos = new Vector3(mainGameLogic.MousePosTile.x + 0.5f, mainGameLogic.MousePosTile.y + 0.5f, mainGameLogic.MousePosTile.z);
             builtBuilding = Instantiate(newBuildingAssets[BuildingAssetType.BUILDING], adjustedPos, Quaternion.identity);
