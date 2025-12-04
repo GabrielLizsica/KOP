@@ -5,8 +5,10 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] private float range;
-    [SerializeField] private List<Transform> targets;
+    [SerializeField] private float fireRate;
+    [SerializeField] private List<Transform> targets = new List<Transform>();
     [SerializeField] private GameObject projectile;
+    private Enemy newEnemy;
 
     private void Start()
     {
@@ -24,19 +26,32 @@ public class Tower : MonoBehaviour
             {
                 GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity, transform);
                 newProjectile.GetComponent<Projectile>().Initialize(targets[0]);
+                
+                yield return new WaitForSeconds(1f / fireRate);
             }
-
-            yield return new WaitForSeconds(1f);
+            else
+            {
+                yield return null;
+            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        targets.Add(other.transform);
+        if ((newEnemy = other.GetComponentInParent<Enemy>()) != null)
+        {
+            targets.Add(other.transform.parent);
+            newEnemy.OnEnemyDeath += Enemy_OnEnemyDeath;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         targets.Remove(other.transform);
+    }
+    
+    private void Enemy_OnEnemyDeath(object sender, Enemy.OnEnemyDeathEventArgs e)
+    {
+        targets.Remove(e.enemyObject.transform);
     }
 }

@@ -377,41 +377,4 @@ public class MapHandler : MonoBehaviour
             return false;
         }
     }
-    
-    /*
-    private List<Vector2Int> backtrackPath(ref List<Vector2Int> list, ref Vector2Int currentTile)
-    {
-        List<Vector2Int> freeNeighbors = new List<Vector2Int>();
-        Vector2Int badTile = new Vector2Int();
-    
-        for (int i = list.Count - 1; i >= 0; i--)
-        {
-            freeNeighbors = checkFreeDir(list[i], list, new Vector2Int(-1, -1));
-            //Debug.Log("Free neighbors of tile: " + list[i].x + ", " + list[i].y + " --> " + freeNeighbors.Count);
-            
-            if (freeNeighbors.Count < 2)
-            {
-                badTile = list[i];
-                //Debug.Log("removed bad tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " )");
-                list.RemoveAt(i);
-            }
-            else
-            {
-                //Debug.Log("Found good tile at: " + list[i].x + ", " + list[i].y + " (i = " + i + " ) - Breaking backtrack");
-                currentTile = list[i];
-                break;
-            }
-        }
-        
-        for (int i = 0; i < freeNeighbors.Count; i++)
-        {
-            if (freeNeighbors.Contains(badTile))
-            {
-                freeNeighbors.Remove(badTile);
-            }
-        }
-
-        return freeNeighbors;
-    }
-    */
 }

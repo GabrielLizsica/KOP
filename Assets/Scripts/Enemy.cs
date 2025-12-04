@@ -14,9 +14,17 @@ public class Enemy : MonoBehaviour
     [Header("Enemy variables")]
     [SerializeField] private List<Vector2Int> path;
     [SerializeField] private float speed;
+    [SerializeField] public float health;
+    [SerializeField] public float weakness;
 
     public event EventHandler<OnBaseReachedEventArgs> OnBaseReached;
+    public event EventHandler<OnEnemyDeathEventArgs> OnEnemyDeath;
     public class OnBaseReachedEventArgs : EventArgs 
+    {
+        public GameObject enemyObject;
+    }
+    
+    public class OnEnemyDeathEventArgs : EventArgs
     {
         public GameObject enemyObject;
     }
@@ -35,6 +43,12 @@ public class Enemy : MonoBehaviour
     
     private void Update()
     {
+        if (health <= 0)
+        {
+            OnEnemyDeath?.Invoke(this, new OnEnemyDeathEventArgs { enemyObject = transform.gameObject });
+            Destroy(gameObject);
+        } 
+        
         if (Vector3.Distance(transform.position, new Vector3(path[path.Count - 1].x + 0.5f, path[path.Count - 1].y + 0.5f, 0)) > 0.1f)
         {
             targetTile = new Vector3(path[targetIndex].x + 0.5f, path[targetIndex].y + 0.5f, 0);
