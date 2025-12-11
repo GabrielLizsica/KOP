@@ -12,7 +12,7 @@ public class Tower : MonoBehaviour
 
     private void Start()
     {
-        CircleCollider2D trigger = GetComponentInChildren<CircleCollider2D>();
+        CircleCollider2D trigger = GetComponent<CircleCollider2D>();
         trigger.radius = range;
 
         StartCoroutine(fireProjectile());
@@ -40,14 +40,14 @@ public class Tower : MonoBehaviour
     {
         if ((newEnemy = other.GetComponentInParent<Enemy>()) != null)
         {
-            targets.Add(other.transform.parent);
+            targets.Add(other.transform);
             newEnemy.OnEnemyDeath += Enemy_OnEnemyDeath;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        targets.Remove(collision.transform.parent);
+        targets.Remove(collision.transform);
     }
 
     private void Enemy_OnEnemyDeath(object sender, Enemy.OnEnemyDeathEventArgs e)

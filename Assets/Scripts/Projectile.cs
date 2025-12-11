@@ -15,8 +15,9 @@ public class Projectile : MonoBehaviour
     {
         target = _target;
         targetEnemy = target.gameObject.GetComponent<Enemy>();
-        isInitialized = true;
         bodyTransform = gameObject.GetComponentInChildren<Transform>();
+        
+        isInitialized = true;
     }
 
     private void Update()
@@ -36,7 +37,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.parent == target)
+        if (collision.transform == target)
         {
             hitEnemy();
         }
