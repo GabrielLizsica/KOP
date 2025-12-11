@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapHandler: {fileID: 971234573}
-  waveHandler: {fileID: 0}
+  waveHandler: {fileID: 971234576}
   tilemapGround: {fileID: 0}
 --- !u!4 &971234575
 Transform:

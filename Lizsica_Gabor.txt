@@ -1,0 +1,6 @@
+Ma sikerult atcsinalnom a lovedekek rendszeret ugy, hogy univerzalisan mukodjon, nem tavolsagot merjen.
+
+Nagyjabol 40%-val lehetek jelenleg keszen.
+
+Szilveszterig tervezem megcsinalni az osszes assetet a terkephez, illetve a kartyakat es a UI alapjat.
+

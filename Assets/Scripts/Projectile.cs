@@ -23,21 +23,22 @@ public class Projectile : MonoBehaviour
     {
         if (!isInitialized) return;
         if (target == null) Destroy(gameObject);
-        
-        if(Vector3.Distance(transform.position, target.position) < 0.5f)
-        {
-            hitEnemy();
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * travelSpeed);
-            bodyTransform.up = (target.position - transform.position).normalized;
-        }
+
+        transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * travelSpeed);
+        bodyTransform.up = (target.position - transform.position).normalized;
     }
     
     private void hitEnemy()
     {
         targetEnemy.health -= damage * targetEnemy.weakness;
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.parent == target)
+        {
+            hitEnemy();
+        }
     }
 }
