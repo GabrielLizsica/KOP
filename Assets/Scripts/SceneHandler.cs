@@ -20,14 +20,6 @@ public class SceneHandler : MonoBehaviour
     {
         currentScene = SceneManager.GetActiveScene().buildIndex;
     }
-    
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && SceneManager.GetActiveScene().buildIndex == (int)Scenes.MAIN_MENU)
-        {
-            changeScene();
-        }
-    }
 
     public void changeScene()
     {
