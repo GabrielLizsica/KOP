@@ -24,10 +24,17 @@ public class Projectile : MonoBehaviour
     private void Update()
     {
         if (!isInitialized) return;
-        if (target == null) Destroy(gameObject);
+        //if (target == null) Destroy(gameObject);
 
-        transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * travelSpeed);
-        bodyTransform.up = (target.position - transform.position).normalized;
+        if (target != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * travelSpeed);
+            bodyTransform.up = (target.position - transform.position).normalized;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     
     private void hitEnemy()
