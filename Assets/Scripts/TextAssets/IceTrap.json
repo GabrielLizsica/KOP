@@ -1,0 +1,15 @@
+{
+    "title":{
+        "en":"Ice Trap",
+        "hu":"Jeges csapda"
+    },
+    "description":{
+    },
+    "stats":{
+        "level0":{
+            "damage":10,
+            "health":20,
+            "effectstrength":1
+        } 
+    }
+}

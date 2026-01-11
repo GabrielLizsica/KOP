@@ -1,0 +1,15 @@
+{
+    "title":{
+        "en":"Poison Trap",
+        "hu":"Mergezo csapda"
+    },
+    "description":{
+    },
+    "stats":{
+        "level0":{
+            "damage":10,
+            "health":20,
+            "effectstrength":1
+        } 
+    }
+}

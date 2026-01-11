@@ -1,0 +1,17 @@
+{
+    "title":{
+        "en":"Trap",
+        "hu":"Csapda"
+    },
+    "description":{
+        "en":"Poke!",
+        "hu":"Szur!"
+    },
+    "stats":{
+        "level0":{
+            "damage":10,
+            "health":30,
+            "effectstrength":0
+        }   
+    }
+}

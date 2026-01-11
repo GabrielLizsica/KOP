@@ -11,8 +11,9 @@ public class Projectile : MonoBehaviour
     private bool isInitialized = false;
     private Vector2 targetPos;
 
-    public void Initialize(Transform _target)
+    public void Initialize(Transform _target, int _damage)
     {
+        damage = _damage;
         target = _target;
         targetEnemy = target.gameObject.GetComponent<Enemy>();
         bodyTransform = gameObject.GetComponentInChildren<Transform>();

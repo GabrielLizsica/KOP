@@ -1,0 +1,22 @@
+{
+    "title":{
+        "en":"Tower",
+        "hu":"Torony"
+    },
+    "description":{
+        "en":"The best defense is offense!",
+        "hu":"A legjobb vedekezes a atamdas!"
+    },
+    "stats":{
+        "level0":{
+            "damage":20,
+            "range":10,
+            "attackspeed":1
+        },
+        "level1":{
+            "damage":30,
+            "range":15,
+            "attackspeed":2
+        }
+    }
+}

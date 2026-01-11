@@ -1,0 +1,13 @@
+{
+    "title":{
+        "en":"Increase Damage",
+        "hu":"Sebzes novelo"
+    },
+    "description":{
+    },
+    "stats":{
+        "level0":{
+            "effectstrength":1
+        } 
+    }
+}

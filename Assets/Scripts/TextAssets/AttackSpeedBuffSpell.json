@@ -1,0 +1,13 @@
+{
+    "title":{
+        "en":"Increase Attack Speed",
+        "hu":"Tamadasi sebesseg novelo"
+    },
+    "description":{
+    },
+    "stats":{
+        "level0":{
+            "effectstrength":1
+        } 
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "title":{
+        "en":"Range increase",
+        "hu":"Hatotav novelese"
+    },
+    "description":{
+    },
+    "stats":{
+        "level0":{
+            "effectstrength":1
+        } 
+    }
+}

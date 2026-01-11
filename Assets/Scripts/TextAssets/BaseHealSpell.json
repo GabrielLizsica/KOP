@@ -1,0 +1,13 @@
+{
+    "title":{
+        "en":"Base Heal",
+        "hu":"Bazis javitasa"
+    },
+    "description":{
+    },
+    "stats":{
+        "level0":{
+            "effectstrength":1
+        } 
+    }
+}
