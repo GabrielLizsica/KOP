@@ -17,7 +17,7 @@ public class MapHandler : MonoBehaviour
     [SerializeField] private Tile tileEmpty;
     [SerializeField] private Tile tileBase;
     [SerializeField] private Tile tileEnemy;
-    [SerializeField] private Tile tileWaypoint;
+    [SerializeField] private RuleTile tileWaypoint;
 
     [Header("Path Settings")]
     [SerializeField] private Vector2Int pathStartPos;

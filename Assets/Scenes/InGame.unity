@@ -203,7 +203,7 @@ MonoBehaviour:
   tileEmpty: {fileID: 11400000, guid: a461a4511bee94845b6561dc8276a118, type: 2}
   tileBase: {fileID: 11400000, guid: 2f16c27ada76ced41988a0d339efe821, type: 2}
   tileEnemy: {fileID: 11400000, guid: c79e02654ddb00349a3adb900681ccd4, type: 2}
-  tileWaypoint: {fileID: 11400000, guid: 403f3711e3a553a4ab0d7c59dbc4bb17, type: 2}
+  tileWaypoint: {fileID: 11400000, guid: 50cd8083caab3e9458e477419f81b279, type: 2}
   pathStartPos: {x: 0, y: 0}
   pathEndPos: {x: 0, y: 0}
   path: []
@@ -347,15 +347,39 @@ Tilemap:
   m_Enabled: 1
   m_Tiles: {}
   m_AnimatedTiles: {}
-  m_TileAssetArray: []
-  m_TileSpriteArray: []
-  m_TileMatrixArray: []
-  m_TileColorArray: []
+  m_TileAssetArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileMatrixArray:
+  - m_RefCount: 0
+    m_Data:
+      e00: 2.35e-43
+      e01: 0
+      e02: 1e-45
+      e03: 1.0285598e-38
+      e10: 0
+      e11: 0
+      e12: 0
+      e13: 8.21e-43
+      e20: 3.826281e-19
+      e21: 1.0285598e-38
+      e22: -5.230625e-10
+      e23: -5.891929e-19
+      e30: 4.5911e-41
+      e31: 8.21e-43
+      e32: 8.24e-43
+      e33: 8.21e-43
+  m_TileColorArray:
+  - m_RefCount: 0
+    m_Data: {r: -5.891908e-19, g: -5.891908e-19, b: -5.891908e-19, a: -5.891908e-19}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: 0, y: 0, z: 0}
-  m_Size: {x: 0, y: 0, z: 1}
+  m_Size: {x: 11, y: 6, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
