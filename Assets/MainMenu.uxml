@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/MainMenu.uss?fileID=7433441132597879392&amp;guid=98a3bb71a4273424b9c2d9f1c5b8c977&amp;type=3#MainMenu" />
+    <ui:VisualElement name="Core" class="core" style="flex-grow: 1; display: flex; position: relative;">
+        <ui:VisualElement name="MainMenu" class="mainMenu" style="flex-grow: 1; align-content: flex-start; align-items: center;">
+            <ui:Label text="KARTYAVARAK" class="mainTitle" style="top: 15%; align-self: auto; align-content: auto; justify-content: center; align-items: auto; width: 50%; position: relative; left: auto; -unity-text-align: upper-center; font-size: 60px;" />
+            <ui:Button text="Start" name="StartButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
