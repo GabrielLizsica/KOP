@@ -64,6 +64,7 @@ public class MapHandler : MonoBehaviour
         selectBaseTile();
         baseQuarter = getMapQuarter(baseTilePos);
         selectEnemyTile();
+        occupiedQuarters.Clear();
         occupiedQuarters.Add(baseQuarter);
         occupiedQuarters.Add(getMapQuarter(enemyTilePos));
 
@@ -172,6 +173,7 @@ public class MapHandler : MonoBehaviour
     
     private void generatePath()
     {
+        path.Clear();
         List<Vector2Int> waypoints = createPathWaypoints();
 
         do
@@ -349,6 +351,7 @@ public class MapHandler : MonoBehaviour
     private bool tileHasEscape(Vector2Int tile)
     {
         int escapes = 0;
+        int neighbors = 0;
         
         if (!path.Contains(tile + Vector2Int.up) && !checkOutOfBounds(tile + Vector2Int.up))
         {
@@ -367,7 +370,26 @@ public class MapHandler : MonoBehaviour
             escapes++;
         }
         
-        if (escapes >= 1)
+        if (path.Contains(tile + Vector2Int.up))
+        {
+            neighbors++;
+        }
+        if (path.Contains(tile + Vector2Int.down))
+        {
+            neighbors++;
+        }
+        if (path.Contains(tile + Vector2Int.right))
+        {
+            neighbors++;
+        }
+        if (path.Contains(tile + Vector2Int.left))
+        {
+            neighbors++;
+        }
+
+        Debug.LogWarning("Number of occupied neighbors (part of path): " + neighbors);
+        
+        if (escapes > 1 && neighbors < 2)
         {
             return true;
         }
