@@ -9,7 +9,8 @@
         "level0":{
             "damage":10,
             "health":20,
-            "effectstrength":1
+            "effectstrength":25,
+            "effectduration":5.0
         } 
     }
 }

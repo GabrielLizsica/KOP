@@ -2,17 +2,16 @@ using UnityEngine;
 
 public  class Trap : MonoBehaviour
 {
-    [SerializeField] protected TrapScriptableObject stats;
     [SerializeField] protected int damage;
     [SerializeField] protected int health;
     [SerializeField] protected float effectStrength;
-
-    protected Enemy targetEnemy;
+    [SerializeField] protected float effectDuration;
     
-    protected void hitEnemy()
+    
+    protected void hitEnemy(Enemy targetEnemy)
     {
         targetEnemy.health -= damage * targetEnemy.weakness;
     }
 
-    protected virtual void ApplyEffect() {}
+    protected virtual void applyEffect() {}
 }

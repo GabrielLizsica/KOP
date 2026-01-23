@@ -15,7 +15,8 @@ public class MainGameLogic : MonoBehaviour
     
     [Header("Card Scriptable Objects")]
     [SerializeField] private TowerScriptableObject towerScriptableObject;
-    [SerializeField] private TrapScriptableObject trapScriptableObject;
+    [SerializeField] private BasicTrapScriptableObject basicTrapScriptableObject;
+    [SerializeField] private IceTrapScriptableObject iceTrapScriptableObject;
 
     [Header("Grid")]
     [SerializeField] private Tilemap tilemapGround;
@@ -23,6 +24,14 @@ public class MainGameLogic : MonoBehaviour
     private Vector3 mousePosTile;
 
     public Vector3 MousePosTile { get { return mousePosTile; } }
+    
+    public enum TrapEffects
+    {
+        DEFAULT,
+        ICE,
+        FIRE,
+        POISON
+    }
     
     public class TowerData
     {
@@ -57,6 +66,7 @@ public class MainGameLogic : MonoBehaviour
         public int damage;
         public int health;
         public float effectstrength;
+        public float effectduration;
     }
     
     public class SpellStats
@@ -87,7 +97,7 @@ public class MainGameLogic : MonoBehaviour
     private void InitializeBuildingScriptableObjects()
     {
         TowerData towerData = JsonConvert.DeserializeObject<TowerData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/Tower.json"));
-        TrapData trapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/Trap.json"));
+        TrapData basicTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/BasicTrap.json"));
         TrapData iceTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/IceTrap.json"));
         TrapData poisonTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText (Application.dataPath + "/Scripts/TextAssets/PoisonTrap.json"));
         SpellData baseHealSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/BaseHealSpell.json"));
@@ -99,9 +109,15 @@ public class MainGameLogic : MonoBehaviour
         towerScriptableObject.range = towerData.stats["level0"].range;
         towerScriptableObject.attackspeed = towerData.stats["level0"].attackspeed;
         
-        trapScriptableObject.damage = trapData.stats["level0"].damage;
-        trapScriptableObject.health = trapData.stats["level0"].health;
-        trapScriptableObject.effectstrength = trapData.stats["level0"].effectstrength;
+        basicTrapScriptableObject.damage = basicTrapData.stats["level0"].damage;
+        basicTrapScriptableObject.health = basicTrapData.stats["level0"].health;
+        basicTrapScriptableObject.effectstrength = basicTrapData.stats["level0"].effectstrength;
+        basicTrapScriptableObject.effectduration = basicTrapData.stats["level0"].effectduration;
+
+        iceTrapScriptableObject.damage = iceTrapData.stats["level0"].damage;
+        iceTrapScriptableObject.health = iceTrapData.stats["level0"].health;
+        iceTrapScriptableObject.effectstrength = iceTrapData.stats["level0"].effectstrength;
+        iceTrapScriptableObject.effectduration = iceTrapData.stats["level0"].effectduration;
                 
         Debug.Log(baseHealSpellData.stats["level0"].effectstrength);
     }

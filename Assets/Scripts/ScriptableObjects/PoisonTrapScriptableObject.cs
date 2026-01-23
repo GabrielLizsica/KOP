@@ -6,4 +6,5 @@ public class PoisonTrapScriptableObject : ScriptableObject
     public int damage;
     public int health;
     public float effectstrength;
+    public float effectduration;
 }

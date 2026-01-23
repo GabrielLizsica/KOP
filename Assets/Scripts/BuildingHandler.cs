@@ -22,10 +22,15 @@ public class BuildingHandler : MonoBehaviour
     [SerializeField] private GameObject towerBlueprintValid;
     [SerializeField] private GameObject towerBlueprintInvalid;
     
-    [Header("Trap Assets")]
-    [SerializeField] private GameObject trap;
-    [SerializeField] private GameObject trapBlueprintValid;
-    [SerializeField] private GameObject trapBlueprintInvalid;
+    [Header("BasicTrap Assets")]
+    [SerializeField] private GameObject basicTrap;
+    [SerializeField] private GameObject basicTrapBlueprintValid;
+    [SerializeField] private GameObject basicTrapBlueprintInvalid;
+    
+    [Header("IceTrap Assets")]
+    [SerializeField] private GameObject iceTrap;
+    [SerializeField] private GameObject iceTrapBlueprintValid;
+    [SerializeField] private GameObject iceTrapBlueprintInvalid;
     
     private bool isBuilding;
     private bool canBuild;
@@ -45,8 +50,8 @@ public class BuildingHandler : MonoBehaviour
     {
         DEFAULT,
         TOWER,
-        TRAP,
-        GEM
+        BASIC_TRAP,
+        ICE_TRAP,
     }
     
     private enum BuildingAssetType
@@ -73,7 +78,12 @@ public class BuildingHandler : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Alpha2) && !isBuilding)
         {
-            usedBlueprints = beginBuilding(BuildingType.TRAP);
+            usedBlueprints = beginBuilding(BuildingType.BASIC_TRAP);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha3) && !isBuilding)
+        {
+            usedBlueprints = beginBuilding(BuildingType.ICE_TRAP);
         }
         
         if (isBuilding)
@@ -106,16 +116,23 @@ public class BuildingHandler : MonoBehaviour
                 };
                 
                 break;
-            case BuildingType.TRAP:
+            case BuildingType.BASIC_TRAP:
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
-                    {BuildingAssetType.BUILDING, trap}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, trapBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, trapBlueprintValid}
+                    {BuildingAssetType.BUILDING, basicTrap}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, basicTrapBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, basicTrapBlueprintValid}
                 };
             
                 break;
-            case BuildingType.GEM:
+            case BuildingType.ICE_TRAP:
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, iceTrap}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, iceTrapBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, iceTrapBlueprintValid}
+                };
+            
                 break;
             default:
                 newBuildingAssets = null;
@@ -153,7 +170,24 @@ public class BuildingHandler : MonoBehaviour
                     }
                     
                     break;
-                case BuildingType.TRAP:
+                case BuildingType.BASIC_TRAP:
+                    if (!path.Contains(mouseTile) || checkOccupied(mouseTile))
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
+
+                        canBuild = false;
+                    }
+                    else
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
+
+                        canBuild = true;
+                    }
+
+                    break;
+                case BuildingType.ICE_TRAP:
                     if (!path.Contains(mouseTile) || checkOccupied(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
