@@ -225,6 +225,7 @@ MonoBehaviour:
   towerScriptableObject: {fileID: 11400000, guid: b8bcfd20b1be5d14e9866b1ef0806694, type: 2}
   basicTrapScriptableObject: {fileID: 11400000, guid: c93e924939f56df4fbdd69296a99b2e1, type: 2}
   iceTrapScriptableObject: {fileID: 11400000, guid: 9540edc0c5ffb2845afce0336ff71016, type: 2}
+  poisonTrapScriptableObject: {fileID: 11400000, guid: e4025843239ffdd45970c6f41850e125, type: 2}
   tilemapGround: {fileID: 0}
 --- !u!4 &971234575
 Transform:
@@ -323,6 +324,9 @@ MonoBehaviour:
   iceTrap: {fileID: 8622800852297107663, guid: 42f50ff302e14a84bb82c5bc8fad1df3, type: 3}
   iceTrapBlueprintValid: {fileID: 255577515866052427, guid: 347b67e018e3f6548b330ac3aafd8646, type: 3}
   iceTrapBlueprintInvalid: {fileID: 6674484069045843340, guid: 26822e8305d9c55428b3553955c0ef2c, type: 3}
+  poisonTrap: {fileID: 8622800852297107663, guid: a9ef73e73037f4d48973565ead733a5a, type: 3}
+  poisonTrapBlueprintValid: {fileID: 255577515866052427, guid: 347b67e018e3f6548b330ac3aafd8646, type: 3}
+  poisonTrapBlueprintInvalid: {fileID: 6674484069045843340, guid: 26822e8305d9c55428b3553955c0ef2c, type: 3}
 --- !u!1 &2138761578
 GameObject:
   m_ObjectHideFlags: 0

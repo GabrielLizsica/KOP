@@ -32,6 +32,11 @@ public class BuildingHandler : MonoBehaviour
     [SerializeField] private GameObject iceTrapBlueprintValid;
     [SerializeField] private GameObject iceTrapBlueprintInvalid;
     
+    [Header("IceTrap Assets")]
+    [SerializeField] private GameObject poisonTrap;
+    [SerializeField] private GameObject poisonTrapBlueprintValid;
+    [SerializeField] private GameObject poisonTrapBlueprintInvalid;
+    
     private bool isBuilding;
     private bool canBuild;
     private BuildingType buildingType;
@@ -52,6 +57,7 @@ public class BuildingHandler : MonoBehaviour
         TOWER,
         BASIC_TRAP,
         ICE_TRAP,
+        POISON_TRAP
     }
     
     private enum BuildingAssetType
@@ -84,6 +90,11 @@ public class BuildingHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3) && !isBuilding)
         {
             usedBlueprints = beginBuilding(BuildingType.ICE_TRAP);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha4) && !isBuilding)
+        {
+            usedBlueprints = beginBuilding(BuildingType.POISON_TRAP);
         }
         
         if (isBuilding)
@@ -134,6 +145,16 @@ public class BuildingHandler : MonoBehaviour
                 };
             
                 break;
+                
+            case BuildingType.POISON_TRAP:
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, poisonTrap}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, poisonTrapBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, poisonTrapBlueprintValid}
+                };
+            
+                break;
             default:
                 newBuildingAssets = null;
                 buildingType = BuildingType.DEFAULT;
@@ -171,23 +192,8 @@ public class BuildingHandler : MonoBehaviour
                     
                     break;
                 case BuildingType.BASIC_TRAP:
-                    if (!path.Contains(mouseTile) || checkOccupied(mouseTile))
-                    {
-                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
-                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
-
-                        canBuild = false;
-                    }
-                    else
-                    {
-                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
-                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
-
-                        canBuild = true;
-                    }
-
-                    break;
                 case BuildingType.ICE_TRAP:
+                case BuildingType.POISON_TRAP:
                     if (!path.Contains(mouseTile) || checkOccupied(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);

@@ -78,6 +78,10 @@ public class Enemy : MonoBehaviour
         {
             speed = speed * (1 - effectStrength / 100);
         }
+        else if (effect == MainGameLogic.TrapEffects.POISON)
+        {
+            weakness = weakness * (1 + effectStrength / 100);
+        }
 
         StartCoroutine(resetEffect(duration));
     }

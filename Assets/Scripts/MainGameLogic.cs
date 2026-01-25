@@ -17,6 +17,7 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] private TowerScriptableObject towerScriptableObject;
     [SerializeField] private BasicTrapScriptableObject basicTrapScriptableObject;
     [SerializeField] private IceTrapScriptableObject iceTrapScriptableObject;
+    [SerializeField] private PoisonTrapScriptableObject poisonTrapScriptableObject;
 
     [Header("Grid")]
     [SerializeField] private Tilemap tilemapGround;
@@ -84,7 +85,7 @@ public class MainGameLogic : MonoBehaviour
         
         mapHandler.createMap();
         StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
-        InitializeBuildingScriptableObjects();
+        InitializeCardScriptableObjects();
     }
     
     private void Update()
@@ -94,7 +95,7 @@ public class MainGameLogic : MonoBehaviour
         //Debug.Log(mousePosTile);
     }
     
-    private void InitializeBuildingScriptableObjects()
+    private void InitializeCardScriptableObjects()
     {
         TowerData towerData = JsonConvert.DeserializeObject<TowerData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/Tower.json"));
         TrapData basicTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/BasicTrap.json"));
@@ -118,6 +119,11 @@ public class MainGameLogic : MonoBehaviour
         iceTrapScriptableObject.health = iceTrapData.stats["level0"].health;
         iceTrapScriptableObject.effectstrength = iceTrapData.stats["level0"].effectstrength;
         iceTrapScriptableObject.effectduration = iceTrapData.stats["level0"].effectduration;
+        
+        poisonTrapScriptableObject.damage = poisonTrapData.stats["level0"].damage;
+        poisonTrapScriptableObject.health = poisonTrapData.stats["level0"].health;
+        poisonTrapScriptableObject.effectstrength = poisonTrapData.stats["level0"].effectstrength;
+        poisonTrapScriptableObject.effectduration = poisonTrapData.stats["level0"].effectduration;
                 
         Debug.Log(baseHealSpellData.stats["level0"].effectstrength);
     }
