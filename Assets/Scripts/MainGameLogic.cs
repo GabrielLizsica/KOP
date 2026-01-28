@@ -18,6 +18,9 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] private BasicTrapScriptableObject basicTrapScriptableObject;
     [SerializeField] private IceTrapScriptableObject iceTrapScriptableObject;
     [SerializeField] private PoisonTrapScriptableObject poisonTrapScriptableObject;
+    
+    [Header("Enemy Scriptable Objects")]
+    [SerializeField] private EnemyScriptableObject enemyScriptableObject;
 
     [Header("Grid")]
     [SerializeField] private Tilemap tilemapGround;
@@ -32,6 +35,13 @@ public class MainGameLogic : MonoBehaviour
         ICE,
         FIRE,
         POISON
+    }
+    
+    public class EnemyData
+    {
+        public int speed;
+        public int health;
+        public int weakness;
     }
     
     public class TowerData
@@ -105,6 +115,8 @@ public class MainGameLogic : MonoBehaviour
         SpellData rangeBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/RangeBuffSpell.json"));
         SpellData damageBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/DamageBuffSpell.json"));
         SpellData attackSpeedBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/AttackSpeedBuffSpell.json"));
+
+        EnemyData enemyData = JsonConvert.DeserializeObject<EnemyData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/enemy.json"));
         
         towerScriptableObject.damage = towerData.stats["level0"].damage;
         towerScriptableObject.range = towerData.stats["level0"].range;
@@ -124,6 +136,10 @@ public class MainGameLogic : MonoBehaviour
         poisonTrapScriptableObject.health = poisonTrapData.stats["level0"].health;
         poisonTrapScriptableObject.effectstrength = poisonTrapData.stats["level0"].effectstrength;
         poisonTrapScriptableObject.effectduration = poisonTrapData.stats["level0"].effectduration;
+
+        enemyScriptableObject.speed = enemyData.speed;
+        enemyScriptableObject.health = enemyData.health;
+        enemyScriptableObject.weakness = enemyData.weakness;
                 
         Debug.Log(baseHealSpellData.stats["level0"].effectstrength);
     }

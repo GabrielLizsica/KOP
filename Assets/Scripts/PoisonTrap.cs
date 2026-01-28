@@ -9,17 +9,14 @@ public class PoisonTrap : Trap
     private void Start()
     {
         mainGameLogic = FindAnyObjectByType<MainGameLogic>();
-        damage = stats.damage;
         health = stats.health;
-        effectStrength = stats.effectstrength;
-        effectDuration = stats.effectduration;
     }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if ((targetEnemy = collision.GetComponentInParent<Enemy>()) != null)
         {
-            hitEnemy(targetEnemy);
+            hitEnemy(targetEnemy, stats.damage);
             applyEffect();
             health--;
         }
@@ -27,6 +24,6 @@ public class PoisonTrap : Trap
     
     protected override void applyEffect()
     {
-        targetEnemy.applyEffect(MainGameLogic.TrapEffects.POISON, effectStrength, effectDuration);
+        targetEnemy.applyEffect(MainGameLogic.TrapEffects.POISON, stats.effectstrength, stats.effectduration);
     }
 }

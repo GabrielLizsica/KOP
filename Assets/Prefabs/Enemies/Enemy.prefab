@@ -46,12 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 156e9b2bc46bf4c4a8f1265d2a040662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainGameObject: {fileID: 0}
   mapHandler: {fileID: 0}
+  mainGameLogic: {fileID: 0}
+  stats: {fileID: 11400000, guid: ece897569903bd94a8782956213e540d, type: 2}
   path: []
-  speed: 2
-  health: 100
-  weakness: 1
+  speed: 0
+  health: 0
+  weakness: 0
 --- !u!58 &2992812959259153297
 CircleCollider2D:
   m_ObjectHideFlags: 0

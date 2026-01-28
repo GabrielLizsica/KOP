@@ -226,6 +226,7 @@ MonoBehaviour:
   basicTrapScriptableObject: {fileID: 11400000, guid: c93e924939f56df4fbdd69296a99b2e1, type: 2}
   iceTrapScriptableObject: {fileID: 11400000, guid: 9540edc0c5ffb2845afce0336ff71016, type: 2}
   poisonTrapScriptableObject: {fileID: 11400000, guid: e4025843239ffdd45970c6f41850e125, type: 2}
+  enemyScriptableObject: {fileID: 11400000, guid: ece897569903bd94a8782956213e540d, type: 2}
   tilemapGround: {fileID: 0}
 --- !u!4 &971234575
 Transform:

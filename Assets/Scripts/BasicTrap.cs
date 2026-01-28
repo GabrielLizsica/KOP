@@ -9,17 +9,14 @@ public class BasicTrap : Trap
     
     private void Start()
     {
-        damage = stats.damage;
         health = stats.health;
-        effectStrength = stats.effectstrength;
-        effectDuration = stats.effectduration;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if ((targetEnemy = collision.GetComponentInParent<Enemy>()) != null)
         {
-            hitEnemy(targetEnemy);
+            hitEnemy(targetEnemy, stats.damage);
             health--;
         }
     }

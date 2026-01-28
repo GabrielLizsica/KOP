@@ -1,3 +1,5 @@
 {
-    
+    "speed":2,
+    "health":100,
+    "weakness":1
 }

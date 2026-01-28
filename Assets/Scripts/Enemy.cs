@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private MainGameLogic mainGameLogic;
 
     [Header("Enemy variables")]
+    [SerializeField] private EnemyScriptableObject stats;
     [SerializeField] private List<Vector2Int> path;
     [SerializeField] private float speed;
     [SerializeField] public float health;
@@ -37,6 +38,10 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        speed = stats.speed;
+        health = stats.health;
+        weakness = stats.weakness;
+        
         mainGameLogic = FindAnyObjectByType<MainGameLogic>();
         mapHandler = FindAnyObjectByType<MapHandler>();
         path = mapHandler.Path;
@@ -90,7 +95,7 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
 
-        speed = 2f;
-        weakness = 1f;
+        speed = stats.speed;
+        weakness = stats.weakness;
     }
 }
