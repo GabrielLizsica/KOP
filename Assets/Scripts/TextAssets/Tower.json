@@ -10,13 +10,23 @@
     "stats":{
         "level0":{
             "damage":20,
-            "range":10,
-            "attackspeed":1
+            "range":5,
+            "attackspeed":1.0
         },
         "level1":{
             "damage":30,
-            "range":15,
-            "attackspeed":2
+            "range":7,
+            "attackspeed":1.5
+        },
+        "level2":{
+            "damage":40,
+            "range":9,
+            "attackspeed":2.0
+        },
+        "level3":{
+            "damage":50,
+            "range":11,
+            "attackspeed":2.5
         }
     }
 }

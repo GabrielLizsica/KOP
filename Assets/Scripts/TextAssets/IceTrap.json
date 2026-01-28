@@ -9,8 +9,26 @@
         "level0":{
             "damage":10,
             "health":20,
-            "effectstrength":25,
+            "effectstrength":20,
             "effectduration":5.0
-        } 
+        }, 
+        "level1":{
+            "damage":15,
+            "health":25,
+            "effectstrength":40,
+            "effectduration":7.0
+        }, 
+        "level2":{
+            "damage":20,
+            "health":30,
+            "effectstrength":60,
+            "effectduration":9.0
+        },
+        "level3":{
+            "damage":25,
+            "health":35,
+            "effectstrength":80,
+            "effectduration":11.0
+        }
     }
 }

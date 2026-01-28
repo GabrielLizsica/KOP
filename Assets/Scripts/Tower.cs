@@ -5,21 +5,14 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] TowerScriptableObject stats;
-    [SerializeField] private float range;
-    [SerializeField] private float fireRate;
-    [SerializeField] private int damage;
     [SerializeField] private List<Transform> targets = new List<Transform>();
     [SerializeField] private GameObject projectile;
     private Enemy newEnemy;
 
     private void Start()
     {
-        damage = stats.damage;
-        range = stats.range;
-        fireRate = stats.attackspeed;
-        
         CircleCollider2D trigger = GetComponent<CircleCollider2D>();
-        trigger.radius = range;
+        trigger.radius = stats.range;
 
         StartCoroutine(fireProjectile());
     }
@@ -31,9 +24,9 @@ public class Tower : MonoBehaviour
             if (targets.Count > 0)
             {
                 GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity, transform);
-                newProjectile.GetComponent<Projectile>().Initialize(targets[0], damage);
+                newProjectile.GetComponent<Projectile>().Initialize(targets[0], stats.damage);
                 
-                yield return new WaitForSeconds(1f / fireRate);
+                yield return new WaitForSeconds(1f / stats.attackspeed);
             }
             else
             {
