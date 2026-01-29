@@ -37,6 +37,15 @@ public class MainGameLogic : MonoBehaviour
         POISON
     }
     
+    public enum CardTypes
+    {
+        DEFAULT,
+        TOWER,
+        BASIC_TRAP,
+        ICE_TRAP,
+        POISON_TRAP
+    }
+    
     public class EnemyData
     {
         public int speed;

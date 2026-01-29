@@ -4,9 +4,6 @@ using UnityEngine;
 public  class Trap : MonoBehaviour
 {
     [SerializeField] protected int health;
-    [SerializeField] protected float effectStrength;
-    [SerializeField] protected float effectDuration;
-    
     
     protected void hitEnemy(Enemy targetEnemy, int damage)
     {

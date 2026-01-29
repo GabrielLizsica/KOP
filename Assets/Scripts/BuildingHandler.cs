@@ -11,7 +11,7 @@ public class BuildingHandler : MonoBehaviour
     private MainGameLogic mainGameLogic;
     private MapHandler mapHandler;
     private List<Vector2Int> path;
-    private List<OccupiedPlot> occupiedTiles = new List<OccupiedPlot>();
+    public List<OccupiedPlot> occupiedTiles = new List<OccupiedPlot>();
     private Vector3 prevPos;
     private Dictionary<BuildingAssetType, GameObject> newBuildingAssets;
     private Dictionary<BuildingAssetType, GameObject> usedBlueprints;
@@ -39,19 +39,19 @@ public class BuildingHandler : MonoBehaviour
     
     private bool isBuilding;
     private bool canBuild;
-    private BuildingType buildingType;
-    private struct OccupiedPlot
+    private MainGameLogic.CardTypes buildingType;
+    public struct OccupiedPlot
     {
-        public OccupiedPlot(Vector2Int _pos, BuildingType _type)
+        public OccupiedPlot(Vector2Int _pos, MainGameLogic.CardTypes _type)
         {
             pos = _pos;
             type = _type;
         }
 
         public Vector2Int pos { get; }
-        public BuildingType type { get; }
+        public MainGameLogic.CardTypes type { get; }
     }
-    private enum BuildingType
+    public enum BuildingType
     {
         DEFAULT,
         TOWER,
@@ -79,22 +79,22 @@ public class BuildingHandler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1) && !isBuilding)
         {
-            usedBlueprints = beginBuilding(BuildingType.TOWER);
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.TOWER);
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha2) && !isBuilding)
         {
-            usedBlueprints = beginBuilding(BuildingType.BASIC_TRAP);
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.BASIC_TRAP);
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha3) && !isBuilding)
         {
-            usedBlueprints = beginBuilding(BuildingType.ICE_TRAP);
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.ICE_TRAP);
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha4) && !isBuilding)
         {
-            usedBlueprints = beginBuilding(BuildingType.POISON_TRAP);
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.POISON_TRAP);
         }
         
         if (isBuilding)
@@ -114,11 +114,11 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
-    private void setBuilding(BuildingType type)
+    private void setBuilding(MainGameLogic.CardTypes type)
     {
         switch (type)
         {
-            case BuildingType.TOWER:
+            case MainGameLogic.CardTypes.TOWER:
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, tower}, 
@@ -127,7 +127,7 @@ public class BuildingHandler : MonoBehaviour
                 };
                 
                 break;
-            case BuildingType.BASIC_TRAP:
+            case MainGameLogic.CardTypes.BASIC_TRAP:
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, basicTrap}, 
@@ -136,7 +136,7 @@ public class BuildingHandler : MonoBehaviour
                 };
             
                 break;
-            case BuildingType.ICE_TRAP:
+            case MainGameLogic.CardTypes.ICE_TRAP:
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, iceTrap}, 
@@ -146,7 +146,7 @@ public class BuildingHandler : MonoBehaviour
             
                 break;
                 
-            case BuildingType.POISON_TRAP:
+            case MainGameLogic.CardTypes.POISON_TRAP:
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, poisonTrap}, 
@@ -157,7 +157,7 @@ public class BuildingHandler : MonoBehaviour
                 break;
             default:
                 newBuildingAssets = null;
-                buildingType = BuildingType.DEFAULT;
+                buildingType = MainGameLogic.CardTypes.DEFAULT;
                 break;
         }
     }
@@ -174,7 +174,7 @@ public class BuildingHandler : MonoBehaviour
                     
             switch (buildingType)
             {
-                case BuildingType.TOWER:
+                case MainGameLogic.CardTypes.TOWER:
                     if (path.Contains(mouseTile) || checkOccupied(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
@@ -191,9 +191,9 @@ public class BuildingHandler : MonoBehaviour
                     }
                     
                     break;
-                case BuildingType.BASIC_TRAP:
-                case BuildingType.ICE_TRAP:
-                case BuildingType.POISON_TRAP:
+                case MainGameLogic.CardTypes.BASIC_TRAP:
+                case MainGameLogic.CardTypes.ICE_TRAP:
+                case MainGameLogic.CardTypes.POISON_TRAP:
                     if (!path.Contains(mouseTile) || checkOccupied(mouseTile))
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
@@ -218,7 +218,7 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
-    private Dictionary<BuildingAssetType, GameObject> beginBuilding(BuildingType toBuild)
+    private Dictionary<BuildingAssetType, GameObject> beginBuilding(MainGameLogic.CardTypes toBuild)
     {
         isBuilding = true;
         buildingType = toBuild;
@@ -242,7 +242,7 @@ public class BuildingHandler : MonoBehaviour
         Destroy(usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID]);
         Destroy(usedBlueprints[BuildingAssetType.BLUEPRINT_VALID]);
         usedBlueprints = null;
-        buildingType = BuildingType.DEFAULT;
+        buildingType = MainGameLogic.CardTypes.DEFAULT;
         isBuilding = false;
     }
     

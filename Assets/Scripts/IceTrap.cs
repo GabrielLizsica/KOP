@@ -3,12 +3,10 @@ using UnityEngine;
 public class IceTrap : Trap
 {
     [SerializeField] private IceTrapScriptableObject stats;
-    [SerializeField] private MainGameLogic mainGameLogic;
     private Enemy targetEnemy;
     
     private void Start()
     {
-        mainGameLogic = FindAnyObjectByType<MainGameLogic>();
         health = stats.health;
     }
     

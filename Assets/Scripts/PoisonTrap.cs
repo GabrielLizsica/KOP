@@ -3,12 +3,10 @@ using UnityEngine;
 public class PoisonTrap : Trap
 {
     [SerializeField] private PoisonTrapScriptableObject stats;
-    private MainGameLogic mainGameLogic;
     private Enemy targetEnemy;
     
     private void Start()
     {
-        mainGameLogic = FindAnyObjectByType<MainGameLogic>();
         health = stats.health;
     }
     
