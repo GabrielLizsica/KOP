@@ -11,7 +11,7 @@ public class Projectile : MonoBehaviour
     private bool isInitialized = false;
     private Vector2 targetPos;
 
-    public void Initialize(Transform _target, int _damage)
+    public void Initialize(Transform _target, float _damage)
     {
         damage = _damage;
         target = _target;

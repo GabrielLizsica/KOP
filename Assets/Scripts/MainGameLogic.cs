@@ -18,6 +18,9 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] private BasicTrapScriptableObject basicTrapScriptableObject;
     [SerializeField] private IceTrapScriptableObject iceTrapScriptableObject;
     [SerializeField] private PoisonTrapScriptableObject poisonTrapScriptableObject;
+    [SerializeField] private AttackSpeedBuffScriptableObject attackSpeedBuffScriptableObject;
+    [SerializeField] private RangeBuffScriptableObject rangeBuffScriptableObject;
+    [SerializeField] private DamageBuffScriptableObject damageBuffScriptableObject;
     
     [Header("Enemy Scriptable Objects")]
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
@@ -43,7 +46,10 @@ public class MainGameLogic : MonoBehaviour
         TOWER,
         BASIC_TRAP,
         ICE_TRAP,
-        POISON_TRAP
+        POISON_TRAP,
+        ATTACK_SPEED_BUFF,
+        RANGE_BUFF,
+        DAMAGE_BUFF
     }
     
     public class EnemyData
@@ -83,7 +89,7 @@ public class MainGameLogic : MonoBehaviour
     
     public class TrapStats
     {
-        public int damage;
+        public float damage;
         public int health;
         public float effectstrength;
         public float effectduration;
@@ -92,11 +98,11 @@ public class MainGameLogic : MonoBehaviour
     public class SpellStats
     {
         public float effectstrength;
+        public float effectduration;
     }
     
     private void Start()
-    {
-        
+    {   
         mapHandler = GetComponent<MapHandler>();
         waveHandler = GetComponent<WaveHandler>();
 
@@ -115,7 +121,7 @@ public class MainGameLogic : MonoBehaviour
     }
     
     private void InitializeCardScriptableObjects()
-    {
+    { 
         TowerData towerData = JsonConvert.DeserializeObject<TowerData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/Tower.json"));
         TrapData basicTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/BasicTrap.json"));
         TrapData iceTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/IceTrap.json"));
@@ -124,6 +130,16 @@ public class MainGameLogic : MonoBehaviour
         SpellData rangeBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/RangeBuffSpell.json"));
         SpellData damageBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/DamageBuffSpell.json"));
         SpellData attackSpeedBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/AttackSpeedBuffSpell.json"));
+        
+        if (attackSpeedBuffScriptableObject == null)
+            Debug.LogError("attackSpeedBuffScriptableObject is NULL");
+
+        if (attackSpeedBuffSpellData == null)
+            Debug.LogError("attackSpeedBuffSpellData is NULL");
+        else if (attackSpeedBuffSpellData.stats == null)
+            Debug.LogError("stats dictionary is NULL");
+        else if (!attackSpeedBuffSpellData.stats.ContainsKey("level0"))
+            Debug.LogError("stats does NOT contain key 'level0'");
 
         EnemyData enemyData = JsonConvert.DeserializeObject<EnemyData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/enemy.json"));
         
@@ -145,6 +161,15 @@ public class MainGameLogic : MonoBehaviour
         poisonTrapScriptableObject.health = poisonTrapData.stats["level0"].health;
         poisonTrapScriptableObject.effectstrength = poisonTrapData.stats["level0"].effectstrength;
         poisonTrapScriptableObject.effectduration = poisonTrapData.stats["level0"].effectduration;
+
+        attackSpeedBuffScriptableObject.effectstrength = attackSpeedBuffSpellData.stats["level0"].effectstrength;
+        attackSpeedBuffScriptableObject.effectduration = attackSpeedBuffSpellData.stats["level0"].effectduration;
+
+        rangeBuffScriptableObject.effectstrength = rangeBuffSpellData.stats["level0"].effectstrength;
+        rangeBuffScriptableObject.effectduration = rangeBuffSpellData.stats["level0"].effectduration;
+
+        damageBuffScriptableObject.effectstrength = damageBuffSpellData.stats["level0"].effectstrength;
+        damageBuffScriptableObject.effectduration = damageBuffSpellData.stats["level0"].effectduration;
 
         enemyScriptableObject.speed = enemyData.speed;
         enemyScriptableObject.health = enemyData.health;

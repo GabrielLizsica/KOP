@@ -4,10 +4,13 @@
         "hu":"Tamadasi sebesseg novelo"
     },
     "description":{
+        "en":"Increase Attack Speed",
+        "hu":"Tamadasi sebesseg novelo"
     },
     "stats":{
         "level0":{
-            "effectstrength":1
+            "effectstrength":25,
+            "effectduration":5.0
         } 
     }
 }

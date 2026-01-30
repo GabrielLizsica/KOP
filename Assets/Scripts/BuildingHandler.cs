@@ -12,10 +12,30 @@ public class BuildingHandler : MonoBehaviour
     private MapHandler mapHandler;
     private List<Vector2Int> path;
     public List<OccupiedPlot> occupiedTiles = new List<OccupiedPlot>();
+    private List<MainGameLogic.CardTypes> buildings = new List<MainGameLogic.CardTypes> 
+    {
+        MainGameLogic.CardTypes.TOWER,
+        MainGameLogic.CardTypes.BASIC_TRAP,
+        MainGameLogic.CardTypes.ICE_TRAP,
+        MainGameLogic.CardTypes.POISON_TRAP
+    };
+    private List<MainGameLogic.CardTypes> spells = new List<MainGameLogic.CardTypes>
+    {
+        MainGameLogic.CardTypes.ATTACK_SPEED_BUFF,
+        MainGameLogic.CardTypes.RANGE_BUFF,
+        MainGameLogic.CardTypes.DAMAGE_BUFF,
+    };
+    private List<MainGameLogic.CardTypes> traps = new List<MainGameLogic.CardTypes>
+    {
+        MainGameLogic.CardTypes.BASIC_TRAP,
+        MainGameLogic.CardTypes.ICE_TRAP,
+        MainGameLogic.CardTypes.POISON_TRAP
+    };
     private Vector3 prevPos;
     private Dictionary<BuildingAssetType, GameObject> newBuildingAssets;
     private Dictionary<BuildingAssetType, GameObject> usedBlueprints;
     private GameObject builtBuilding;
+    private SpellScriptableObject spell;
     
     [Header("Tower Assets")]
     [SerializeField] private GameObject tower;
@@ -36,28 +56,38 @@ public class BuildingHandler : MonoBehaviour
     [SerializeField] private GameObject poisonTrap;
     [SerializeField] private GameObject poisonTrapBlueprintValid;
     [SerializeField] private GameObject poisonTrapBlueprintInvalid;
+
+    [Header("AttackSpeedBuffSpell Assets")]
+    [SerializeField] private GameObject attackSpeedBuffBlueprintValid;
+    [SerializeField] private GameObject attackSpeedBuffBlueprintInvalid;
+    [SerializeField] private AttackSpeedBuffScriptableObject attackSpeedBuffScriptableObject;
+    
+    [Header("RangeBuffSpell Assets")]
+    [SerializeField] private GameObject rangeBuffBlueprintValid;
+    [SerializeField] private GameObject rangeBuffBlueprintInvalid;
+    [SerializeField] private RangeBuffScriptableObject rangeBuffScriptableObject;
+    
+    [Header("DamageBuffSpell Assets")]
+    [SerializeField] private GameObject damageBuffBlueprintValid;
+    [SerializeField] private GameObject damageBuffBlueprintInvalid;
+    [SerializeField] private DamageBuffScriptableObject damageBuffScriptableObject;
     
     private bool isBuilding;
     private bool canBuild;
     private MainGameLogic.CardTypes buildingType;
+    private OccupiedPlot occupiedPlot;
     public struct OccupiedPlot
     {
-        public OccupiedPlot(Vector2Int _pos, MainGameLogic.CardTypes _type)
+        public OccupiedPlot(Vector2Int _pos, MainGameLogic.CardTypes _type, GameObject _buildingObject)
         {
             pos = _pos;
             type = _type;
+            buildingObject = _buildingObject;
         }
 
         public Vector2Int pos { get; }
         public MainGameLogic.CardTypes type { get; }
-    }
-    public enum BuildingType
-    {
-        DEFAULT,
-        TOWER,
-        BASIC_TRAP,
-        ICE_TRAP,
-        POISON_TRAP
+        public GameObject buildingObject { get; }
     }
     
     private enum BuildingAssetType
@@ -97,21 +127,43 @@ public class BuildingHandler : MonoBehaviour
             usedBlueprints = beginBuilding(MainGameLogic.CardTypes.POISON_TRAP);
         }
         
+        if (Input.GetKeyDown(KeyCode.Alpha5) && !isBuilding)
+        {
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.ATTACK_SPEED_BUFF);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha6) && !isBuilding)
+        {
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.RANGE_BUFF);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha7) && !isBuilding)
+        {
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.DAMAGE_BUFF);
+        }
+        
         if (isBuilding)
         {
             updateBlueprint(usedBlueprints);
         }
     }
     
-    public void placeNewBuilding(InputAction.CallbackContext context)
+    private Dictionary<BuildingAssetType, GameObject> beginBuilding(MainGameLogic.CardTypes toBuild)
     {
-        if (context.performed && canBuild && isBuilding)
-        {
-            Vector3 adjustedPos = new Vector3(mainGameLogic.MousePosTile.x + 0.5f, mainGameLogic.MousePosTile.y + 0.5f, mainGameLogic.MousePosTile.z);
-            builtBuilding = Instantiate(newBuildingAssets[BuildingAssetType.BUILDING], adjustedPos, Quaternion.identity);
-            occupiedTiles.Add(new OccupiedPlot(new Vector2Int((int)mainGameLogic.MousePosTile.x, (int)mainGameLogic.MousePosTile.y), buildingType));
-            finishBuilding();
-        }
+        isBuilding = true;
+        buildingType = toBuild;
+        setBuilding(toBuild);
+        prevPos = new Vector3(-1, -1, -1);
+
+        GameObject blueprintInvalid = Instantiate(newBuildingAssets[BuildingAssetType.BLUEPRINT_INVALID], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
+        blueprintInvalid.name = newBuildingAssets[BuildingAssetType.BLUEPRINT_INVALID].name;
+        blueprintInvalid.SetActive(false);
+        
+        GameObject blueprintValid = Instantiate(newBuildingAssets[BuildingAssetType.BLUEPRINT_VALID], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
+        blueprintValid.name = newBuildingAssets[BuildingAssetType.BLUEPRINT_VALID].name;
+        blueprintValid.SetActive(false);
+
+        return new Dictionary<BuildingAssetType, GameObject> { { BuildingAssetType.BLUEPRINT_INVALID, blueprintInvalid }, { BuildingAssetType.BLUEPRINT_VALID, blueprintValid } };
     }
     
     private void setBuilding(MainGameLogic.CardTypes type)
@@ -155,6 +207,42 @@ public class BuildingHandler : MonoBehaviour
                 };
             
                 break;
+            
+            case MainGameLogic.CardTypes.ATTACK_SPEED_BUFF:
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, null}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, attackSpeedBuffBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, attackSpeedBuffBlueprintValid}
+                };
+
+                spell = attackSpeedBuffScriptableObject;
+
+                break;
+                
+            case MainGameLogic.CardTypes.RANGE_BUFF:
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, null}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, rangeBuffBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, rangeBuffBlueprintValid}
+                };
+
+                spell = rangeBuffScriptableObject;
+
+                break;
+                
+            case MainGameLogic.CardTypes.DAMAGE_BUFF:
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, null}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, damageBuffBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, damageBuffBlueprintValid}
+                };
+
+                spell = damageBuffScriptableObject;
+
+                break;
             default:
                 newBuildingAssets = null;
                 buildingType = MainGameLogic.CardTypes.DEFAULT;
@@ -175,7 +263,7 @@ public class BuildingHandler : MonoBehaviour
             switch (buildingType)
             {
                 case MainGameLogic.CardTypes.TOWER:
-                    if (path.Contains(mouseTile) || checkOccupied(mouseTile))
+                    if (path.Contains(mouseTile) || checkOccupied(mouseTile) != MainGameLogic.CardTypes.DEFAULT)
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
                         usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
@@ -191,10 +279,11 @@ public class BuildingHandler : MonoBehaviour
                     }
                     
                     break;
+                    
                 case MainGameLogic.CardTypes.BASIC_TRAP:
                 case MainGameLogic.CardTypes.ICE_TRAP:
                 case MainGameLogic.CardTypes.POISON_TRAP:
-                    if (!path.Contains(mouseTile) || checkOccupied(mouseTile))
+                    if (!path.Contains(mouseTile) || checkOccupied(mouseTile) != MainGameLogic.CardTypes.DEFAULT)
                     {
                         usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
                         usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
@@ -210,6 +299,60 @@ public class BuildingHandler : MonoBehaviour
                     }
 
                     break;
+                
+                case MainGameLogic.CardTypes.ATTACK_SPEED_BUFF:
+                    if (checkOccupied(mouseTile) == MainGameLogic.CardTypes.TOWER)
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
+
+                        canBuild = true;
+                    }
+                    else
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
+
+                        canBuild = false;
+                    }
+                    
+                    break;
+                    
+                case MainGameLogic.CardTypes.RANGE_BUFF:
+                    if (checkOccupied(mouseTile) == MainGameLogic.CardTypes.TOWER)
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
+
+                        canBuild = true;
+                    }
+                    else
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
+
+                        canBuild = false;
+                    }
+                    
+                    break;
+                    
+                case MainGameLogic.CardTypes.DAMAGE_BUFF:
+                    if (checkOccupied(mouseTile) == MainGameLogic.CardTypes.TOWER || traps.Contains(checkOccupied(mouseTile)))
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
+
+                        canBuild = true;
+                    }
+                    else
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
+
+                        canBuild = false;
+                    }
+                    
+                    break;
                 default:
                     break;
             }
@@ -218,22 +361,55 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
-    private Dictionary<BuildingAssetType, GameObject> beginBuilding(MainGameLogic.CardTypes toBuild)
+    private MainGameLogic.CardTypes checkOccupied(Vector2Int pos)
     {
-        isBuilding = true;
-        buildingType = toBuild;
-        setBuilding(toBuild);
-        prevPos = new Vector3(-1, -1, -1);
+        for (int i = 0; i < occupiedTiles.Count; i++)
+        {
+            if (occupiedTiles[i].pos == pos)
+            {
+                occupiedPlot = occupiedTiles[i];
+                return occupiedTiles[i].type;
+            }
+        }
 
-        GameObject blueprintInvalid = Instantiate(newBuildingAssets[BuildingAssetType.BLUEPRINT_INVALID], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
-        blueprintInvalid.name = newBuildingAssets[BuildingAssetType.BLUEPRINT_INVALID].name;
-        blueprintInvalid.SetActive(false);
-        
-        GameObject blueprintValid = Instantiate(newBuildingAssets[BuildingAssetType.BLUEPRINT_VALID], new Vector3(mainGameLogic.MousePosTile.x, mainGameLogic.MousePosTile.y, 0), Quaternion.identity);
-        blueprintValid.name = newBuildingAssets[BuildingAssetType.BLUEPRINT_VALID].name;
-        blueprintValid.SetActive(false);
-
-        return new Dictionary<BuildingAssetType, GameObject> { { BuildingAssetType.BLUEPRINT_INVALID, blueprintInvalid }, { BuildingAssetType.BLUEPRINT_VALID, blueprintValid } };
+        return MainGameLogic.CardTypes.DEFAULT;
+    }
+    
+    public void placeNewBuilding(InputAction.CallbackContext context)
+    {
+        if (context.performed && canBuild && isBuilding)
+        {
+            if (buildings.Contains(buildingType))
+            {
+                Vector3 adjustedPos = new Vector3(mainGameLogic.MousePosTile.x + 0.5f, mainGameLogic.MousePosTile.y + 0.5f, mainGameLogic.MousePosTile.z);
+                builtBuilding = Instantiate(newBuildingAssets[BuildingAssetType.BUILDING], adjustedPos, Quaternion.identity);
+                occupiedTiles.Add(new OccupiedPlot(new Vector2Int((int)mainGameLogic.MousePosTile.x, (int)mainGameLogic.MousePosTile.y), buildingType, builtBuilding));
+            }
+            else if (spells.Contains(buildingType))
+            {
+                switch (occupiedPlot.type)
+                {
+                    case MainGameLogic.CardTypes.TOWER:
+                        occupiedPlot.buildingObject.GetComponent<Tower>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                        Debug.Log("Casted on Tower!");
+                        break;
+                        
+                    case MainGameLogic.CardTypes.BASIC_TRAP:
+                        occupiedPlot.buildingObject.GetComponent<BasicTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                        break;
+                        
+                    case  MainGameLogic.CardTypes.ICE_TRAP:
+                        occupiedPlot.buildingObject.GetComponent<IceTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                        break;
+                        
+                    case  MainGameLogic.CardTypes.POISON_TRAP:
+                        occupiedPlot.buildingObject.GetComponent<PoisonTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                        break;
+                }
+            }
+            
+            finishBuilding();
+        }
     }
     
     private void finishBuilding()
@@ -243,19 +419,7 @@ public class BuildingHandler : MonoBehaviour
         Destroy(usedBlueprints[BuildingAssetType.BLUEPRINT_VALID]);
         usedBlueprints = null;
         buildingType = MainGameLogic.CardTypes.DEFAULT;
+        spell = null;
         isBuilding = false;
-    }
-    
-    private bool checkOccupied(Vector2Int pos)
-    {
-        for (int i = 0; i < occupiedTiles.Count; i++)
-        {
-            if (occupiedTiles[i].pos == pos)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
