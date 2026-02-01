@@ -32,6 +32,27 @@ public class MainGameLogic : MonoBehaviour
     [Header("")]
     [SerializeField] public float baseHealth;
 
+    private DeckHandler deckHandler;
+    private List<CardTypes> deck = new List<CardTypes>()
+    {
+        CardTypes.TOWER,
+        CardTypes.TOWER,
+        CardTypes.BASIC_TRAP,
+        CardTypes.BASIC_TRAP,
+        CardTypes.ICE_TRAP,
+        CardTypes.ICE_TRAP,
+        CardTypes.POISON_TRAP,
+        CardTypes.POISON_TRAP,
+        CardTypes.ATTACK_SPEED_BUFF,
+        CardTypes.ATTACK_SPEED_BUFF,
+        CardTypes.RANGE_BUFF,
+        CardTypes.RANGE_BUFF,
+        CardTypes.DAMAGE_BUFF,
+        CardTypes.DAMAGE_BUFF,
+        CardTypes.BASE_HEAL,
+        CardTypes.BASE_HEAL
+    };
+
     private Vector3 mousePosTile;
 
     public Vector3 MousePosTile { get { return mousePosTile; } }
@@ -110,11 +131,13 @@ public class MainGameLogic : MonoBehaviour
     {   
         mapHandler = GetComponent<MapHandler>();
         waveHandler = GetComponent<WaveHandler>();
+        deckHandler = GetComponent<DeckHandler>();
 
         tilemapGround = mapHandler.tilemapGround;
         baseHealth = 100f;
         
         mapHandler.createMap();
+        deckHandler.setDeck(deck);
         StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
         InitializeCardScriptableObjects();
     }
@@ -173,8 +196,6 @@ public class MainGameLogic : MonoBehaviour
         enemyScriptableObject.speed = enemyData.speed;
         enemyScriptableObject.health = enemyData.health;
         enemyScriptableObject.weakness = enemyData.weakness;
-                
-        Debug.Log(baseHealSpellData.stats["level0"].effectstrength);
     }
     
     private Vector3 getMousePosTile()

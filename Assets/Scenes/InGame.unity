@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 971234573}
   - component: {fileID: 971234576}
   - component: {fileID: 971234579}
+  - component: {fileID: 971234580}
   m_Layer: 0
   m_Name: MainGameObject
   m_TagString: Untagged
@@ -232,6 +233,7 @@ MonoBehaviour:
   baseHealSciptableObject: {fileID: 11400000, guid: e89d9338f7c238249bcb3809238ed9c5, type: 2}
   enemyScriptableObject: {fileID: 11400000, guid: ece897569903bd94a8782956213e540d, type: 2}
   tilemapGround: {fileID: 0}
+  baseHealth: 0
 --- !u!4 &971234575
 Transform:
   m_ObjectHideFlags: 0
@@ -289,9 +291,9 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 971234579}
-        m_TargetAssemblyTypeName: BuildingHandler, Assembly-CSharp
-        m_MethodName: placeNewBuilding
+      - m_Target: {fileID: 971234580}
+        m_TargetAssemblyTypeName: DeckHandler, Assembly-CSharp
+        m_MethodName: castCard
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -344,6 +346,18 @@ MonoBehaviour:
   baseHealBlueprintValid: {fileID: 9161564235182866073, guid: 19ec6ef13322c43458c886e1fb0dd0c7, type: 3}
   baseHealBlueprintInvalid: {fileID: 9161564235182866073, guid: 56724e0faa800f5409a29129fb30a22a, type: 3}
   baseHealScriptableObject: {fileID: 11400000, guid: a1ce487e59ec71a4680276c216b2d99b, type: 2}
+--- !u!114 &971234580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971234572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd1552c587cb6ff489008c3ca40dfaa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2138761578
 GameObject:
   m_ObjectHideFlags: 0

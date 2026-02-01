@@ -113,6 +113,7 @@ public class BuildingHandler : MonoBehaviour
     
     private void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha1) && !isBuilding)
         {
             usedBlueprints = beginBuilding(MainGameLogic.CardTypes.TOWER);
@@ -152,11 +153,17 @@ public class BuildingHandler : MonoBehaviour
         {
             usedBlueprints = beginBuilding(MainGameLogic.CardTypes.BASE_HEAL);
         }
+        */
         
         if (isBuilding)
         {
             updateBlueprint(usedBlueprints);
         }
+    }
+    
+    public void cardSelected(MainGameLogic.CardTypes type)
+    {
+        usedBlueprints = beginBuilding(type);
     }
     
     private Dictionary<BuildingAssetType, GameObject> beginBuilding(MainGameLogic.CardTypes toBuild)
@@ -416,9 +423,9 @@ public class BuildingHandler : MonoBehaviour
         return MainGameLogic.CardTypes.DEFAULT;
     }
     
-    public void placeNewBuilding(InputAction.CallbackContext context)
+    public void placeNewBuilding()
     {
-        if (context.performed && canBuild && isBuilding)
+        if (canBuild && isBuilding)
         {
             if (buildings.Contains(buildingType))
             {
@@ -460,7 +467,7 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
-    private void finishBuilding()
+    public void finishBuilding()
     {
         newBuildingAssets = null;
         Destroy(usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID]);
