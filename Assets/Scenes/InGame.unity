@@ -305,6 +305,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: fa9972b3-6885-486f-8e3f-4c2c76e8a784
     m_ActionName: 'InBattle/Interact[/Mouse/press]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 971234580}
+        m_TargetAssemblyTypeName: DeckHandler, Assembly-CSharp
+        m_MethodName: cancelCast
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ab03b39e-f4de-4678-8505-e90f47d27046
+    m_ActionName: 'InBattle/CancelPlace[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: InBattle
