@@ -21,12 +21,16 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] private AttackSpeedBuffScriptableObject attackSpeedBuffScriptableObject;
     [SerializeField] private RangeBuffScriptableObject rangeBuffScriptableObject;
     [SerializeField] private DamageBuffScriptableObject damageBuffScriptableObject;
+    [SerializeField] private BaseHealSciptableObject baseHealSciptableObject;
     
     [Header("Enemy Scriptable Objects")]
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
 
     [Header("Grid")]
     [SerializeField] private Tilemap tilemapGround;
+    
+    [Header("")]
+    [SerializeField] public float baseHealth;
 
     private Vector3 mousePosTile;
 
@@ -49,7 +53,8 @@ public class MainGameLogic : MonoBehaviour
         POISON_TRAP,
         ATTACK_SPEED_BUFF,
         RANGE_BUFF,
-        DAMAGE_BUFF
+        DAMAGE_BUFF,
+        BASE_HEAL
     }
     
     public class EnemyData
@@ -107,6 +112,7 @@ public class MainGameLogic : MonoBehaviour
         waveHandler = GetComponent<WaveHandler>();
 
         tilemapGround = mapHandler.tilemapGround;
+        baseHealth = 100f;
         
         mapHandler.createMap();
         StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
@@ -130,16 +136,6 @@ public class MainGameLogic : MonoBehaviour
         SpellData rangeBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/RangeBuffSpell.json"));
         SpellData damageBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/DamageBuffSpell.json"));
         SpellData attackSpeedBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/AttackSpeedBuffSpell.json"));
-        
-        if (attackSpeedBuffScriptableObject == null)
-            Debug.LogError("attackSpeedBuffScriptableObject is NULL");
-
-        if (attackSpeedBuffSpellData == null)
-            Debug.LogError("attackSpeedBuffSpellData is NULL");
-        else if (attackSpeedBuffSpellData.stats == null)
-            Debug.LogError("stats dictionary is NULL");
-        else if (!attackSpeedBuffSpellData.stats.ContainsKey("level0"))
-            Debug.LogError("stats does NOT contain key 'level0'");
 
         EnemyData enemyData = JsonConvert.DeserializeObject<EnemyData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/enemy.json"));
         
@@ -170,6 +166,9 @@ public class MainGameLogic : MonoBehaviour
 
         damageBuffScriptableObject.effectstrength = damageBuffSpellData.stats["level0"].effectstrength;
         damageBuffScriptableObject.effectduration = damageBuffSpellData.stats["level0"].effectduration;
+        
+        baseHealSciptableObject.effectstrength = baseHealSpellData.stats["level0"].effectstrength;
+        baseHealSciptableObject.effectduration = baseHealSpellData.stats["level0"].effectduration;
 
         enemyScriptableObject.speed = enemyData.speed;
         enemyScriptableObject.health = enemyData.health;

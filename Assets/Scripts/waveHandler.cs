@@ -9,10 +9,12 @@ public class WaveHandler : MonoBehaviour
     [SerializeField] private MapHandler mapHandler;
 
     [SerializeField] private Enemy enemy;
+    private MainGameLogic mainGameLogic;
     
     private void Start()
     {
         mapHandler = GetComponent<MapHandler>();
+        mainGameLogic = GetComponent<MainGameLogic>();
     }
     
     public IEnumerator spawnWave(int waveCount, int enemyCount, float timeBetweenWaves, float timeBetweenenemies)
@@ -37,6 +39,7 @@ public class WaveHandler : MonoBehaviour
     
     private void Enemy_OnBasereached(object sender, Enemy.OnBaseReachedEventArgs e)
     {
+        mainGameLogic.baseHealth -= 25f;
         Transform enemyParent = e.enemyObject.transform.parent;
         Destroy(e.enemyObject.gameObject);
         StartCoroutine(DeleteWaveEmpty(enemyParent));

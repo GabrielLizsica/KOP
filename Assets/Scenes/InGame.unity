@@ -229,6 +229,7 @@ MonoBehaviour:
   attackSpeedBuffScriptableObject: {fileID: 11400000, guid: 34f7b290173897946b6d252979caa0cf, type: 2}
   rangeBuffScriptableObject: {fileID: 11400000, guid: 02c64e5d3735d6e43bd9015756467405, type: 2}
   damageBuffScriptableObject: {fileID: 11400000, guid: a1ce487e59ec71a4680276c216b2d99b, type: 2}
+  baseHealSciptableObject: {fileID: 11400000, guid: e89d9338f7c238249bcb3809238ed9c5, type: 2}
   enemyScriptableObject: {fileID: 11400000, guid: ece897569903bd94a8782956213e540d, type: 2}
   tilemapGround: {fileID: 0}
 --- !u!4 &971234575
@@ -340,6 +341,9 @@ MonoBehaviour:
   damageBuffBlueprintValid: {fileID: 9161564235182866073, guid: 971a857e8b554cf46ac47d3f983c8169, type: 3}
   damageBuffBlueprintInvalid: {fileID: 9161564235182866073, guid: 7b883f63275ffac488564acb8ab7b761, type: 3}
   damageBuffScriptableObject: {fileID: 11400000, guid: a1ce487e59ec71a4680276c216b2d99b, type: 2}
+  baseHealBlueprintValid: {fileID: 9161564235182866073, guid: 19ec6ef13322c43458c886e1fb0dd0c7, type: 3}
+  baseHealBlueprintInvalid: {fileID: 9161564235182866073, guid: 56724e0faa800f5409a29129fb30a22a, type: 3}
+  baseHealScriptableObject: {fileID: 11400000, guid: a1ce487e59ec71a4680276c216b2d99b, type: 2}
 --- !u!1 &2138761578
 GameObject:
   m_ObjectHideFlags: 0

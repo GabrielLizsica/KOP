@@ -24,6 +24,7 @@ public class BuildingHandler : MonoBehaviour
         MainGameLogic.CardTypes.ATTACK_SPEED_BUFF,
         MainGameLogic.CardTypes.RANGE_BUFF,
         MainGameLogic.CardTypes.DAMAGE_BUFF,
+        MainGameLogic.CardTypes.BASE_HEAL
     };
     private List<MainGameLogic.CardTypes> traps = new List<MainGameLogic.CardTypes>
     {
@@ -71,6 +72,11 @@ public class BuildingHandler : MonoBehaviour
     [SerializeField] private GameObject damageBuffBlueprintValid;
     [SerializeField] private GameObject damageBuffBlueprintInvalid;
     [SerializeField] private DamageBuffScriptableObject damageBuffScriptableObject;
+    
+    [Header("BaseHealSpell Assets")]
+    [SerializeField] private GameObject baseHealBlueprintValid;
+    [SerializeField] private GameObject baseHealBlueprintInvalid;
+    [SerializeField] private DamageBuffScriptableObject baseHealScriptableObject;
     
     private bool isBuilding;
     private bool canBuild;
@@ -140,6 +146,11 @@ public class BuildingHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha7) && !isBuilding)
         {
             usedBlueprints = beginBuilding(MainGameLogic.CardTypes.DAMAGE_BUFF);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha8) && !isBuilding)
+        {
+            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.BASE_HEAL);
         }
         
         if (isBuilding)
@@ -241,6 +252,18 @@ public class BuildingHandler : MonoBehaviour
                 };
 
                 spell = damageBuffScriptableObject;
+
+                break;
+                
+            case MainGameLogic.CardTypes.BASE_HEAL:
+                newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
+                {
+                    {BuildingAssetType.BUILDING, null}, 
+                    {BuildingAssetType.BLUEPRINT_INVALID, baseHealBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, baseHealBlueprintValid}
+                };
+
+                spell = baseHealScriptableObject;
 
                 break;
             default:
@@ -353,6 +376,24 @@ public class BuildingHandler : MonoBehaviour
                     }
                     
                     break;
+                    
+                case MainGameLogic.CardTypes.BASE_HEAL:
+                    if (mouseTile == path[path.Count - 1])
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(false);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(true);
+
+                        canBuild = true;
+                    }
+                    else
+                    {
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_INVALID].SetActive(true);
+                        usedBlueprints[BuildingAssetType.BLUEPRINT_VALID].SetActive(false);
+
+                        canBuild = false;
+                    }
+                    
+                    break;
                 default:
                     break;
             }
@@ -387,24 +428,31 @@ public class BuildingHandler : MonoBehaviour
             }
             else if (spells.Contains(buildingType))
             {
-                switch (occupiedPlot.type)
+                if (buildingType == MainGameLogic.CardTypes.BASE_HEAL)
                 {
-                    case MainGameLogic.CardTypes.TOWER:
-                        occupiedPlot.buildingObject.GetComponent<Tower>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
-                        Debug.Log("Casted on Tower!");
-                        break;
-                        
-                    case MainGameLogic.CardTypes.BASIC_TRAP:
-                        occupiedPlot.buildingObject.GetComponent<BasicTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
-                        break;
-                        
-                    case  MainGameLogic.CardTypes.ICE_TRAP:
-                        occupiedPlot.buildingObject.GetComponent<IceTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
-                        break;
-                        
-                    case  MainGameLogic.CardTypes.POISON_TRAP:
-                        occupiedPlot.buildingObject.GetComponent<PoisonTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
-                        break;
+                    mainGameLogic.baseHealth += ((mainGameLogic.baseHealth + spell.effectstrength) > 100) ? 100 - mainGameLogic.baseHealth : spell.effectstrength;
+                }
+                else
+                {
+                    switch (occupiedPlot.type)
+                    {
+                        case MainGameLogic.CardTypes.TOWER:
+                            occupiedPlot.buildingObject.GetComponent<Tower>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                            Debug.Log("Casted on Tower!");
+                            break;
+                            
+                        case MainGameLogic.CardTypes.BASIC_TRAP:
+                            occupiedPlot.buildingObject.GetComponent<BasicTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                            break;
+                            
+                        case MainGameLogic.CardTypes.ICE_TRAP:
+                            occupiedPlot.buildingObject.GetComponent<IceTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                            break;
+                            
+                        case MainGameLogic.CardTypes.POISON_TRAP:
+                            occupiedPlot.buildingObject.GetComponent<PoisonTrap>().applyEffect(buildingType, spell.effectstrength, spell.effectduration);
+                            break;
+                    }
                 }
             }
             
