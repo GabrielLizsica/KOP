@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.068671644}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 989638042101214856}
@@ -75,9 +75,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 0, g: 0.15156436, b: 1, a: 1}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 763635779253519013, guid: fca83cdc85398664a9925f1bcea414f0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -134,10 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7878483f4ae9b8c438c5f081b62a50bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
   health: 0
-  effectStrength: 0
-  effectDuration: 0
+  damage: 0
   stats: {fileID: 11400000, guid: e4025843239ffdd45970c6f41850e125, type: 2}
 --- !u!50 &7574621620923727303
 Rigidbody2D:

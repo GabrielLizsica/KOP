@@ -18,6 +18,10 @@ public class MapHandler : MonoBehaviour
     [SerializeField] private Tile tileBase;
     [SerializeField] private Tile tileEnemy;
     [SerializeField] private RuleTile tileWaypoint;
+    [SerializeField] private GameObject enemySpawnerAsset;
+    [SerializeField] private GameObject baseBuildingAsset;
+    private GameObject enemySpawnerObject;
+    private GameObject baseBuildingObject;
 
     [Header("Path Settings")]
     [SerializeField] private Vector2Int pathStartPos;
@@ -73,6 +77,11 @@ public class MapHandler : MonoBehaviour
         //Debug.Log("Base quarter: " + baseQuarter);
 
         generatePath();
+        UnityEngine.Vector3 adjustedChoords = new UnityEngine.Vector3(path[0].x + 0.5f, path[0].y + 0.5f, 0f);
+        enemySpawnerObject = Instantiate(enemySpawnerAsset, adjustedChoords, UnityEngine.Quaternion.identity);
+        
+        adjustedChoords = new UnityEngine.Vector3(path[path.Count - 1].x + 0.5f, path[path.Count - 1].y + 0.5f, 0f);
+        baseBuildingObject = Instantiate(baseBuildingAsset, adjustedChoords, UnityEngine.Quaternion.identity);
     }
     
     private mapQuarters getMapQuarter(Vector2Int tileChoords)

@@ -43,39 +43,19 @@ public class BuildingHandler : MonoBehaviour
     [SerializeField] private GameObject towerBlueprintValid;
     [SerializeField] private GameObject towerBlueprintInvalid;
     
-    [Header("BasicTrap Assets")]
+    [Header("Trap Assets")]
     [SerializeField] private GameObject basicTrap;
-    [SerializeField] private GameObject basicTrapBlueprintValid;
-    [SerializeField] private GameObject basicTrapBlueprintInvalid;
-    
-    [Header("IceTrap Assets")]
+    [SerializeField] private GameObject trapBlueprintValid;
+    [SerializeField] private GameObject trapBlueprintInvalid;
     [SerializeField] private GameObject iceTrap;
-    [SerializeField] private GameObject iceTrapBlueprintValid;
-    [SerializeField] private GameObject iceTrapBlueprintInvalid;
-    
-    [Header("IceTrap Assets")]
     [SerializeField] private GameObject poisonTrap;
-    [SerializeField] private GameObject poisonTrapBlueprintValid;
-    [SerializeField] private GameObject poisonTrapBlueprintInvalid;
 
-    [Header("AttackSpeedBuffSpell Assets")]
-    [SerializeField] private GameObject attackSpeedBuffBlueprintValid;
-    [SerializeField] private GameObject attackSpeedBuffBlueprintInvalid;
+    [Header("Spell Assets")]
+    [SerializeField] private GameObject spellBlueprintValid;
+    [SerializeField] private GameObject spellBlueprintInvalid;
     [SerializeField] private AttackSpeedBuffScriptableObject attackSpeedBuffScriptableObject;
-    
-    [Header("RangeBuffSpell Assets")]
-    [SerializeField] private GameObject rangeBuffBlueprintValid;
-    [SerializeField] private GameObject rangeBuffBlueprintInvalid;
     [SerializeField] private RangeBuffScriptableObject rangeBuffScriptableObject;
-    
-    [Header("DamageBuffSpell Assets")]
-    [SerializeField] private GameObject damageBuffBlueprintValid;
-    [SerializeField] private GameObject damageBuffBlueprintInvalid;
     [SerializeField] private DamageBuffScriptableObject damageBuffScriptableObject;
-    
-    [Header("BaseHealSpell Assets")]
-    [SerializeField] private GameObject baseHealBlueprintValid;
-    [SerializeField] private GameObject baseHealBlueprintInvalid;
     [SerializeField] private DamageBuffScriptableObject baseHealScriptableObject;
     
     private bool isBuilding;
@@ -201,8 +181,8 @@ public class BuildingHandler : MonoBehaviour
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, basicTrap}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, basicTrapBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, basicTrapBlueprintValid}
+                    {BuildingAssetType.BLUEPRINT_INVALID, trapBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, trapBlueprintValid}
                 };
             
                 break;
@@ -210,8 +190,8 @@ public class BuildingHandler : MonoBehaviour
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, iceTrap}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, iceTrapBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, iceTrapBlueprintValid}
+                    {BuildingAssetType.BLUEPRINT_INVALID, trapBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, trapBlueprintValid}
                 };
             
                 break;
@@ -220,8 +200,8 @@ public class BuildingHandler : MonoBehaviour
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, poisonTrap}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, poisonTrapBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, poisonTrapBlueprintValid}
+                    {BuildingAssetType.BLUEPRINT_INVALID, trapBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, trapBlueprintValid}
                 };
             
                 break;
@@ -230,8 +210,8 @@ public class BuildingHandler : MonoBehaviour
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, null}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, attackSpeedBuffBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, attackSpeedBuffBlueprintValid}
+                    {BuildingAssetType.BLUEPRINT_INVALID, spellBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, spellBlueprintValid}
                 };
 
                 spell = attackSpeedBuffScriptableObject;
@@ -242,8 +222,8 @@ public class BuildingHandler : MonoBehaviour
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, null}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, rangeBuffBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, rangeBuffBlueprintValid}
+                    {BuildingAssetType.BLUEPRINT_INVALID, spellBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, spellBlueprintValid}
                 };
 
                 spell = rangeBuffScriptableObject;
@@ -254,8 +234,8 @@ public class BuildingHandler : MonoBehaviour
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, null}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, damageBuffBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, damageBuffBlueprintValid}
+                    {BuildingAssetType.BLUEPRINT_INVALID, spellBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, spellBlueprintValid}
                 };
 
                 spell = damageBuffScriptableObject;
@@ -266,8 +246,8 @@ public class BuildingHandler : MonoBehaviour
                 newBuildingAssets = new Dictionary<BuildingAssetType, GameObject> 
                 {
                     {BuildingAssetType.BUILDING, null}, 
-                    {BuildingAssetType.BLUEPRINT_INVALID, baseHealBlueprintInvalid}, 
-                    {BuildingAssetType.BLUEPRINT_VALID, baseHealBlueprintValid}
+                    {BuildingAssetType.BLUEPRINT_INVALID, spellBlueprintInvalid}, 
+                    {BuildingAssetType.BLUEPRINT_VALID, spellBlueprintValid}
                 };
 
                 spell = baseHealScriptableObject;

@@ -138,8 +138,8 @@ public class MainGameLogic : MonoBehaviour
         
         mapHandler.createMap();
         deckHandler.setDeck(deck);
-        StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
         InitializeCardScriptableObjects();
+        StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
     }
     
     private void Update()
@@ -150,17 +150,27 @@ public class MainGameLogic : MonoBehaviour
     }
     
     private void InitializeCardScriptableObjects()
-    { 
-        TowerData towerData = JsonConvert.DeserializeObject<TowerData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/Tower.json"));
-        TrapData basicTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/BasicTrap.json"));
-        TrapData iceTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/IceTrap.json"));
-        TrapData poisonTrapData = JsonConvert.DeserializeObject<TrapData>(File.ReadAllText (Application.dataPath + "/Scripts/TextAssets/PoisonTrap.json"));
-        SpellData baseHealSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/BaseHealSpell.json"));
-        SpellData rangeBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/RangeBuffSpell.json"));
-        SpellData damageBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/DamageBuffSpell.json"));
-        SpellData attackSpeedBuffSpellData = JsonConvert.DeserializeObject<SpellData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/AttackSpeedBuffSpell.json"));
+    {   
+        TextAsset towerJson = Resources.Load<TextAsset>("TextAssets/Tower");
+        TextAsset basicTrapJson = Resources.Load<TextAsset>("TextAssets/BasicTrap");
+        TextAsset iceTrapJson = Resources.Load<TextAsset>("TextAssets/IceTrap");
+        TextAsset poisonTrapJson = Resources.Load<TextAsset>("TextAssets/PoisonTrap");
+        TextAsset baseHealJson = Resources.Load<TextAsset>("TextAssets/BaseHealSpell");
+        TextAsset rangeBuffJson = Resources.Load<TextAsset>("TextAssets/RangeBuffSpell");
+        TextAsset damageBuffJson = Resources.Load<TextAsset>("TextAssets/DamageBuffSpell");
+        TextAsset attackSpeedBuffJson = Resources.Load<TextAsset>("TextAssets/AttackSpeedBuffSpell");
+    
+        TowerData towerData = JsonConvert.DeserializeObject<TowerData>(towerJson.text);
+        TrapData basicTrapData = JsonConvert.DeserializeObject<TrapData>(basicTrapJson.text);
+        TrapData iceTrapData = JsonConvert.DeserializeObject<TrapData>(iceTrapJson.text);
+        TrapData poisonTrapData = JsonConvert.DeserializeObject<TrapData>(poisonTrapJson.text);
+        SpellData baseHealSpellData = JsonConvert.DeserializeObject<SpellData>(baseHealJson.text);
+        SpellData rangeBuffSpellData = JsonConvert.DeserializeObject<SpellData>(rangeBuffJson.text);
+        SpellData damageBuffSpellData = JsonConvert.DeserializeObject<SpellData>(damageBuffJson.text);
+        SpellData attackSpeedBuffSpellData = JsonConvert.DeserializeObject<SpellData>(attackSpeedBuffJson.text);
 
-        EnemyData enemyData = JsonConvert.DeserializeObject<EnemyData>(File.ReadAllText(Application.dataPath + "/Scripts/TextAssets/enemy.json"));
+        TextAsset enemyJson = Resources.Load<TextAsset>("TextAssets/Enemy");
+        EnemyData enemyData = JsonConvert.DeserializeObject<EnemyData>(enemyJson.text);
         
         towerScriptableObject.damage = towerData.stats["level0"].damage;
         towerScriptableObject.range = towerData.stats["level0"].range;

@@ -32,7 +32,6 @@ public class WaveHandler : MonoBehaviour
 
                 yield return new WaitForSeconds(timeBetweenenemies);
             }
-
             yield return new WaitForSeconds(timeBetweenWaves);
         }
     }

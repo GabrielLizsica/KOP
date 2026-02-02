@@ -38,6 +38,10 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        if (stats == null)
+        {
+            Application.Quit();
+        }
         speed = stats.speed;
         health = stats.health;
         weakness = stats.weakness;
@@ -53,6 +57,7 @@ public class Enemy : MonoBehaviour
         {
             OnEnemyDeath?.Invoke(this, new OnEnemyDeathEventArgs { enemyObject = transform.gameObject });
             Destroy(gameObject);
+            
         }
 
         if (Vector3.Distance(transform.position, new Vector3(path[path.Count - 1].x + 0.5f, path[path.Count - 1].y + 0.5f, 0)) > 0.1f)

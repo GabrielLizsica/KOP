@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -105,9 +106,9 @@ public class DeckHandler : MonoBehaviour
         }
     }
     
-    public void cancelCast()
+    public void cancelCast(InputAction.CallbackContext context)
     {
-        if (selectedIndex != -1)
+        if (context.performed && selectedIndex != -1)
         {
             cardHandler.finishBuilding();
             selectedIndex = -1;
