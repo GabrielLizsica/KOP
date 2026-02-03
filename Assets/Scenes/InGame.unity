@@ -348,17 +348,11 @@ MonoBehaviour:
   trapBlueprintInvalid: {fileID: 6674484069045843340, guid: 26822e8305d9c55428b3553955c0ef2c, type: 3}
   iceTrap: {fileID: 8622800852297107663, guid: 42f50ff302e14a84bb82c5bc8fad1df3, type: 3}
   poisonTrap: {fileID: 8622800852297107663, guid: a9ef73e73037f4d48973565ead733a5a, type: 3}
-  attackSpeedBuffBlueprintValid: {fileID: 9161564235182866073, guid: 2a7e035f622bfe943865a2b7a25cd88c, type: 3}
-  attackSpeedBuffBlueprintInvalid: {fileID: 9161564235182866073, guid: 671161012ca2f3b4e8149d7d3445eeff, type: 3}
+  spellBlueprintValid: {fileID: 9161564235182866073, guid: 2a7e035f622bfe943865a2b7a25cd88c, type: 3}
+  spellBlueprintInvalid: {fileID: 9161564235182866073, guid: 671161012ca2f3b4e8149d7d3445eeff, type: 3}
   attackSpeedBuffScriptableObject: {fileID: 11400000, guid: 34f7b290173897946b6d252979caa0cf, type: 2}
-  rangeBuffBlueprintValid: {fileID: 9161564235182866073, guid: 7d0a3a11aca97214f8a77c6b771c1356, type: 3}
-  rangeBuffBlueprintInvalid: {fileID: 9161564235182866073, guid: 1ef7e7c05ea7e5345b6c07a1005e6060, type: 3}
   rangeBuffScriptableObject: {fileID: 11400000, guid: 02c64e5d3735d6e43bd9015756467405, type: 2}
-  damageBuffBlueprintValid: {fileID: 9161564235182866073, guid: 971a857e8b554cf46ac47d3f983c8169, type: 3}
-  damageBuffBlueprintInvalid: {fileID: 9161564235182866073, guid: 7b883f63275ffac488564acb8ab7b761, type: 3}
   damageBuffScriptableObject: {fileID: 11400000, guid: a1ce487e59ec71a4680276c216b2d99b, type: 2}
-  baseHealBlueprintValid: {fileID: 9161564235182866073, guid: 19ec6ef13322c43458c886e1fb0dd0c7, type: 3}
-  baseHealBlueprintInvalid: {fileID: 9161564235182866073, guid: 56724e0faa800f5409a29129fb30a22a, type: 3}
   baseHealScriptableObject: {fileID: 11400000, guid: a1ce487e59ec71a4680276c216b2d99b, type: 2}
 --- !u!114 &971234580
 MonoBehaviour:
