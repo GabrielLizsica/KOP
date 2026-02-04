@@ -1,0 +1,35 @@
+.hand {
+    top: 90%;
+    transition-property: top;
+    transition-duration: 0.25s;
+    align-items: center;
+}
+
+.hand:hover {
+    top: 75%;
+    transition-property: top;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+
+.card {
+    top: 20%;
+    transition-property: position, margin-left, margin-right;
+    transition-duration: 0.25s, 0.4s, 0.4s;
+    margin-left: -75px;
+    margin-right: 10px;
+    transition-delay: 0s, 0s, 0s;
+    transition-timing-function: ease, ease, ease;
+}
+
+.card:hover {
+    top: 5%;
+    transition-property: top, margin-left, margin-right;
+    transition-duration: 0.25s, 0.4s, 0.4s;
+    margin-left: 10px;
+    margin-right: 95px;
+    transition-delay: 0s, 0s, 0s;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
