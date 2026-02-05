@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DeckHandler : MonoBehaviour
 {
+    [SerializeField] private GameObject battleUIObject;
+    private InBattleMenuHandler battleUI;
+
     private MainGameLogic mainGameLogic;
     private BuildingHandler cardHandler;
     private List<MainGameLogic.CardTypes> deck;
@@ -12,10 +17,24 @@ public class DeckHandler : MonoBehaviour
     private List<MainGameLogic.CardTypes> hand  = new List<MainGameLogic.CardTypes>( new MainGameLogic.CardTypes[5] );
     private int selectedIndex = -1;
 
+    public event EventHandler<OnCardDrawEventArgs> OnCardDraw;
+    public class OnCardDrawEventArgs : EventArgs
+    {
+        public int cardID;
+        public MainGameLogic.CardTypes cardType;
+    }
+
     private void Start()
     {
         mainGameLogic = GetComponent<MainGameLogic>();
         cardHandler = GetComponent<BuildingHandler>();
+        battleUI = battleUIObject.GetComponent<InBattleMenuHandler>();
+
+        battleUI.cardButtons["card0"].clicked += () => OnButtonClicked("card0");
+        battleUI.cardButtons["card1"].clicked += () => OnButtonClicked("card1");
+        battleUI.cardButtons["card2"].clicked += () => OnButtonClicked("card2");
+        battleUI.cardButtons["card3"].clicked += () => OnButtonClicked("card3");
+        battleUI.cardButtons["card4"].clicked += () => OnButtonClicked("card4");
     }
     
     private void Update()
@@ -73,7 +92,7 @@ public class DeckHandler : MonoBehaviour
     
     private void drawCard(int index)
     {
-        int cardIndex = Random.Range(0, remainingDeck.Count);
+        int cardIndex = UnityEngine.Random.Range(0, remainingDeck.Count);
         hand[index] = remainingDeck[cardIndex];
         remainingDeck.RemoveAt(cardIndex);
         
@@ -81,6 +100,8 @@ public class DeckHandler : MonoBehaviour
         {
             setRemainingDeck();
         }
+
+        OnCardDraw?.Invoke(this, new OnCardDrawEventArgs {cardID = index, cardType = hand[index]});
 
         Debug.Log("The " + index + " card is: " + hand[index]);
     }
@@ -112,6 +133,32 @@ public class DeckHandler : MonoBehaviour
         {
             cardHandler.finishBuilding();
             selectedIndex = -1;
+        }
+    }
+
+    private void OnButtonClicked(string buttonID)
+    {
+        switch (buttonID)
+        {
+            case "card0":
+                selectCard(0);
+                break;
+            
+            case "card1":
+                selectCard(1);
+                break;
+            
+            case "card2":
+                selectCard(2);
+                break;
+            
+            case "card3":
+                selectCard(3);
+                break;
+            
+            case "card4":
+                selectCard(4);
+                break;
         }
     }
 }

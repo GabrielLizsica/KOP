@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c4a736f7d6f63d949b4667b968b0cd74
+guid: a28040edef6862c4eaf246094418de66
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8736557589972523046
-    second: CardTrapPoison_0
+      213: -2799136734287450800
+    second: CardTower_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CardTrapPoison_0
+      name: CardTower_0
       rect:
         serializedVersion: 2
         x: 186
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6281e0ef6dc7e3970800000000000000
-      internalID: 8736557589972523046
+      spriteID: 05dac0b78f77729d0800000000000000
+      internalID: -2799136734287450800
       vertices: []
       indices: 
       edges: []
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CardTower_0: -2799136734287450800
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

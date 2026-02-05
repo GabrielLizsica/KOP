@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0375f0cda4adf7b46806987f514067ac
+guid: 787f470b265c4444a88e830881070a93
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5928008818809842370
-    second: CardRangeBuff_0
+      213: 2003607355256039105
+    second: CardTrapIce_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CardRangeBuff_0
+      name: CardTrapIce_0
       rect:
         serializedVersion: 2
         x: 186
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e35d471236b7bbda0800000000000000
-      internalID: -5928008818809842370
+      spriteID: 1c66567264e3ecb10800000000000000
+      internalID: 2003607355256039105
       vertices: []
       indices: 
       edges: []
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CardTrapIce_0: 2003607355256039105
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

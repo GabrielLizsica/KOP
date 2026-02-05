@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 053932860f0f5764186d85f7f35d0ba5
+guid: 0375f0cda4adf7b46806987f514067ac
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2200365635829170139
-    second: CardBaseHeal_0
+      213: -5928008818809842370
+    second: CardRangeBuff_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CardBaseHeal_0
+      name: CardRangeBuff_0
       rect:
         serializedVersion: 2
         x: 186
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5200d6cbc1bb671e0800000000000000
-      internalID: -2200365635829170139
+      spriteID: e35d471236b7bbda0800000000000000
+      internalID: -5928008818809842370
       vertices: []
       indices: 
       edges: []
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CardRangeBuff_0: -5928008818809842370
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
