@@ -91,15 +91,15 @@ public class DeckHandler : MonoBehaviour
     }
     
     private void drawCard(int index)
-    {
-        int cardIndex = UnityEngine.Random.Range(0, remainingDeck.Count);
-        hand[index] = remainingDeck[cardIndex];
-        remainingDeck.RemoveAt(cardIndex);
-        
+    {   
         if (remainingDeck.Count == 0)
         {
             setRemainingDeck();
         }
+
+        int cardIndex = UnityEngine.Random.Range(0, remainingDeck.Count);
+        hand[index] = remainingDeck[cardIndex];
+        remainingDeck.RemoveAt(cardIndex);
 
         OnCardDraw?.Invoke(this, new OnCardDrawEventArgs {cardID = index, cardType = hand[index]});
 
