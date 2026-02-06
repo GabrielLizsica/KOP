@@ -67,7 +67,7 @@ public class DeckHandler : MonoBehaviour
     
     public void setDeck(List<MainGameLogic.CardTypes> _deck)
     {
-        deck = _deck;
+        deck = new List<MainGameLogic.CardTypes>(_deck);
         initialize();
     }
     
@@ -79,7 +79,7 @@ public class DeckHandler : MonoBehaviour
     
     private void setRemainingDeck()
     {
-        remainingDeck = deck;
+        remainingDeck = new List<MainGameLogic.CardTypes>(deck);
     }
     
     private void drawInitialCards()
@@ -97,6 +97,8 @@ public class DeckHandler : MonoBehaviour
             setRemainingDeck();
         }
 
+        Debug.LogWarning("Draw index: " + index);
+        //Debug.LogWarning("")
         int cardIndex = UnityEngine.Random.Range(0, remainingDeck.Count);
         hand[index] = remainingDeck[cardIndex];
         remainingDeck.RemoveAt(cardIndex);
