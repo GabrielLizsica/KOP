@@ -53,10 +53,10 @@ public class BuildingHandler : MonoBehaviour
     [Header("Spell Assets")]
     [SerializeField] private GameObject spellBlueprintValid;
     [SerializeField] private GameObject spellBlueprintInvalid;
-    [SerializeField] private AttackSpeedBuffScriptableObject attackSpeedBuffScriptableObject;
-    [SerializeField] private RangeBuffScriptableObject rangeBuffScriptableObject;
-    [SerializeField] private DamageBuffScriptableObject damageBuffScriptableObject;
-    [SerializeField] private DamageBuffScriptableObject baseHealScriptableObject;
+    [SerializeField] private SpellScriptableObject attackSpeedBuffScriptableObject;
+    [SerializeField] private SpellScriptableObject rangeBuffScriptableObject;
+    [SerializeField] private SpellScriptableObject damageBuffScriptableObject;
+    [SerializeField] private SpellScriptableObject baseHealScriptableObject;
     
     private bool isBuilding;
     private bool canBuild;

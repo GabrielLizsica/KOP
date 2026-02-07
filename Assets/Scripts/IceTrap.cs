@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class IceTrap : Trap
 {
-    [SerializeField] private IceTrapScriptableObject stats;
+    [SerializeField] private TrapScriptableObject stats;
     private Enemy targetEnemy;
     
     private void Start()

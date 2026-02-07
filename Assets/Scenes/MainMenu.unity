@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneHandlerObject: {fileID: 427213243}
+  playerProfileScriptableObject: {fileID: 11400000, guid: f3578b91d3a30564194a4113db0f979e, type: 2}
 --- !u!1 &2009847372
 GameObject:
   m_ObjectHideFlags: 0

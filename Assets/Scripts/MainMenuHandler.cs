@@ -1,15 +1,59 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.VFX;
+using System.Collections.Generic;
+using System;
+using Newtonsoft.Json;
 
 public class MainMenuHandler : MonoBehaviour
 {
     [SerializeField] private GameObject sceneHandlerObject;
+    [SerializeField] private PlayerProfleScriptableObject playerProfileScriptableObject;
 
     private SceneHandler sceneHandler;
     private VisualElement mainMenu;
     private Button startButton;
+
+    public Profile playerProfile;
     
+    public class Card
+    {
+        public int level;
+        public int deck;
+        public int owned;
+    }
+
+    public class ProfileRaw
+    {
+        public int gold;
+        public Dictionary<string, Card> cards;
+    }
+
+    public class Profile
+    {
+        public int gold;
+        public Dictionary<MainGameLogic.CardTypes, Card> cards;
+
+        public Profile(ProfileRaw rawData)
+        {
+            gold = rawData.gold;
+            cards = new Dictionary<MainGameLogic.CardTypes, Card>();
+
+            foreach (var pair in rawData.cards)
+            {
+                if (Enum.TryParse(pair.Key, out MainGameLogic.CardTypes cardType))
+                {
+                    cards.Add(cardType, pair.Value);
+                    Debug.Log($"Successfully parsed card into: {pair.Key}, {pair.Value}");
+                }
+                else
+                {
+                    Debug.LogError($"Unknown cardType in Json: {pair.Key}");
+                }
+            }
+        }
+    }
+
     private void Start()
     {
         mainMenu = GetComponent<UIDocument>().rootVisualElement;
@@ -17,6 +61,12 @@ public class MainMenuHandler : MonoBehaviour
         
         startButton = mainMenu.Q<Button>("StartButton");
         startButton.clicked += OnStartButtonClicked;
+
+        TextAsset profileJson = Resources.Load<TextAsset>("TextAssets/Profile1");
+        ProfileRaw rawProfileData = JsonConvert.DeserializeObject<ProfileRaw>(profileJson.text);
+        playerProfile = new Profile(rawProfileData);
+        playerProfileScriptableObject.gold = playerProfile.gold;
+        playerProfileScriptableObject.cards = new Dictionary<MainGameLogic.CardTypes, Card>(playerProfile.cards);
     }
     
     private void OnStartButtonClicked()

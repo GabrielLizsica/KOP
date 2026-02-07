@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PoisonTrap : Trap
 {
-    [SerializeField] private PoisonTrapScriptableObject stats;
+    [SerializeField] private TrapScriptableObject stats;
     private Enemy targetEnemy;
     
     private void Start()

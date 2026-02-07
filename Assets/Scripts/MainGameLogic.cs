@@ -12,16 +12,18 @@ public class MainGameLogic : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private MapHandler mapHandler;
     [SerializeField] private WaveHandler waveHandler;
+    [SerializeField] private GameObject a;
     
-    [Header("Card Scriptable Objects")]
+    [Header("Scriptable Objects")]
+    [SerializeField] private PlayerProfleScriptableObject playerProfileScriptableObject;
     [SerializeField] private TowerScriptableObject towerScriptableObject;
-    [SerializeField] private BasicTrapScriptableObject basicTrapScriptableObject;
-    [SerializeField] private IceTrapScriptableObject iceTrapScriptableObject;
-    [SerializeField] private PoisonTrapScriptableObject poisonTrapScriptableObject;
-    [SerializeField] private AttackSpeedBuffScriptableObject attackSpeedBuffScriptableObject;
-    [SerializeField] private RangeBuffScriptableObject rangeBuffScriptableObject;
-    [SerializeField] private DamageBuffScriptableObject damageBuffScriptableObject;
-    [SerializeField] private BaseHealSciptableObject baseHealSciptableObject;
+    [SerializeField] private TrapScriptableObject basicTrapScriptableObject;
+    [SerializeField] private TrapScriptableObject iceTrapScriptableObject;
+    [SerializeField] private TrapScriptableObject poisonTrapScriptableObject;
+    [SerializeField] private SpellScriptableObject attackSpeedBuffScriptableObject;
+    [SerializeField] private SpellScriptableObject rangeBuffScriptableObject;
+    [SerializeField] private SpellScriptableObject damageBuffScriptableObject;
+    [SerializeField] private SpellScriptableObject baseHealSciptableObject;
     
     [Header("Enemy Scriptable Objects")]
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
@@ -33,25 +35,7 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] public float baseHealth;
 
     private DeckHandler deckHandler;
-    private List<CardTypes> deck = new List<CardTypes>()
-    {
-        CardTypes.TOWER,
-        CardTypes.TOWER,
-        CardTypes.BASIC_TRAP,
-        CardTypes.BASIC_TRAP,
-        CardTypes.ICE_TRAP,
-        CardTypes.ICE_TRAP,
-        CardTypes.POISON_TRAP,
-        CardTypes.POISON_TRAP,
-        CardTypes.ATTACK_SPEED_BUFF,
-        CardTypes.ATTACK_SPEED_BUFF,
-        CardTypes.RANGE_BUFF,
-        CardTypes.RANGE_BUFF,
-        CardTypes.DAMAGE_BUFF,
-        CardTypes.DAMAGE_BUFF,
-        CardTypes.BASE_HEAL,
-        CardTypes.BASE_HEAL
-    };
+    private List<CardTypes> deck;
 
     private Vector3 mousePosTile;
 
@@ -137,7 +121,7 @@ public class MainGameLogic : MonoBehaviour
         baseHealth = 100f;
         
         mapHandler.createMap();
-        deckHandler.setDeck(deck);
+        deckHandler.setDeck(createDeck());
         InitializeCardScriptableObjects();
         StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
     }
@@ -151,6 +135,8 @@ public class MainGameLogic : MonoBehaviour
     
     private void InitializeCardScriptableObjects()
     {   
+        
+
         TextAsset towerJson = Resources.Load<TextAsset>("TextAssets/Tower");
         TextAsset basicTrapJson = Resources.Load<TextAsset>("TextAssets/BasicTrap");
         TextAsset iceTrapJson = Resources.Load<TextAsset>("TextAssets/IceTrap");
@@ -172,40 +158,60 @@ public class MainGameLogic : MonoBehaviour
         TextAsset enemyJson = Resources.Load<TextAsset>("TextAssets/Enemy");
         EnemyData enemyData = JsonConvert.DeserializeObject<EnemyData>(enemyJson.text);
         
-        towerScriptableObject.damage = towerData.stats["level0"].damage;
-        towerScriptableObject.range = towerData.stats["level0"].range;
-        towerScriptableObject.attackspeed = towerData.stats["level0"].attackspeed;
+        int towerLevel = playerProfileScriptableObject.cards[CardTypes.TOWER].level;
+        TowerStats towerStats = towerData.stats[$"level{towerLevel}"];
+        towerScriptableObject.Init(towerStats.damage, towerStats.range, towerStats.attackspeed);
+
+        int basicTrapLevel = playerProfileScriptableObject.cards[CardTypes.BASIC_TRAP].level;
+        TrapStats basicTrapStats = basicTrapData.stats[$"level{basicTrapLevel}"];
+        basicTrapScriptableObject.Init(basicTrapStats.damage, basicTrapStats.health, basicTrapStats.effectstrength, basicTrapStats.effectduration);
         
-        basicTrapScriptableObject.damage = basicTrapData.stats["level0"].damage;
-        basicTrapScriptableObject.health = basicTrapData.stats["level0"].health;
-        basicTrapScriptableObject.effectstrength = basicTrapData.stats["level0"].effectstrength;
-        basicTrapScriptableObject.effectduration = basicTrapData.stats["level0"].effectduration;
+        int iceTrapLevel = playerProfileScriptableObject.cards[CardTypes.ICE_TRAP].level;
+        TrapStats iceTrapStats = iceTrapData.stats[$"level{iceTrapLevel}"];
+        iceTrapScriptableObject.Init(iceTrapStats.damage, iceTrapStats.health, iceTrapStats.effectstrength, iceTrapStats.effectduration);
 
-        iceTrapScriptableObject.damage = iceTrapData.stats["level0"].damage;
-        iceTrapScriptableObject.health = iceTrapData.stats["level0"].health;
-        iceTrapScriptableObject.effectstrength = iceTrapData.stats["level0"].effectstrength;
-        iceTrapScriptableObject.effectduration = iceTrapData.stats["level0"].effectduration;
+        int poisonTrapLevel = playerProfileScriptableObject.cards[CardTypes.POISON_TRAP].level;
+        TrapStats poisonTrapStats = poisonTrapData.stats[$"level{poisonTrapLevel}"];
+        poisonTrapScriptableObject.Init(poisonTrapStats.damage, poisonTrapStats.health, poisonTrapStats.effectstrength, poisonTrapStats.effectduration);
         
-        poisonTrapScriptableObject.damage = poisonTrapData.stats["level0"].damage;
-        poisonTrapScriptableObject.health = poisonTrapData.stats["level0"].health;
-        poisonTrapScriptableObject.effectstrength = poisonTrapData.stats["level0"].effectstrength;
-        poisonTrapScriptableObject.effectduration = poisonTrapData.stats["level0"].effectduration;
+        int attackSpeedBuffLevel = playerProfileScriptableObject.cards[CardTypes.ATTACK_SPEED_BUFF].level;
+        SpellStats attackSpeedBuffStats = attackSpeedBuffSpellData.stats[$"level{attackSpeedBuffLevel}"];
+        attackSpeedBuffScriptableObject.Init(attackSpeedBuffStats.effectstrength, attackSpeedBuffStats.effectduration);
 
-        attackSpeedBuffScriptableObject.effectstrength = attackSpeedBuffSpellData.stats["level0"].effectstrength;
-        attackSpeedBuffScriptableObject.effectduration = attackSpeedBuffSpellData.stats["level0"].effectduration;
+        int rangeBuffLevel = playerProfileScriptableObject.cards[CardTypes.RANGE_BUFF].level;
+        SpellStats rangeBuffStats = rangeBuffSpellData.stats[$"level{rangeBuffLevel}"];
+        rangeBuffScriptableObject.Init(rangeBuffStats.effectstrength, rangeBuffStats.effectduration);
 
-        rangeBuffScriptableObject.effectstrength = rangeBuffSpellData.stats["level0"].effectstrength;
-        rangeBuffScriptableObject.effectduration = rangeBuffSpellData.stats["level0"].effectduration;
-
-        damageBuffScriptableObject.effectstrength = damageBuffSpellData.stats["level0"].effectstrength;
-        damageBuffScriptableObject.effectduration = damageBuffSpellData.stats["level0"].effectduration;
+        int damageBuffLevel = playerProfileScriptableObject.cards[CardTypes.DAMAGE_BUFF].level;
+        SpellStats damageBuffStats = damageBuffSpellData.stats[$"level{damageBuffLevel}"];
+        damageBuffScriptableObject.Init(damageBuffStats.effectstrength, damageBuffStats.effectduration);
         
-        baseHealSciptableObject.effectstrength = baseHealSpellData.stats["level0"].effectstrength;
-        baseHealSciptableObject.effectduration = baseHealSpellData.stats["level0"].effectduration;
+        Debug.Log(damageBuffScriptableObject.effectstrength);
+
+        int baseHealLevel = playerProfileScriptableObject.cards[CardTypes.BASE_HEAL].level;
+        SpellStats baseHealStats = baseHealSpellData.stats[$"level{baseHealLevel}"];
+        baseHealSciptableObject.Init(baseHealStats.effectstrength, baseHealStats.effectduration);
 
         enemyScriptableObject.speed = enemyData.speed;
         enemyScriptableObject.health = enemyData.health;
         enemyScriptableObject.weakness = enemyData.weakness;
+
+        Debug.Log("Scriptable objects initialized!");
+    }
+
+    private List<CardTypes> createDeck()
+    {
+        List<CardTypes> cardList = new List<CardTypes>();
+
+        foreach (var pair in playerProfileScriptableObject.cards)
+        {
+            for (int i = 0; i < pair.Value.deck; i++)
+            {
+                cardList.Add(pair.Key);
+            }
+        }
+
+        return cardList;
     }
     
     private Vector3 getMousePosTile()

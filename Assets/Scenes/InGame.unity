@@ -290,14 +290,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapHandler: {fileID: 971234573}
   waveHandler: {fileID: 971234576}
+  a: {fileID: 0}
+  playerProfileScriptableObject: {fileID: 11400000, guid: f3578b91d3a30564194a4113db0f979e, type: 2}
   towerScriptableObject: {fileID: 11400000, guid: b8bcfd20b1be5d14e9866b1ef0806694, type: 2}
-  basicTrapScriptableObject: {fileID: 11400000, guid: c93e924939f56df4fbdd69296a99b2e1, type: 2}
-  iceTrapScriptableObject: {fileID: 11400000, guid: 9540edc0c5ffb2845afce0336ff71016, type: 2}
-  poisonTrapScriptableObject: {fileID: 11400000, guid: e4025843239ffdd45970c6f41850e125, type: 2}
-  attackSpeedBuffScriptableObject: {fileID: 11400000, guid: 34f7b290173897946b6d252979caa0cf, type: 2}
-  rangeBuffScriptableObject: {fileID: 11400000, guid: 02c64e5d3735d6e43bd9015756467405, type: 2}
-  damageBuffScriptableObject: {fileID: 11400000, guid: a1ce487e59ec71a4680276c216b2d99b, type: 2}
-  baseHealSciptableObject: {fileID: 11400000, guid: e89d9338f7c238249bcb3809238ed9c5, type: 2}
+  basicTrapScriptableObject: {fileID: 11400000, guid: 27189a01192b21942bf88776c3c53ed3, type: 2}
+  iceTrapScriptableObject: {fileID: 11400000, guid: 1114c615f01796644ad6f04ed9009487, type: 2}
+  poisonTrapScriptableObject: {fileID: 11400000, guid: e77ee6e6a6f788c45b1e2b278d66b57e, type: 2}
+  attackSpeedBuffScriptableObject: {fileID: 11400000, guid: 02075eaf8f8b06b4aa14662d9625199f, type: 2}
+  rangeBuffScriptableObject: {fileID: 11400000, guid: 16ad132d7adc4714eaa5cce5cc4609f1, type: 2}
+  damageBuffScriptableObject: {fileID: 11400000, guid: 64725317dbfb01e40b1da38115afa05e, type: 2}
+  baseHealSciptableObject: {fileID: 11400000, guid: 7c6fd47cddf28184187570fedcb61838, type: 2}
   enemyScriptableObject: {fileID: 11400000, guid: ece897569903bd94a8782956213e540d, type: 2}
   tilemapGround: {fileID: 0}
   baseHealth: 0

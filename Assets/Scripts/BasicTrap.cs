@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BasicTrap : Trap
 {
-    [SerializeField] private BasicTrapScriptableObject stats;
+    [SerializeField] private TrapScriptableObject stats;
     private Enemy targetEnemy;
     
     private void Start()

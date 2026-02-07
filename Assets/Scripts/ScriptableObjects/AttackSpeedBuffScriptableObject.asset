@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eeb2be133251ef74da41a7ff2f37d82b, type: 3}
+  m_Script: {fileID: 11500000, guid: e4c929200e3cea14c815ae6b710de5db, type: 3}
   m_Name: AttackSpeedBuffScriptableObject
   m_EditorClassIdentifier: 
   effectstrength: 0
