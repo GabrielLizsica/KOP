@@ -4,12 +4,15 @@ using UnityEngine.VFX;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
+using System.IO;
 
 public class SaveLoadSystem : MonoBehaviour
 {
     [SerializeField] private PlayerProfleScriptableObject playerProfileScriptableObject;
 
     public Profile playerProfile;
+    private MainMenuHandler.Profiles currentProfile;
+    string savePath;
     
     public class Card
     {
@@ -48,15 +51,58 @@ public class SaveLoadSystem : MonoBehaviour
                 }
             }
         }
+
+        public Profile() { }
+    }
+    
+    private void Start()
+    {
+        savePath = Path.Combine(Application.persistentDataPath, "Saves");
+        Debug.Log(savePath);
+
+        #if SIMULATE_FIRST_RUN
+            if (Directory.Exists(savePath))
+                Directory.Delete(savePath, true);
+        #endif
+        
+        if (!Directory.Exists(savePath))
+        {
+            Profile skeletonProfile = new Profile(JsonConvert.DeserializeObject<ProfileRaw>(Resources.Load<TextAsset>("TextAssets/SkeletonProfile").text));
+            
+            Directory.CreateDirectory(savePath);
+            
+            for (int i = 0; i < Enum.GetValues(typeof(MainMenuHandler.Profiles)).Length; i++)
+            {
+                string saveFilePath = Path.Combine(savePath, $"Profile{i}.json");
+                File.WriteAllText(saveFilePath, Resources.Load<TextAsset>("TextAssets/SkeletonProfile").text);
+            }
+        }
     }
 
     public void loadProfile(MainMenuHandler.Profiles profile)
     {
-        TextAsset profileJson = Resources.Load<TextAsset>($"TextAssets/Profile{(int)profile}");
-
-        ProfileRaw rawProfileData = JsonConvert.DeserializeObject<ProfileRaw>(profileJson.text);
+        currentProfile = profile;
+        ProfileRaw rawProfileData = JsonConvert.DeserializeObject<ProfileRaw>(File.ReadAllText(savePath + $"/Profile{(int)currentProfile}.json"));
+        
         playerProfile = new Profile(rawProfileData);
         playerProfileScriptableObject.gold = playerProfile.gold;
         playerProfileScriptableObject.cards = new Dictionary<MainGameLogic.CardTypes, Card>(playerProfile.cards);
+    }
+    
+    public void saveProfile()
+    {
+        Profile saveData = new Profile();
+        saveData.gold = playerProfileScriptableObject.gold;
+        saveData.cards = new Dictionary<MainGameLogic.CardTypes, Card>(playerProfileScriptableObject.cards);
+        
+        string saveJson = JsonConvert.SerializeObject(saveData);
+        string filePath = Path.Combine(savePath, $"Profile{(int)currentProfile}.json");
+        File.WriteAllText(filePath, saveJson);
+    }
+    
+    public void resetProfile(MainMenuHandler.Profiles profile)
+    {
+        string saveFilePath = Path.Combine(savePath, $"Profile{(int)profile}.json");
+        File.WriteAllText(saveFilePath, Resources.Load<TextAsset>("TextAssets/SkeletonProfile").text);
     }
 }

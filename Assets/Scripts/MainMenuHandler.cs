@@ -56,7 +56,10 @@ public class MainMenuHandler : MonoBehaviour
         setPreBattleMenuButtons();
 
         setProfileButtonEvents();
+        setProfileDeleterButtonEvents();
         setPreBattleMenuButtonEvents();
+
+        Debug.Log(Application.persistentDataPath);
     }
 
     private void setProfileButtons()
@@ -82,6 +85,14 @@ public class MainMenuHandler : MonoBehaviour
             pair.Value.clicked += () => OnProfileButtonClicked(pair.Key);
         }
     }
+    
+    private void setProfileDeleterButtonEvents()
+    {
+        foreach (var pair in profileDeleteButtons)
+        {
+            pair.Value.clicked += () => OnProfileDeleteButtonClicked(pair.Key);
+        }
+    }
 
     private void setPreBattleMenuButtons()
     {
@@ -94,6 +105,7 @@ public class MainMenuHandler : MonoBehaviour
     private void setPreBattleMenuButtonEvents()
     {
         preBattleButtons[PreGameButtons.START].clicked += OnStartButtonClicked;
+        preBattleButtons[PreGameButtons.SAVE_EXIT].clicked += OnSaveButtonClicked;
     }
     
     private void OnStartButtonClicked()
@@ -104,9 +116,23 @@ public class MainMenuHandler : MonoBehaviour
     private void OnProfileButtonClicked(Profiles profile)
     {
         saveLoadSystem.loadProfile(profile);
-        Debug.Log("Loading profile: " + profile);
+        
         profileSelector.style.display = DisplayStyle.None;
         profileDeleter.style.display = DisplayStyle.None;
         preBattleMenu.style.display = DisplayStyle.Flex;
+    }
+    
+    private void OnSaveButtonClicked()
+    {
+        saveLoadSystem.saveProfile();
+        
+        profileSelector.style.display = DisplayStyle.Flex;
+        profileDeleter.style.display = DisplayStyle.Flex;
+        preBattleMenu.style.display = DisplayStyle.None;
+    }
+    
+    private void OnProfileDeleteButtonClicked(Profiles profile)
+    {
+        saveLoadSystem.resetProfile(profile);
     }
 }
