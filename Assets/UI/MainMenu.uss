@@ -17,19 +17,20 @@
     align-content: auto;
 }
 
-.unity-button {
-    background-image: url("project://database/Assets/Prefabs/Sprites/tileEmpty.png?fileID=-7848429836932565593&guid=c12e1094b77d00a42bf665bb5b2f7a30&type=3#tileEmpty_0");
-    top: 30%;
-    width: 50%;
-    border-top-color: rgba(255, 255, 255, 0);
-    border-left-color: rgba(255, 255, 255, 0);
-    border-bottom-color: rgba(255, 255, 255, 0);
-    border-right-color: rgba(255, 255, 255, 0);
-    font-size: 32px;
-    -unity-font-style: bold;
+.button-list {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    align-content: auto;
+    align-self: auto;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-.unity-button:hover {
-    background-color: rgba(255, 255, 255, 0);
-    background-image: url("project://database/Assets/Prefabs/Sprites/tileBase.png?fileID=3701863832368287640&guid=839aa4443a389274d8e0fca933f95f41&type=3#tileBase_0");
+.unity-button {
+    width: 40%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-self: auto;
+    align-content: auto;
 }

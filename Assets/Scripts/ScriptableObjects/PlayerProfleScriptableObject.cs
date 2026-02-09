@@ -5,5 +5,5 @@ using UnityEngine;
 public class PlayerProfleScriptableObject : ScriptableObject
 {
     public int gold;
-    public Dictionary<MainGameLogic.CardTypes, MainMenuHandler.Card> cards;
+    public Dictionary<MainGameLogic.CardTypes, SaveLoadSystem.Card> cards;
 }
