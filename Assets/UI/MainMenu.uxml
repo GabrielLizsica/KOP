@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=98a3bb71a4273424b9c2d9f1c5b8c977&amp;type=3#MainMenu" />
-    <ui:VisualElement name="MainMenu" class="mainMenu" style="flex-grow: 1; align-content: flex-start; align-items: center;">
+    <ui:VisualElement name="MainMenu" class="mainMenu" style="flex-grow: 1; align-content: flex-start; align-items: center; border-right-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-width: 5px; border-left-width: 5px;">
         <ui:Label text="KARTYAVARAK" class="mainTitle" style="top: 15%; align-self: auto; align-content: auto; justify-content: center; align-items: auto; width: 50%; position: relative; left: auto; -unity-text-align: upper-center; font-size: 60px;" />
         <ui:VisualElement name="ProfileDeleter" class="button-list" style="flex-grow: 1; width: 25%; align-self: flex-end; position: absolute; justify-content: flex-start; overflow: visible; visibility: visible;">
             <ui:Button text="Reset" name="ProfileDeleteButton0" />
@@ -9,10 +9,10 @@
             <ui:Button text="Reset" name="ProfileDeleteButton3" />
         </ui:VisualElement>
         <ui:VisualElement name="ProfileSelector" class="button-list" style="flex-grow: 1; justify-content: flex-start; width: 50%;">
-            <ui:Button text="Button" name="ProfileButton0" />
-            <ui:Button text="Button" name="ProfileButton1" />
-            <ui:Button text="Button" name="ProfileButton2" />
-            <ui:Button text="Button" name="ProfileButton3" />
+            <ui:Button text="Profile 1" name="ProfileButton0" />
+            <ui:Button text="Profile 2" name="ProfileButton1" />
+            <ui:Button text="Profile 3" name="ProfileButton2" />
+            <ui:Button text="Profile 4" name="ProfileButton3" />
         </ui:VisualElement>
         <ui:VisualElement name="PreBattleMenu" enabled="true" class="button-list" style="flex-grow: 1; width: 50%;">
             <ui:Button text="Start" name="StartButton" />
@@ -21,4 +21,5 @@
             <ui:Button text="Save &amp; Exit" name="SaveExitButton" />
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:VisualElement name="ProfileResetConfirm" style="flex-grow: 1; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; background-color: rgb(255, 255, 255); border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px;" />
 </ui:UXML>
