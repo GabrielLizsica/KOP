@@ -36,34 +36,6 @@ public class DeckHandler : MonoBehaviour
         battleUI.cardButtons["card4"].clicked += () => OnButtonClicked("card4");
     }
     
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            selectCard(0);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            selectCard(1);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            selectCard(2);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            selectCard(3);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            selectCard(4);
-        }
-    }
-    
     public void setDeck(List<MainGameLogic.CardTypes> _deck)
     {
         deck = new List<MainGameLogic.CardTypes>(_deck);
