@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0389f7740e6b4409eb6da8c48f74f4, type: 3}
   m_Name: PlayerProfleScriptableObject
   m_EditorClassIdentifier: 
-  gold: 0
+  gold: 1250

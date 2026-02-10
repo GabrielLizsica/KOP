@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using UnityEditor.Tilemaps;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -14,10 +13,15 @@ public class MainMenuHandler : MonoBehaviour
     private Dictionary<Profiles, Button> profileButtons = new Dictionary<Profiles, Button>();
     private Dictionary<Profiles, Button> profileDeleteButtons = new Dictionary<Profiles, Button>();
     private Dictionary<PreGameButtons, Button> preBattleButtons = new Dictionary<PreGameButtons, Button>();
+    private Dictionary<ConfirmButtons, Button> confirmButtons = new Dictionary<ConfirmButtons,Button>();
+    private Button quitButton;
+    private Profiles profileToReset;
     private VisualElement profileSelector;
     private VisualElement profileDeleter;
     private VisualElement preBattleMenu;
     private VisualElement mainMenu;
+    private VisualElement resetConfirmMenu;
+    private Label resetConfirmLabel;
 
     private SceneHandler sceneHandler; 
     private SaveLoadSystem saveLoadSystem;
@@ -37,6 +41,12 @@ public class MainMenuHandler : MonoBehaviour
         DECK,
         SAVE_EXIT
     }  
+    
+    private enum ConfirmButtons
+    {
+        CONFIRM,
+        CANCEL
+    }
 
     
 
@@ -49,17 +59,38 @@ public class MainMenuHandler : MonoBehaviour
         profileSelector = mainMenu.Q<VisualElement>("ProfileSelector");
         profileDeleter = mainMenu.Q<VisualElement>("ProfileDeleter");
         preBattleMenu = mainMenu.Q<VisualElement>("PreBattleMenu");
-        preBattleMenu.style.display = DisplayStyle.None;
+        resetConfirmMenu = mainMenu.Q<VisualElement>("ProfileResetConfirm");
+        quitButton = profileSelector.Q<Button>("QuitButton");
+        quitButton.clicked += Application.Quit;
 
+        resetConfirmLabel = resetConfirmMenu.Q<Label>("ConfirmLabel");
+        
+        preBattleMenu.style.display = DisplayStyle.None;
+        resetConfirmMenu.style.display = DisplayStyle.None;
+
+        setConfirmButtons();
         setProfileButtons();
         setProfileDeleterButtons();
         setPreBattleMenuButtons();
 
+        setConfirmButtonEvents();
         setProfileButtonEvents();
         setProfileDeleterButtonEvents();
         setPreBattleMenuButtonEvents();
 
         Debug.Log(Application.persistentDataPath);
+    }
+    
+    private void setConfirmButtons()
+    {
+        confirmButtons.Add(ConfirmButtons.CANCEL, resetConfirmMenu.Q<Button>("CancelButton"));
+        confirmButtons.Add(ConfirmButtons.CONFIRM, resetConfirmMenu.Q<Button>("ConfirmButton"));
+    }
+    
+    private void setConfirmButtonEvents()
+    {
+        confirmButtons[ConfirmButtons.CANCEL].clicked += OnCancelButtonClicked;
+        confirmButtons[ConfirmButtons.CONFIRM].clicked += OnConfirmButtonClicked;
     }
 
     private void setProfileButtons()
@@ -133,6 +164,39 @@ public class MainMenuHandler : MonoBehaviour
     
     private void OnProfileDeleteButtonClicked(Profiles profile)
     {
-        saveLoadSystem.resetProfile(profile);
+        toggleProfileMenu(false);
+        resetConfirmMenu.style.display = DisplayStyle.Flex;
+        resetConfirmLabel.text = $"Are you sure you want to reset profile {(int)profile + 1}?";
+        profileToReset = profile;
+    }
+    
+    private void OnCancelButtonClicked()
+    {
+        resetConfirmMenu.style.display = DisplayStyle.None;
+        toggleProfileMenu(true);
+    }
+    
+    private void OnConfirmButtonClicked()
+    {
+        saveLoadSystem.resetProfile(profileToReset);
+        resetConfirmMenu.style.display = DisplayStyle.None;
+        toggleProfileMenu(true);
+    }
+    
+    private void toggleProfileMenu(bool enabled)
+    {
+        SetInteractableRecursive(profileSelector, enabled);
+        SetInteractableRecursive(profileDeleter, enabled);
+    }
+    
+    private void SetInteractableRecursive(VisualElement root, bool enabled)
+    {
+        root.pickingMode = enabled ? PickingMode.Position : PickingMode.Ignore;
+        root.style.opacity = enabled ? 1f : 0.5f;
+
+        foreach (var child in root.Children())
+        {
+            SetInteractableRecursive(child, enabled);
+        }
     }
 }

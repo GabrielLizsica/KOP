@@ -13,6 +13,7 @@
             <ui:Button text="Profile 2" name="ProfileButton1" />
             <ui:Button text="Profile 3" name="ProfileButton2" />
             <ui:Button text="Profile 4" name="ProfileButton3" />
+            <ui:Button text="Quit Game" name="QuitButton" style="top: 15%;" />
         </ui:VisualElement>
         <ui:VisualElement name="PreBattleMenu" enabled="true" class="button-list" style="flex-grow: 1; width: 50%;">
             <ui:Button text="Start" name="StartButton" />
@@ -20,6 +21,10 @@
             <ui:Button text="Cards" name="CardsButton" />
             <ui:Button text="Save &amp; Exit" name="SaveExitButton" />
         </ui:VisualElement>
+        <ui:VisualElement name="ProfileResetConfirm" style="flex-grow: 1; position: absolute; top: 35%; left: 101%; width: 100%; height: 30%; background-color: rgb(255, 255, 255); border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px;">
+            <ui:Label text="Are you sure you want to reset" name="ConfirmLabel" style="top: 25%; left: 25%; width: 50%; align-self: auto; align-items: stretch; -unity-text-align: upper-center; font-size: 24px;" />
+            <ui:Button text="No" name="CancelButton" style="top: 60%; left: 15%; width: 25%; height: 25%; position: absolute;" />
+            <ui:Button text="Yes" name="ConfirmButton" style="top: 60%; left: 60%; width: 25%; height: 25%; white-space: normal; -unity-text-align: middle-center; position: absolute;" />
+        </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="ProfileResetConfirm" style="flex-grow: 1; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; background-color: rgb(255, 255, 255); border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px;" />
 </ui:UXML>
