@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using Mono.Cecil.Cil;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -19,12 +20,16 @@ public class MainMenuHandler : MonoBehaviour
     private VisualElement profileSelector;
     private VisualElement profileDeleter;
     private VisualElement preBattleMenu;
+    private VisualElement root;
     private VisualElement mainMenu;
     private VisualElement resetConfirmMenu;
+    private VisualElement cardsMenu;
     private Label resetConfirmLabel;
 
     private SceneHandler sceneHandler; 
     private SaveLoadSystem saveLoadSystem;
+
+    private bool cardsMenuOpen;
 
     public enum Profiles
     {
@@ -48,37 +53,120 @@ public class MainMenuHandler : MonoBehaviour
         CANCEL
     }
 
+    private struct CardData<T>
+    {
+        public CardData(MainGameLogic.CardTypes _type, string _name, string _description, T _stats, CardStats _saveStats)
+        {
+            type = _type;
+            name = _name;
+            description = _description;
+            stats = _stats;
+            saveStats = _saveStats;
+        }
+        
+        public MainGameLogic.CardTypes type { get; }
+        public string name { get; }
+        public string description { get; }
+        public T stats { get; }
+        public CardStats saveStats { get; }
+    }
     
+    private struct CardStats
+    {
+        public int inDeck { get; }
+        public int level { get; }
+        public int owned { get; }
+    }
+    
+    private struct TowerData
+    {
+        public TowerData(int _damage, int _range, float _attackSpeed)
+        {
+            damage = _damage;
+            range = _range;
+            attackSpeed = _attackSpeed;
+        }
+        
+        public int damage { get; }
+        public int range { get; }
+        public float attackSpeed { get; }
+    }
+    
+    private struct TrapData
+    {
+        public TrapData (float _damage, int _health, float _effectStrength, float _effectDuration)
+        {
+            damage = _damage;
+            health = _health;
+            effectStrength = _effectStrength;
+            effectDuration = _effectDuration;
+        }
+    
+        public float damage { get; }
+        public int health { get; }
+        public float effectStrength { get; }
+        public float effectDuration { get; }
+    }
+    
+    private struct SpellData
+    {
+        public SpellData(float _effectStrength, float _effectDuration)
+        {
+            effectStrength = _effectStrength;
+            effectDuration = _effectDuration;
+        }
+    
+        public float effectStrength { get; }
+        public float effectDuration { get; }
+    }
 
     private void Start()
     {
-        mainMenu = GetComponent<UIDocument>().rootVisualElement;
         sceneHandler = sceneHandlerObject.GetComponent<SceneHandler>();
         saveLoadSystem = sceneHandlerObject.GetComponent<SaveLoadSystem>();
 
-        profileSelector = mainMenu.Q<VisualElement>("ProfileSelector");
-        profileDeleter = mainMenu.Q<VisualElement>("ProfileDeleter");
-        preBattleMenu = mainMenu.Q<VisualElement>("PreBattleMenu");
-        resetConfirmMenu = mainMenu.Q<VisualElement>("ProfileResetConfirm");
-        quitButton = profileSelector.Q<Button>("QuitButton");
-        quitButton.clicked += Application.Quit;
-
-        resetConfirmLabel = resetConfirmMenu.Q<Label>("ConfirmLabel");
         
-        preBattleMenu.style.display = DisplayStyle.None;
-        resetConfirmMenu.style.display = DisplayStyle.None;
 
-        setConfirmButtons();
-        setProfileButtons();
-        setProfileDeleterButtons();
-        setPreBattleMenuButtons();
+        root = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Root");
 
-        setConfirmButtonEvents();
-        setProfileButtonEvents();
-        setProfileDeleterButtonEvents();
-        setPreBattleMenuButtonEvents();
+        root.schedule.Execute(() =>
+        {
+            mainMenu = root.Q<VisualElement>("MainMenu");
+            resetConfirmMenu = root.Q<VisualElement>("ProfileResetConfirm");
+            cardsMenu = root.Q<VisualElement>("CardsMenu");
+            
+            profileSelector = mainMenu.Q<VisualElement>("ProfileSelector");
+            profileDeleter = mainMenu.Q<VisualElement>("ProfileDeleter");
+            preBattleMenu = mainMenu.Q<VisualElement>("PreBattleMenu");
+            
+            quitButton = profileSelector.Q<Button>("QuitButton");
+            quitButton.clicked += Application.Quit;
 
-        Debug.Log(Application.persistentDataPath);
+            resetConfirmLabel = resetConfirmMenu.Q<Label>("ConfirmLabel");
+            
+            preBattleMenu.style.display = DisplayStyle.None;
+            resetConfirmMenu.style.display = DisplayStyle.None;
+            cardsMenu.style.display = DisplayStyle.None;
+
+            cardsMenuOpen = false;
+
+            setConfirmButtons();
+            setProfileButtons();
+            setProfileDeleterButtons();
+            setPreBattleMenuButtons();
+
+            setConfirmButtonEvents();
+            setProfileButtonEvents();
+            setProfileDeleterButtonEvents();
+            setPreBattleMenuButtonEvents();
+
+            Debug.Log(Application.persistentDataPath);
+            
+            if (cardsMenu == null)
+            {
+                Debug.LogError("Cards menu not found!");
+            }
+        });
     }
     
     private void setConfirmButtons()
@@ -137,6 +225,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         preBattleButtons[PreGameButtons.START].clicked += OnStartButtonClicked;
         preBattleButtons[PreGameButtons.SAVE_EXIT].clicked += OnSaveButtonClicked;
+        preBattleButtons[PreGameButtons.CARDS].clicked += OnCardsMenuButtonClicked;
     }
     
     private void OnStartButtonClicked()
@@ -150,6 +239,7 @@ public class MainMenuHandler : MonoBehaviour
         
         profileSelector.style.display = DisplayStyle.None;
         profileDeleter.style.display = DisplayStyle.None;
+        cardsMenu.style.display = DisplayStyle.None;
         preBattleMenu.style.display = DisplayStyle.Flex;
     }
     
@@ -183,20 +273,46 @@ public class MainMenuHandler : MonoBehaviour
         toggleProfileMenu(true);
     }
     
-    private void toggleProfileMenu(bool enabled)
+    private void OnCardsMenuButtonClicked()
     {
-        SetInteractableRecursive(profileSelector, enabled);
-        SetInteractableRecursive(profileDeleter, enabled);
+        if (cardsMenu.style.display == DisplayStyle.None)
+        {
+            setVisibleRecursive(cardsMenu, true);
+        }
+        else if (cardsMenu.style.display == DisplayStyle.Flex)
+        {
+            setVisibleRecursive(cardsMenu, false);
+        }
     }
     
-    private void SetInteractableRecursive(VisualElement root, bool enabled)
+    private void toggleProfileMenu(bool enabled)
     {
-        root.pickingMode = enabled ? PickingMode.Position : PickingMode.Ignore;
-        root.style.opacity = enabled ? 1f : 0.5f;
-
-        foreach (var child in root.Children())
+        setInteractableRecursive(profileSelector, enabled, true);
+        setInteractableRecursive(profileDeleter, enabled, true);
+    }
+    
+    private void setInteractableRecursive(VisualElement _root, bool enabled, bool touchOpacity)
+    {
+        _root.pickingMode = enabled ? PickingMode.Position : PickingMode.Ignore;
+        
+        if (touchOpacity)
         {
-            SetInteractableRecursive(child, enabled);
+            _root.style.opacity = enabled ? 1f : 0.5f;
+        }
+
+        foreach (var child in _root.Children())
+        {
+            setInteractableRecursive(child, enabled, touchOpacity);
+        }
+    }
+    
+    private void setVisibleRecursive(VisualElement _root, bool enabled)
+    {
+        _root.style.display = enabled ? DisplayStyle.Flex : DisplayStyle.None;
+        
+        foreach (var child in _root.Children())
+        {
+            setVisibleRecursive(child, enabled);
         }
     }
 }

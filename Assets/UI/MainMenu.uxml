@@ -1,27 +1,37 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=98a3bb71a4273424b9c2d9f1c5b8c977&amp;type=3#MainMenu" />
-    <ui:VisualElement name="MainMenu" class="mainMenu" style="flex-grow: 1; align-content: flex-start; align-items: center; border-right-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-width: 5px; border-left-width: 5px;">
-        <ui:Label text="KARTYAVARAK" class="mainTitle" style="top: 15%; align-self: auto; align-content: auto; justify-content: center; align-items: auto; width: 50%; position: relative; left: auto; -unity-text-align: upper-center; font-size: 60px;" />
-        <ui:VisualElement name="ProfileDeleter" class="button-list" style="flex-grow: 1; width: 25%; align-self: flex-end; position: absolute; justify-content: flex-start; overflow: visible; visibility: visible;">
-            <ui:Button text="Reset" name="ProfileDeleteButton0" />
-            <ui:Button text="Reset" name="ProfileDeleteButton1" />
-            <ui:Button text="Reset" name="ProfileDeleteButton2" />
-            <ui:Button text="Reset" name="ProfileDeleteButton3" />
+    <ui:VisualElement name="Root" style="flex-grow: 1;">
+        <ui:VisualElement name="MainMenu" class="mainMenu" style="flex-grow: 1; align-content: flex-start; align-items: center; border-right-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-width: 5px; border-left-width: 5px;">
+            <ui:Label text="KARTYAVARAK" class="mainTitle" style="top: 15%; align-self: auto; align-content: auto; justify-content: center; align-items: auto; width: 50%; position: relative; left: auto; -unity-text-align: upper-center; font-size: 60px;" />
+            <ui:VisualElement name="ProfileDeleter" class="button-list" style="flex-grow: 1; width: 25%; align-self: flex-end; position: absolute; justify-content: flex-start; overflow: visible; visibility: visible;">
+                <ui:Button text="Reset" name="ProfileDeleteButton0" />
+                <ui:Button text="Reset" name="ProfileDeleteButton1" />
+                <ui:Button text="Reset" name="ProfileDeleteButton2" />
+                <ui:Button text="Reset" name="ProfileDeleteButton3" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ProfileSelector" class="button-list" style="flex-grow: 1; justify-content: flex-start; width: 50%;">
+                <ui:Button text="Profile 1" name="ProfileButton0" />
+                <ui:Button text="Profile 2" name="ProfileButton1" />
+                <ui:Button text="Profile 3" name="ProfileButton2" />
+                <ui:Button text="Profile 4" name="ProfileButton3" />
+                <ui:Button text="Quit Game" name="QuitButton" style="top: 15%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="PreBattleMenu" enabled="true" class="button-list" style="flex-grow: 1; width: 50%;">
+                <ui:Button text="Start" name="StartButton" />
+                <ui:Button text="Deck" name="DeckButton" />
+                <ui:Button text="Cards" name="CardsButton" />
+                <ui:Button text="Save &amp; Exit" name="SaveExitButton" />
+            </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="ProfileSelector" class="button-list" style="flex-grow: 1; justify-content: flex-start; width: 50%;">
-            <ui:Button text="Profile 1" name="ProfileButton0" />
-            <ui:Button text="Profile 2" name="ProfileButton1" />
-            <ui:Button text="Profile 3" name="ProfileButton2" />
-            <ui:Button text="Profile 4" name="ProfileButton3" />
-            <ui:Button text="Quit Game" name="QuitButton" style="top: 15%;" />
+        <ui:VisualElement name="CardsMenu" style="flex-grow: 1; position: absolute; top: 15%; left: 35%; width: 55%; height: 70%; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+            <ui:VisualElement name="PlayerStats" style="flex-grow: 1; top: 2.5%; left: 20%; right: auto; width: 60%; height: 7.5%; position: absolute; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); flex-direction: row; align-self: auto; align-content: auto; justify-content: center; align-items: center;">
+                <ui:Label text="Cards in deck: ?/18" name="DeckCounter" style="-unity-text-align: middle-center; left: 25%; width: 10%; font-size: 20px; position: absolute; align-items: auto; align-content: auto;" />
+                <ui:Label text="Gold: 1000" name="GoldCounter" style="top: auto; left: 75%; position: absolute; width: 10%; -unity-text-align: upper-center; font-size: 20px; align-self: auto; justify-content: flex-start; align-items: auto; align-content: auto;" />
+            </ui:VisualElement>
+            <ui:Label text="CARDS" name="Title" style="top: -10%; left: 25%; width: 50%; align-items: center; -unity-text-align: upper-center; font-size: 32px; -unity-font-style: bold;" />
+            <ui:ListView style="top: 12.5%; position: absolute; left: 2.5%; width: 95%; height: 85%; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
-        <ui:VisualElement name="PreBattleMenu" enabled="true" class="button-list" style="flex-grow: 1; width: 50%;">
-            <ui:Button text="Start" name="StartButton" />
-            <ui:Button text="Deck" name="DeckButton" />
-            <ui:Button text="Cards" name="CardsButton" />
-            <ui:Button text="Save &amp; Exit" name="SaveExitButton" />
-        </ui:VisualElement>
-        <ui:VisualElement name="ProfileResetConfirm" style="flex-grow: 1; position: absolute; top: 35%; left: 101%; width: 100%; height: 30%; background-color: rgb(255, 255, 255); border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px;">
+        <ui:VisualElement name="ProfileResetConfirm" style="flex-grow: 1; position: absolute; top: 35%; left: 35%; width: 25%; height: 30%; background-color: rgb(255, 255, 255); border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px;">
             <ui:Label text="Are you sure you want to reset" name="ConfirmLabel" style="top: 25%; left: 25%; width: 50%; align-self: auto; align-items: stretch; -unity-text-align: upper-center; font-size: 24px;" />
             <ui:Button text="No" name="CancelButton" style="top: 60%; left: 15%; width: 25%; height: 25%; position: absolute;" />
             <ui:Button text="Yes" name="ConfirmButton" style="top: 60%; left: 60%; width: 25%; height: 25%; white-space: normal; -unity-text-align: middle-center; position: absolute;" />

@@ -177,6 +177,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerProfileScriptableObject: {fileID: 11400000, guid: f3578b91d3a30564194a4113db0f979e, type: 2}
+  towerScriptableObject: {fileID: 11400000, guid: b8bcfd20b1be5d14e9866b1ef0806694, type: 2}
+  basicTrapScriptableObject: {fileID: 11400000, guid: 27189a01192b21942bf88776c3c53ed3, type: 2}
+  iceTrapScriptableObject: {fileID: 11400000, guid: 1114c615f01796644ad6f04ed9009487, type: 2}
+  poisonTrapScriptableObject: {fileID: 11400000, guid: e77ee6e6a6f788c45b1e2b278d66b57e, type: 2}
+  attackSpeedBuffScriptableObject: {fileID: 11400000, guid: 02075eaf8f8b06b4aa14662d9625199f, type: 2}
+  rangeBuffScriptableObject: {fileID: 11400000, guid: 16ad132d7adc4714eaa5cce5cc4609f1, type: 2}
+  damageBuffScriptableObject: {fileID: 11400000, guid: 64725317dbfb01e40b1da38115afa05e, type: 2}
+  baseHealSciptableObject: {fileID: 11400000, guid: 7c6fd47cddf28184187570fedcb61838, type: 2}
+  cardTexturesScriptableObject: {fileID: 11400000, guid: b6ffc8d4fc8b64d4780541783e81bfad, type: 2}
+  enemyScriptableObject: {fileID: 11400000, guid: ece897569903bd94a8782956213e540d, type: 2}
 --- !u!1001 &1346556026
 PrefabInstance:
   m_ObjectHideFlags: 0

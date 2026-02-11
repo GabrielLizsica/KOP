@@ -6,6 +6,8 @@ using UnityEngine.XR;
 public class InBattleMenuHandler : MonoBehaviour
 {
     [SerializeField] private GameObject mainGameObject;
+    [SerializeField] private CardTexturesScriptableObject cardTexturesScriptableObject;
+    private Dictionary<MainGameLogic.CardTypes, Texture2D> cardTextures;
     private DeckHandler deckHandler;
     private VisualElement battleUI;
     private VisualElement handUI;
@@ -16,18 +18,6 @@ public class InBattleMenuHandler : MonoBehaviour
         {"card2", null},
         {"card3", null},
         {"card4", null}
-    };
-
-    private Dictionary<MainGameLogic.CardTypes, Texture2D> cardTextures = new Dictionary<MainGameLogic.CardTypes, Texture2D>
-    {
-        {MainGameLogic.CardTypes.TOWER, null},
-        {MainGameLogic.CardTypes.BASIC_TRAP, null},
-        {MainGameLogic.CardTypes.ICE_TRAP, null},
-        {MainGameLogic.CardTypes.POISON_TRAP, null},
-        {MainGameLogic.CardTypes.ATTACK_SPEED_BUFF, null},
-        {MainGameLogic.CardTypes.DAMAGE_BUFF, null},
-        {MainGameLogic.CardTypes.RANGE_BUFF, null},
-        {MainGameLogic.CardTypes.BASE_HEAL, null}
     };
 
     private void Start()
@@ -43,16 +33,10 @@ public class InBattleMenuHandler : MonoBehaviour
         cardButtons["card3"] = handUI.Q<Button>("card3");
         cardButtons["card4"] = handUI.Q<Button>("card4");
 
-        deckHandler.OnCardDraw += Deck_OnCardDraw;
+        cardTextures = new Dictionary<MainGameLogic.CardTypes, Texture2D>(cardTexturesScriptableObject.textures);
 
-        cardTextures[MainGameLogic.CardTypes.TOWER] = Resources.Load<Texture2D>("Cards/CardTower");
-        cardTextures[MainGameLogic.CardTypes.BASIC_TRAP] = Resources.Load<Texture2D>("Cards/CardTrapBasic");
-        cardTextures[MainGameLogic.CardTypes.ICE_TRAP] = Resources.Load<Texture2D>("Cards/CardTrapIce");
-        cardTextures[MainGameLogic.CardTypes.POISON_TRAP] = Resources.Load<Texture2D>("Cards/CardTrapPoison");
-        cardTextures[MainGameLogic.CardTypes.ATTACK_SPEED_BUFF] = null;
-        cardTextures[MainGameLogic.CardTypes.DAMAGE_BUFF] = Resources.Load<Texture2D>("Cards/CardDamageBuff");
-        cardTextures[MainGameLogic.CardTypes.RANGE_BUFF] = Resources.Load<Texture2D>("Cards/CardRangeBuff");
-        cardTextures[MainGameLogic.CardTypes.BASE_HEAL] = Resources.Load<Texture2D>("Cards/CardBaseHeal");
+        deckHandler.OnCardDraw += Deck_OnCardDraw;
+        
     }
 
     private void Deck_OnCardDraw(object sender, DeckHandler.OnCardDrawEventArgs e)
