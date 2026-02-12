@@ -1,0 +1,10 @@
+.frame {
+    border-right-width: 5px;
+    border-top-width: 5px;
+    border-left-width: 5px;
+    border-bottom-width: 5px;
+    border-right-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-left-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+}

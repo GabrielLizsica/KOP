@@ -10,6 +10,7 @@ using Mono.Cecil.Cil;
 public class MainMenuHandler : MonoBehaviour
 {
     [SerializeField] private GameObject sceneHandlerObject;
+    [SerializeField] private VisualTreeAsset cardRowTemplate;
 
     private Dictionary<Profiles, Button> profileButtons = new Dictionary<Profiles, Button>();
     private Dictionary<Profiles, Button> profileDeleteButtons = new Dictionary<Profiles, Button>();
@@ -24,6 +25,7 @@ public class MainMenuHandler : MonoBehaviour
     private VisualElement mainMenu;
     private VisualElement resetConfirmMenu;
     private VisualElement cardsMenu;
+    private ListView cardListView;
     private Label resetConfirmLabel;
 
     private SceneHandler sceneHandler; 
@@ -52,10 +54,15 @@ public class MainMenuHandler : MonoBehaviour
         CONFIRM,
         CANCEL
     }
-
-    private struct CardData<T>
+    
+    public interface ICardStats
     {
-        public CardData(MainGameLogic.CardTypes _type, string _name, string _description, T _stats, CardStats _saveStats)
+        
+    }
+
+    private struct CardData : ICardStats
+    {
+        public CardData(MainGameLogic.CardTypes _type, string _name, string _description, ICardStats _stats, CardStats _saveStats)
         {
             type = _type;
             name = _name;
@@ -67,7 +74,7 @@ public class MainMenuHandler : MonoBehaviour
         public MainGameLogic.CardTypes type { get; }
         public string name { get; }
         public string description { get; }
-        public T stats { get; }
+        public ICardStats stats { get; }
         public CardStats saveStats { get; }
     }
     
@@ -78,7 +85,7 @@ public class MainMenuHandler : MonoBehaviour
         public int owned { get; }
     }
     
-    private struct TowerData
+    private struct TowerData : ICardStats
     {
         public TowerData(int _damage, int _range, float _attackSpeed)
         {
@@ -92,7 +99,7 @@ public class MainMenuHandler : MonoBehaviour
         public float attackSpeed { get; }
     }
     
-    private struct TrapData
+    private struct TrapData : ICardStats
     {
         public TrapData (float _damage, int _health, float _effectStrength, float _effectDuration)
         {
@@ -108,7 +115,7 @@ public class MainMenuHandler : MonoBehaviour
         public float effectDuration { get; }
     }
     
-    private struct SpellData
+    private struct SpellData : ICardStats
     {
         public SpellData(float _effectStrength, float _effectDuration)
         {
@@ -159,14 +166,31 @@ public class MainMenuHandler : MonoBehaviour
             setProfileButtonEvents();
             setProfileDeleterButtonEvents();
             setPreBattleMenuButtonEvents();
-
-            Debug.Log(Application.persistentDataPath);
-            
-            if (cardsMenu == null)
-            {
-                Debug.LogError("Cards menu not found!");
-            }
         });
+    }
+    
+    private List<Texture2D> createCardDataList()
+    {
+        /*List<CardData> data = new List<CardData>();
+        
+        for (int i = 0; i < Enum.GetValues(typeof(MainGameLogic.CardTypes)).Length; i++)
+        {
+            MainGameLogic.CardTypes currentType = (MainGameLogic.CardTypes)i;
+            
+            
+        }*/
+        
+        List<Texture2D> test = new List<Texture2D>();
+
+        for (int i = 1; i < Enum.GetValues(typeof(MainGameLogic.CardTypes)).Length; i++)
+            test.Add(saveLoadSystem.cardTexturesScriptableObject.textures[(MainGameLogic.CardTypes)i]);
+
+        return test;
+    }
+    
+    private void bindCardElements(VisualElement ve, Texture2D texture)
+    {
+        ve.Q<VisualElement>("Texture").style.backgroundImage = texture;
     }
     
     private void setConfirmButtons()
@@ -241,6 +265,13 @@ public class MainMenuHandler : MonoBehaviour
         profileDeleter.style.display = DisplayStyle.None;
         cardsMenu.style.display = DisplayStyle.None;
         preBattleMenu.style.display = DisplayStyle.Flex;
+        
+        List<Texture2D> testList = createCardDataList();
+
+        cardListView = cardsMenu.Q<ListView>("Cards");
+        cardListView.itemsSource = testList;
+        cardListView.makeItem = () => cardRowTemplate.CloneTree();
+        cardListView.bindItem = (ve, index) => bindCardElements(ve, cardListView.itemsSource[index] as Texture2D);
     }
     
     private void OnSaveButtonClicked()

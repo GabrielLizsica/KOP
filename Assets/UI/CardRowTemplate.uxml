@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/CardRowTemplate.uss?fileID=7433441132597879392&amp;guid=c3f31fb17cc23864ca5b5848f012a372&amp;type=3#CardRowTemplate" />
+    <ui:VisualElement name="Texture" class="frame" style="flex-grow: 1; width: 150px; height: auto; position: relative; max-height: 150px; left: 2.5%;" />
+</ui:UXML>

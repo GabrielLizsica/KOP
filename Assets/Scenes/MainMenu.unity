@@ -325,6 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneHandlerObject: {fileID: 427213243}
+  cardRowTemplate: {fileID: 9197481963319205126, guid: d4689bda30365ac4daf66304332ccad1, type: 3}
 --- !u!1 &2009847372
 GameObject:
   m_ObjectHideFlags: 0

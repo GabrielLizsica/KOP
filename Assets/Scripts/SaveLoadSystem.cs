@@ -10,16 +10,16 @@ using UnityEngine.UI;
 public class SaveLoadSystem : MonoBehaviour
 {
     [Header("Scriptable Objects")]
-    [SerializeField] private PlayerProfleScriptableObject playerProfileScriptableObject;
-    [SerializeField] private TowerScriptableObject towerScriptableObject;
-    [SerializeField] private TrapScriptableObject basicTrapScriptableObject;
-    [SerializeField] private TrapScriptableObject iceTrapScriptableObject;
-    [SerializeField] private TrapScriptableObject poisonTrapScriptableObject;
-    [SerializeField] private SpellScriptableObject attackSpeedBuffScriptableObject;
-    [SerializeField] private SpellScriptableObject rangeBuffScriptableObject;
-    [SerializeField] private SpellScriptableObject damageBuffScriptableObject;
-    [SerializeField] private SpellScriptableObject baseHealSciptableObject;
-    [SerializeField] private CardTexturesScriptableObject cardTexturesScriptableObject;
+    [SerializeField] public PlayerProfleScriptableObject playerProfileScriptableObject;
+    [SerializeField] public  TowerScriptableObject towerScriptableObject;
+    [SerializeField] public  TrapScriptableObject basicTrapScriptableObject;
+    [SerializeField] public  TrapScriptableObject iceTrapScriptableObject;
+    [SerializeField] public  TrapScriptableObject poisonTrapScriptableObject;
+    [SerializeField] public  SpellScriptableObject attackSpeedBuffScriptableObject;
+    [SerializeField] public  SpellScriptableObject rangeBuffScriptableObject;
+    [SerializeField] public  SpellScriptableObject damageBuffScriptableObject;
+    [SerializeField] public  SpellScriptableObject baseHealSciptableObject;
+    [SerializeField] public  CardTexturesScriptableObject cardTexturesScriptableObject;
     
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
     
