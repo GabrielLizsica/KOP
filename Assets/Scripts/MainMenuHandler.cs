@@ -269,6 +269,7 @@ public class MainMenuHandler : MonoBehaviour
         List<Texture2D> testList = createCardDataList();
 
         cardListView = cardsMenu.Q<ListView>("Cards");
+        cardListView.fixedItemHeight = Screen.height * 0.1777f;
         cardListView.itemsSource = testList;
         cardListView.makeItem = () => cardRowTemplate.CloneTree();
         cardListView.bindItem = (ve, index) => bindCardElements(ve, cardListView.itemsSource[index] as Texture2D);
