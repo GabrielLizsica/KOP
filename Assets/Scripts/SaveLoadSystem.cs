@@ -201,37 +201,37 @@ public class SaveLoadSystem : MonoBehaviour
         
         int towerLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.TOWER].level;
         TowerStats towerStats = towerData.stats[$"level{towerLevel}"];
-        towerScriptableObject.Init(towerStats.damage, towerStats.range, towerStats.attackspeed);
+        towerScriptableObject.Init(towerData, towerLevel);
 
         int basicTrapLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.BASIC_TRAP].level;
         TrapStats basicTrapStats = basicTrapData.stats[$"level{basicTrapLevel}"];
-        basicTrapScriptableObject.Init(basicTrapStats.damage, basicTrapStats.health, basicTrapStats.effectstrength, basicTrapStats.effectduration);
+        basicTrapScriptableObject.Init(basicTrapData, basicTrapLevel);
         
         int iceTrapLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.ICE_TRAP].level;
         TrapStats iceTrapStats = iceTrapData.stats[$"level{iceTrapLevel}"];
-        iceTrapScriptableObject.Init(iceTrapStats.damage, iceTrapStats.health, iceTrapStats.effectstrength, iceTrapStats.effectduration);
+        iceTrapScriptableObject.Init(iceTrapData, iceTrapLevel);
 
         int poisonTrapLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.POISON_TRAP].level;
         TrapStats poisonTrapStats = poisonTrapData.stats[$"level{poisonTrapLevel}"];
-        poisonTrapScriptableObject.Init(poisonTrapStats.damage, poisonTrapStats.health, poisonTrapStats.effectstrength, poisonTrapStats.effectduration);
+        poisonTrapScriptableObject.Init(poisonTrapData, poisonTrapLevel);
         
         int attackSpeedBuffLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.ATTACK_SPEED_BUFF].level;
         SpellStats attackSpeedBuffStats = attackSpeedBuffSpellData.stats[$"level{attackSpeedBuffLevel}"];
-        attackSpeedBuffScriptableObject.Init(attackSpeedBuffStats.effectstrength, attackSpeedBuffStats.effectduration);
+        attackSpeedBuffScriptableObject.Init(attackSpeedBuffSpellData, attackSpeedBuffLevel);
 
         int rangeBuffLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.RANGE_BUFF].level;
         SpellStats rangeBuffStats = rangeBuffSpellData.stats[$"level{rangeBuffLevel}"];
-        rangeBuffScriptableObject.Init(rangeBuffStats.effectstrength, rangeBuffStats.effectduration);
+        rangeBuffScriptableObject.Init(rangeBuffSpellData, rangeBuffLevel);
 
         int damageBuffLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.DAMAGE_BUFF].level;
         SpellStats damageBuffStats = damageBuffSpellData.stats[$"level{damageBuffLevel}"];
-        damageBuffScriptableObject.Init(damageBuffStats.effectstrength, damageBuffStats.effectduration);
+        damageBuffScriptableObject.Init(damageBuffSpellData, damageBuffLevel);
         
         Debug.Log(damageBuffScriptableObject.effectstrength);
 
         int baseHealLevel = playerProfileScriptableObject.cards[MainGameLogic.CardTypes.BASE_HEAL].level;
         SpellStats baseHealStats = baseHealSpellData.stats[$"level{baseHealLevel}"];
-        baseHealSciptableObject.Init(baseHealStats.effectstrength, baseHealStats.effectduration);
+        baseHealSciptableObject.Init(baseHealSpellData, baseHealLevel);
 
         enemyScriptableObject.speed = enemyData.speed;
         enemyScriptableObject.health = enemyData.health;

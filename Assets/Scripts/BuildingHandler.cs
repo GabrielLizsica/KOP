@@ -19,14 +19,14 @@ public class BuildingHandler : MonoBehaviour
         MainGameLogic.CardTypes.ICE_TRAP,
         MainGameLogic.CardTypes.POISON_TRAP
     };
-    private List<MainGameLogic.CardTypes> spells = new List<MainGameLogic.CardTypes>
+    public static List<MainGameLogic.CardTypes> spells = new List<MainGameLogic.CardTypes>
     {
         MainGameLogic.CardTypes.ATTACK_SPEED_BUFF,
         MainGameLogic.CardTypes.RANGE_BUFF,
         MainGameLogic.CardTypes.DAMAGE_BUFF,
         MainGameLogic.CardTypes.BASE_HEAL
     };
-    private List<MainGameLogic.CardTypes> traps = new List<MainGameLogic.CardTypes>
+    public static List<MainGameLogic.CardTypes> traps = new List<MainGameLogic.CardTypes>
     {
         MainGameLogic.CardTypes.BASIC_TRAP,
         MainGameLogic.CardTypes.ICE_TRAP,

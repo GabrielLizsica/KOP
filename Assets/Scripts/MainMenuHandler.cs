@@ -5,13 +5,17 @@ using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Mono.Cecil.Cil;
+using Unity.VisualScripting;
+using UnityEditor.Rendering;
 
 public class MainMenuHandler : MonoBehaviour
 {
     [SerializeField] private GameObject sceneHandlerObject;
     [SerializeField] private VisualTreeAsset cardRowTemplate;
 
+    private TowerScriptableObject towerScriptableObject;
+    private Dictionary<MainGameLogic.CardTypes, TrapScriptableObject> trapScriptableObjects;
+    private Dictionary<MainGameLogic.CardTypes, SpellScriptableObject> spellScriptableObjects;
     private Dictionary<Profiles, Button> profileButtons = new Dictionary<Profiles, Button>();
     private Dictionary<Profiles, Button> profileDeleteButtons = new Dictionary<Profiles, Button>();
     private Dictionary<PreGameButtons, Button> preBattleButtons = new Dictionary<PreGameButtons, Button>();
@@ -57,18 +61,18 @@ public class MainMenuHandler : MonoBehaviour
     
     public interface ICardStats
     {
-        
     }
 
-    private struct CardData : ICardStats
+    private class CardData : ICardStats
     {
-        public CardData(MainGameLogic.CardTypes _type, string _name, string _description, ICardStats _stats, CardStats _saveStats)
+        public CardData(MainGameLogic.CardTypes _type, string _name, string _description, ICardStats _stats, CardStats _saveStats, Texture2D _texture)
         {
             type = _type;
             name = _name;
             description = _description;
             stats = _stats;
             saveStats = _saveStats;
+            texture = _texture;
         }
         
         public MainGameLogic.CardTypes type { get; }
@@ -76,16 +80,23 @@ public class MainMenuHandler : MonoBehaviour
         public string description { get; }
         public ICardStats stats { get; }
         public CardStats saveStats { get; }
+        public Texture2D texture;
     }
     
     private struct CardStats
     {
+        public CardStats(int _inDeck, int _level, int _owned)
+        {
+            inDeck = _inDeck;
+            level = _level;
+            owned = _owned;
+        }
         public int inDeck { get; }
         public int level { get; }
         public int owned { get; }
     }
     
-    private struct TowerData : ICardStats
+    private class TowerData : ICardStats
     {
         public TowerData(int _damage, int _range, float _attackSpeed)
         {
@@ -99,7 +110,7 @@ public class MainMenuHandler : MonoBehaviour
         public float attackSpeed { get; }
     }
     
-    private struct TrapData : ICardStats
+    private class TrapData : ICardStats
     {
         public TrapData (float _damage, int _health, float _effectStrength, float _effectDuration)
         {
@@ -115,7 +126,7 @@ public class MainMenuHandler : MonoBehaviour
         public float effectDuration { get; }
     }
     
-    private struct SpellData : ICardStats
+    private class SpellData : ICardStats
     {
         public SpellData(float _effectStrength, float _effectDuration)
         {
@@ -169,28 +180,121 @@ public class MainMenuHandler : MonoBehaviour
         });
     }
     
-    private List<Texture2D> createCardDataList()
+    private List<CardData> createCardDataList()
     {
-        /*List<CardData> data = new List<CardData>();
-        
-        for (int i = 0; i < Enum.GetValues(typeof(MainGameLogic.CardTypes)).Length; i++)
-        {
-            MainGameLogic.CardTypes currentType = (MainGameLogic.CardTypes)i;
-            
-            
-        }*/
-        
-        List<Texture2D> test = new List<Texture2D>();
+        List<CardData> test = new List<CardData>();
+        MainGameLogic.CardTypes cardType = MainGameLogic.CardTypes.DEFAULT;
+        string cardName = "";
+        string cardDesc = "";
+        SpellData spellStats = null;
+        TrapData trapStats = null;
+        TowerData towerStats = null;
+        Texture2D cardTexture;
 
         for (int i = 1; i < Enum.GetValues(typeof(MainGameLogic.CardTypes)).Length; i++)
-            test.Add(saveLoadSystem.cardTexturesScriptableObject.textures[(MainGameLogic.CardTypes)i]);
+        {
+            cardType = (MainGameLogic.CardTypes)i;
+            spellStats = null;
+            trapStats = null;
+            towerStats = null;
+
+            if (BuildingHandler.spells.Contains(cardType))
+            {
+                SpellScriptableObject spellObject = spellScriptableObjects[cardType];
+                cardName = spellObject.title["en"];
+                cardDesc = spellObject.description["en"];
+                spellStats = new SpellData(spellObject.effectstrength, spellObject.effectduration);
+            }
+            else if (BuildingHandler.traps.Contains(cardType))
+            {
+                TrapScriptableObject trapObject = trapScriptableObjects[cardType];
+                cardName = trapObject.title["en"];
+                cardDesc = trapObject.description["en"];      
+                trapStats = new TrapData(trapObject.damage, trapObject.health, trapObject.effectstrength, trapObject.effectduration);  
+            }
+            else if (cardType == MainGameLogic.CardTypes.TOWER)
+            {
+                TowerScriptableObject towerObject = towerScriptableObject;
+                cardName = towerScriptableObject.title["en"];
+                cardDesc = towerScriptableObject.description["en"];
+                towerStats = new TowerData(towerObject.damage, towerObject.range, towerObject.attackspeed);
+            }
+
+            PlayerProfleScriptableObject profile = saveLoadSystem.playerProfileScriptableObject;
+            SaveLoadSystem.Card card = profile.cards[cardType];
+            CardStats cardSaveStats = new CardStats(card.deck, card.level, card.owned);
+            cardTexture = saveLoadSystem.cardTexturesScriptableObject.textures[cardType];
+
+            if (spellStats != null)
+            {
+                test.Add(new CardData(cardType, cardName, cardDesc, spellStats, cardSaveStats, cardTexture));
+            } 
+            else if (trapStats != null)
+            {
+                test.Add(new CardData(cardType, cardName, cardDesc, trapStats, cardSaveStats, cardTexture));
+            }
+            else if (towerStats != null)
+            {
+                test.Add(new CardData(cardType, cardName, cardDesc, towerStats, cardSaveStats, cardTexture));
+            }
+        }
 
         return test;
     }
     
-    private void bindCardElements(VisualElement ve, Texture2D texture)
+    private void bindCardElements(VisualElement ve, CardData data)
     {
-        ve.Q<VisualElement>("Texture").style.backgroundImage = texture;
+        VisualElement texture = ve.Q<VisualElement>("Texture");
+        VisualElement nameBox = ve.Q<VisualElement>("NameBox");
+        VisualElement statBox = ve.Q<VisualElement>("StatsBox");
+        VisualElement statLabelBox = statBox.Q<VisualElement>("StatLabels");
+        VisualElement statValueLabelBox = statBox.Q<VisualElement>("StatValueLabels");
+        
+        Label name = nameBox.Q<Label>("Name");
+        Label description = nameBox.Q<Label>("Description");
+
+        List<Label> statLabels = new List<Label>();
+        List<Label> statValueLabels = new List<Label>();
+        
+        for (int i = 0; i < 4; i++)
+        {
+            statLabels.Add(statLabelBox.Q<Label>($"Stat{i}"));
+            statValueLabels.Add(statValueLabelBox.Q<Label>($"StatValue{i}"));
+        }
+        
+
+        if (data.stats is TowerData)
+        {
+            statLabels[0].text = "Damage";
+            statLabels[1].text = "Range";
+            statLabels[2].text = "Attack Speed";
+            statLabels[3].style.display = DisplayStyle.None;
+
+            TowerData stats = data.stats as TowerData;
+
+            statValueLabels[0].text = $"{stats.damage}";
+            statValueLabels[1].text = $"{stats.range}";
+            statValueLabels[2].text = $"{stats.attackSpeed}";
+            statValueLabels[3].style.display = DisplayStyle.None;
+        }
+        else if (data.stats is TrapData)
+        {
+            statLabels[0].text = "Damage";
+            statLabels[1].text = "Health";
+            statLabels[2].text = "Effect Strength";
+            statLabels[3].text = "Effect Duration";
+
+            TrapData stats = data.stats as TrapData;
+
+            statValueLabels[0].text = $"{stats.damage}";
+            statValueLabels[1].text = $"{stats.health}";
+            statValueLabels[2].text = $"{stats.effectStrength}";
+            statValueLabels[3].text = $"{stats.effectDuration}";
+        }
+
+        texture.style.backgroundImage = data.texture;
+        name.text = data.name;
+        description.text = data.description;
     }
     
     private void setConfirmButtons()
@@ -261,18 +365,34 @@ public class MainMenuHandler : MonoBehaviour
     {
         saveLoadSystem.loadProfile(profile);
         
+        towerScriptableObject = saveLoadSystem.towerScriptableObject;
+        trapScriptableObjects = new Dictionary<MainGameLogic.CardTypes, TrapScriptableObject>
+        {
+            {MainGameLogic.CardTypes.BASIC_TRAP, saveLoadSystem.basicTrapScriptableObject},
+            {MainGameLogic.CardTypes.ICE_TRAP, saveLoadSystem.iceTrapScriptableObject},
+            {MainGameLogic.CardTypes.POISON_TRAP, saveLoadSystem.poisonTrapScriptableObject}
+        };
+
+        spellScriptableObjects = new Dictionary<MainGameLogic.CardTypes, SpellScriptableObject>
+        {
+            {MainGameLogic.CardTypes.ATTACK_SPEED_BUFF, saveLoadSystem.attackSpeedBuffScriptableObject},
+            {MainGameLogic.CardTypes.BASE_HEAL, saveLoadSystem.baseHealSciptableObject},
+            {MainGameLogic.CardTypes.DAMAGE_BUFF, saveLoadSystem.damageBuffScriptableObject},
+            {MainGameLogic.CardTypes.RANGE_BUFF, saveLoadSystem.rangeBuffScriptableObject}
+        };
+
         profileSelector.style.display = DisplayStyle.None;
         profileDeleter.style.display = DisplayStyle.None;
         cardsMenu.style.display = DisplayStyle.None;
         preBattleMenu.style.display = DisplayStyle.Flex;
         
-        List<Texture2D> testList = createCardDataList();
+        List<CardData> testList = createCardDataList();
 
         cardListView = cardsMenu.Q<ListView>("Cards");
         cardListView.fixedItemHeight = Screen.height * 0.1777f;
         cardListView.itemsSource = testList;
         cardListView.makeItem = () => cardRowTemplate.CloneTree();
-        cardListView.bindItem = (ve, index) => bindCardElements(ve, cardListView.itemsSource[index] as Texture2D);
+        cardListView.bindItem = (ve, index) => bindCardElements(ve, cardListView.itemsSource[index] as CardData);
     }
     
     private void OnSaveButtonClicked()
