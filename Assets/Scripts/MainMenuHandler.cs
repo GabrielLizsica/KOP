@@ -246,22 +246,37 @@ public class MainMenuHandler : MonoBehaviour
     {
         VisualElement texture = ve.Q<VisualElement>("Texture");
         VisualElement nameBox = ve.Q<VisualElement>("NameBox");
-        VisualElement statBox = ve.Q<VisualElement>("StatsBox");
-        VisualElement statLabelBox = statBox.Q<VisualElement>("StatLabels");
-        VisualElement statValueLabelBox = statBox.Q<VisualElement>("StatValueLabels");
+
+        VisualElement statsBox = ve.Q<VisualElement>("StatsBox");
+        VisualElement statLabelBox = statsBox.Q<VisualElement>("StatLabels");
+        VisualElement statValueLabelBox = statsBox.Q<VisualElement>("StatValueLabels");
+
+        VisualElement profileStatsBox = ve.Q<VisualElement>("ProfileStatsBox");
+        VisualElement profileStatLabelBox = profileStatsBox.Q<VisualElement>("ProfileStatLabels");
+        VisualElement profileStatValueLabelBox = profileStatsBox.Q<VisualElement>("ProfileStatValueLabels");
         
         Label name = nameBox.Q<Label>("Name");
         Label description = nameBox.Q<Label>("Description");
 
         List<Label> statLabels = new List<Label>();
         List<Label> statValueLabels = new List<Label>();
+
+        List<Label> profileStatLabels = new List<Label>();
+        List<Label> profileStatValueLabels = new List<Label>();
         
         for (int i = 0; i < 4; i++)
         {
             statLabels.Add(statLabelBox.Q<Label>($"Stat{i}"));
             statValueLabels.Add(statValueLabelBox.Q<Label>($"StatValue{i}"));
         }
-        
+
+        for (int i = 0; i < 3; i++)
+        {
+            profileStatLabels.Add(profileStatLabelBox.Q<Label>($"ProfileStat{i}"));
+            profileStatValueLabels.Add(profileStatValueLabelBox.Q<Label>($"ProfileStatValue{i}"));
+        }
+
+        Debug.Log("Number of profileStatLabels: " + profileStatLabels.Count);
 
         if (data.stats is TowerData)
         {
@@ -291,6 +306,28 @@ public class MainMenuHandler : MonoBehaviour
             statValueLabels[2].text = $"{stats.effectStrength}";
             statValueLabels[3].text = $"{stats.effectDuration}";
         }
+        else if (data.stats is SpellData)
+        {
+            statLabels[0].text = "Effect Strength";
+            statLabels[1].text = "Effect Duration";
+            statLabels[2].style.display = DisplayStyle.None;
+            statLabels[3].style.display = DisplayStyle.None;
+
+            SpellData stats = data.stats as SpellData;
+
+            statValueLabels[0].text = $"{stats.effectStrength}";
+            statValueLabels[1].text = $"{stats.effectDuration}";
+            statValueLabels[2].style.display = DisplayStyle.None;
+            statValueLabels[3].style.display = DisplayStyle.None;
+        }
+
+        profileStatLabels[0].text = "Owned";
+        profileStatLabels[1].text = "Level";
+        profileStatLabels[2].text = "In Deck";
+
+        profileStatValueLabels[0].text = $"{data.saveStats.owned}";
+        profileStatValueLabels[1].text = $"{data.saveStats.level}";
+        profileStatValueLabels[2].text = $"{data.saveStats.inDeck}";
 
         texture.style.backgroundImage = data.texture;
         name.text = data.name;

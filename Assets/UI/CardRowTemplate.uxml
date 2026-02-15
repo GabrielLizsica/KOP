@@ -20,15 +20,15 @@
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="ProfileStatsBox" class="frame" style="flex-grow: 1; position: absolute; left: 67%; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; justify-content: space-between; top: 11%; width: 15%; flex-direction: row;">
-        <ui:VisualElement name="StatLabels" class="stat-label" style="flex-grow: 1; justify-content: space-evenly; position: relative;">
-            <ui:Label text="Stat 1" name="Stat0" />
-            <ui:Label text="Stat 1" name="Stat1" />
-            <ui:Label text="Stat 1" name="Stat2" />
+        <ui:VisualElement name="ProfileStatLabels" class="stat-label" style="flex-grow: 1; justify-content: space-evenly; position: relative;">
+            <ui:Label text="Stat 1" name="ProfileStat0" />
+            <ui:Label text="Stat 1" name="ProfileStat1" />
+            <ui:Label text="Stat 1" name="ProfileStat2" />
         </ui:VisualElement>
-        <ui:VisualElement name="StatValueLabels" class="stat-label" style="flex-grow: 1; justify-content: space-evenly; align-self: flex-start; align-items: center;">
-            <ui:Label text="Stat 1" name="StatValue0" style="align-self: auto; height: auto;" />
-            <ui:Label text="Stat 1" name="StatValue1" style="height: auto;" />
-            <ui:Label text="Stat 1" name="StatValue2" />
+        <ui:VisualElement name="ProfileStatValueLabels" class="stat-label" style="flex-grow: 1; justify-content: space-evenly; align-self: flex-start; align-items: center;">
+            <ui:Label text="Stat 1" name="ProfileStatValue0" style="align-self: auto; height: auto;" />
+            <ui:Label text="Stat 1" name="ProfileStatValue1" style="height: auto;" />
+            <ui:Label text="Stat 1" name="ProfileStatValue2" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="CardButtons" class="frame" style="flex-grow: 1; position: absolute; left: 83%; top: 11%; width: 15%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; align-self: center; justify-content: space-evenly; align-items: center;">
