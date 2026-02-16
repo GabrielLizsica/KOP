@@ -6,6 +6,7 @@ using System;
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class SaveLoadSystem : MonoBehaviour
 {
@@ -162,7 +163,7 @@ public class SaveLoadSystem : MonoBehaviour
         playerProfileScriptableObject.gold = playerProfile.gold;
         playerProfileScriptableObject.cards = new Dictionary<MainGameLogic.CardTypes, Card>(playerProfile.cards);
         
-        initializeScriptableObjectData();
+        updateScriptableObjectData();
         loadCardTextures();
     }
     
@@ -183,7 +184,7 @@ public class SaveLoadSystem : MonoBehaviour
         File.WriteAllText(saveFilePath, Resources.Load<TextAsset>("TextAssets/SkeletonProfile").text);
     }
     
-    private void initializeScriptableObjectData()
+    private void updateScriptableObjectData()
     {
         Dictionary<MainGameLogic.CardTypes, TextAsset> cardTextAssets = loadCardTextAssets();
     
@@ -266,5 +267,28 @@ public class SaveLoadSystem : MonoBehaviour
         cardTextures[MainGameLogic.CardTypes.BASE_HEAL] = Resources.Load<Texture2D>("Cards/CardBaseHeal");
 
         cardTexturesScriptableObject.textures = new Dictionary<MainGameLogic.CardTypes, Texture2D>(cardTextures);
+    }
+
+    public void buyCard(MainGameLogic.CardTypes card)
+    {
+        playerProfileScriptableObject.cards[card].owned++;
+    }
+
+    public void upgradeCard(MainGameLogic.CardTypes card)
+    {
+        playerProfileScriptableObject.cards[card].level++;
+        updateScriptableObjectData();
+    }
+
+    public void addCardToDeck(MainGameLogic.CardTypes card)
+    {
+        playerProfileScriptableObject.cards[card].deck++;
+        updateScriptableObjectData();
+    }
+
+    public void removeCardFromDeck(MainGameLogic.CardTypes card)
+    {
+        playerProfileScriptableObject.cards[card].deck--;
+        updateScriptableObjectData();
     }
 }

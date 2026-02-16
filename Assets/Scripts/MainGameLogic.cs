@@ -59,7 +59,6 @@ public class MainGameLogic : MonoBehaviour
         
         mapHandler.createMap();
         deckHandler.setDeck(createDeck());
-        InitializeCardScriptableObjects();
         StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
     }
     
@@ -68,11 +67,6 @@ public class MainGameLogic : MonoBehaviour
         mousePosTile = tilemapGround.WorldToCell(getMousePosTile());
 
         //Debug.Log(mousePosTile);
-    }
-    
-    private void InitializeCardScriptableObjects()
-    {   
-        Debug.Log("Scriptable objects initialized!");
     }
 
     private List<CardTypes> createDeck()

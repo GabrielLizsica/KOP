@@ -12,6 +12,7 @@ public class MainMenuHandler : MonoBehaviour
 {
     [SerializeField] private GameObject sceneHandlerObject;
     [SerializeField] private VisualTreeAsset cardRowTemplate;
+    [SerializeField] private int maxDeckCount;
 
     private TowerScriptableObject towerScriptableObject;
     private Dictionary<MainGameLogic.CardTypes, TrapScriptableObject> trapScriptableObjects;
@@ -19,7 +20,7 @@ public class MainMenuHandler : MonoBehaviour
     private Dictionary<Profiles, Button> profileButtons = new Dictionary<Profiles, Button>();
     private Dictionary<Profiles, Button> profileDeleteButtons = new Dictionary<Profiles, Button>();
     private Dictionary<PreGameButtons, Button> preBattleButtons = new Dictionary<PreGameButtons, Button>();
-    private Dictionary<ConfirmButtons, Button> confirmButtons = new Dictionary<ConfirmButtons,Button>();
+    private Dictionary<ConfirmButtons, Button> confirmButtons = new Dictionary<ConfirmButtons, Button>();
     private Button quitButton;
     private Profiles profileToReset;
     private VisualElement profileSelector;
@@ -31,6 +32,7 @@ public class MainMenuHandler : MonoBehaviour
     private VisualElement cardsMenu;
     private ListView cardListView;
     private Label resetConfirmLabel;
+    private Label cardInDeckLabel;
 
     private SceneHandler sceneHandler; 
     private SaveLoadSystem saveLoadSystem;
@@ -143,45 +145,42 @@ public class MainMenuHandler : MonoBehaviour
         sceneHandler = sceneHandlerObject.GetComponent<SceneHandler>();
         saveLoadSystem = sceneHandlerObject.GetComponent<SaveLoadSystem>();
 
-        
-
         root = GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("Root");
 
-        root.schedule.Execute(() =>
-        {
-            mainMenu = root.Q<VisualElement>("MainMenu");
-            resetConfirmMenu = root.Q<VisualElement>("ProfileResetConfirm");
-            cardsMenu = root.Q<VisualElement>("CardsMenu");
-            
-            profileSelector = mainMenu.Q<VisualElement>("ProfileSelector");
-            profileDeleter = mainMenu.Q<VisualElement>("ProfileDeleter");
-            preBattleMenu = mainMenu.Q<VisualElement>("PreBattleMenu");
-            
-            quitButton = profileSelector.Q<Button>("QuitButton");
-            quitButton.clicked += Application.Quit;
+        mainMenu = root.Q<VisualElement>("MainMenu");
+        resetConfirmMenu = root.Q<VisualElement>("ProfileResetConfirm");
+        cardsMenu = root.Q<VisualElement>("CardsMenu");
+        
+        profileSelector = mainMenu.Q<VisualElement>("ProfileSelector");
+        profileDeleter = mainMenu.Q<VisualElement>("ProfileDeleter");
+        preBattleMenu = mainMenu.Q<VisualElement>("PreBattleMenu");
+        
+        quitButton = profileSelector.Q<Button>("QuitButton");
+        quitButton.clicked += Application.Quit;
 
-            resetConfirmLabel = resetConfirmMenu.Q<Label>("ConfirmLabel");
-            
-            preBattleMenu.style.display = DisplayStyle.None;
-            resetConfirmMenu.style.display = DisplayStyle.None;
-            cardsMenu.style.display = DisplayStyle.None;
+        resetConfirmLabel = resetConfirmMenu.Q<Label>("ConfirmLabel");
+        cardInDeckLabel = cardsMenu.Q<VisualElement>("PlayerStats").Q<Label>("DeckCounter");
+        
+        preBattleMenu.style.display = DisplayStyle.None;
+        resetConfirmMenu.style.display = DisplayStyle.None;
+        cardsMenu.style.display = DisplayStyle.None;
 
-            cardsMenuOpen = false;
+        cardsMenuOpen = false;
 
-            setConfirmButtons();
-            setProfileButtons();
-            setProfileDeleterButtons();
-            setPreBattleMenuButtons();
+        setConfirmButtons();
+        setProfileButtons();
+        setProfileDeleterButtons();
+        setPreBattleMenuButtons();
 
-            setConfirmButtonEvents();
-            setProfileButtonEvents();
-            setProfileDeleterButtonEvents();
-            setPreBattleMenuButtonEvents();
-        });
+        setConfirmButtonEvents();
+        setProfileButtonEvents();
+        setProfileDeleterButtonEvents();
+        setPreBattleMenuButtonEvents();
     }
     
     private List<CardData> createCardDataList()
     {
+        Debug.Log("Cards in deck: " + getCardInDeckCount());
         List<CardData> test = new List<CardData>();
         MainGameLogic.CardTypes cardType = MainGameLogic.CardTypes.DEFAULT;
         string cardName = "";
@@ -254,9 +253,16 @@ public class MainMenuHandler : MonoBehaviour
         VisualElement profileStatsBox = ve.Q<VisualElement>("ProfileStatsBox");
         VisualElement profileStatLabelBox = profileStatsBox.Q<VisualElement>("ProfileStatLabels");
         VisualElement profileStatValueLabelBox = profileStatsBox.Q<VisualElement>("ProfileStatValueLabels");
+
+        VisualElement cardButtons = ve.Q<VisualElement>("CardButtons");
         
         Label name = nameBox.Q<Label>("Name");
         Label description = nameBox.Q<Label>("Description");
+
+        Button buyButton = cardButtons.Q<Button>("BuyButton");
+        Button upgradeButton = cardButtons.Q<Button>("UpgradeButton");
+        Button cardRemoveButton = cardButtons.Q<VisualElement>("DeckButtons").Q<Button>("CardRemoveButton");
+        Button cardAddButton = cardButtons.Q<VisualElement>("DeckButtons").Q<Button>("CardAddButton");
 
         List<Label> statLabels = new List<Label>();
         List<Label> statValueLabels = new List<Label>();
@@ -274,6 +280,15 @@ public class MainMenuHandler : MonoBehaviour
         {
             profileStatLabels.Add(profileStatLabelBox.Q<Label>($"ProfileStat{i}"));
             profileStatValueLabels.Add(profileStatValueLabelBox.Q<Label>($"ProfileStatValue{i}"));
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            statLabels[i].style.display = DisplayStyle.Flex;
+            statValueLabels[i].style.display = DisplayStyle.Flex;
+
+            statLabels[i].text = "";
+            statValueLabels[i].text = "";
         }
 
         Debug.Log("Number of profileStatLabels: " + profileStatLabels.Count);
@@ -326,12 +341,72 @@ public class MainMenuHandler : MonoBehaviour
         profileStatLabels[2].text = "In Deck";
 
         profileStatValueLabels[0].text = $"{data.saveStats.owned}";
-        profileStatValueLabels[1].text = $"{data.saveStats.level}";
+        profileStatValueLabels[1].text = $"{data.saveStats.level + 1}";
         profileStatValueLabels[2].text = $"{data.saveStats.inDeck}";
 
         texture.style.backgroundImage = data.texture;
         name.text = data.name;
         description.text = data.description;
+
+        if (buyButton.userData is Action oldBuyCallback)
+        {
+            buyButton.clicked -= oldBuyCallback;
+        }
+        if (upgradeButton.userData is Action oldUpgradeCallback)
+        {
+            upgradeButton.clicked -= oldUpgradeCallback;
+        }
+        if (cardAddButton.userData is Action oldCardAddCallback)
+        {
+            cardAddButton.clicked -= oldCardAddCallback;
+        }
+        if (cardRemoveButton.userData is Action oldCardRemoveCallback)
+        {
+            cardRemoveButton.clicked -= oldCardRemoveCallback;
+        }
+
+        Action newBuyCallback = () => OnBuyButtonClicked(data.type);
+        buyButton.userData = newBuyCallback;
+        buyButton.clicked += newBuyCallback;
+
+        Action newUpgradeCallBack = () => OnUpgradeButtonClicked(data.type);
+        upgradeButton.userData = newUpgradeCallBack;
+        upgradeButton.clicked += newUpgradeCallBack;
+
+        Action newCardAddCallback = () => OnCardAddButtonClicked(data.type);
+        cardAddButton.userData = newCardAddCallback;
+        cardAddButton.clicked += newCardAddCallback;
+
+        Action newCardRemoveCallback = () => OnCardRemoveButtonClicked(data.type);
+        cardRemoveButton.userData = newCardRemoveCallback;
+        cardRemoveButton.clicked += newCardRemoveCallback;
+
+        if (data.saveStats.level == 3)
+        {
+            setInteractableRecursive(upgradeButton, false, true);
+        }
+        else
+        {
+            setInteractableRecursive(upgradeButton, true, true);
+        }
+
+        if (data.saveStats.inDeck < data.saveStats.owned && getCardInDeckCount() < maxDeckCount)
+        {
+            setInteractableRecursive(cardAddButton, true, true);
+        }
+        else
+        {
+            setInteractableRecursive(cardAddButton, false, true);
+        }
+
+        if (data.saveStats.inDeck > 0)
+        {
+            setInteractableRecursive(cardRemoveButton, true, true);
+        }
+        else
+        {
+            setInteractableRecursive(cardRemoveButton, false, true);
+        }
     }
     
     private void setConfirmButtons()
@@ -423,11 +498,11 @@ public class MainMenuHandler : MonoBehaviour
         cardsMenu.style.display = DisplayStyle.None;
         preBattleMenu.style.display = DisplayStyle.Flex;
         
-        List<CardData> testList = createCardDataList();
+        //List<CardData> testList = createCardDataList();
 
         cardListView = cardsMenu.Q<ListView>("Cards");
         cardListView.fixedItemHeight = Screen.height * 0.1777f;
-        cardListView.itemsSource = testList;
+        cardListView.itemsSource = createCardDataList();
         cardListView.makeItem = () => cardRowTemplate.CloneTree();
         cardListView.bindItem = (ve, index) => bindCardElements(ve, cardListView.itemsSource[index] as CardData);
     }
@@ -439,6 +514,7 @@ public class MainMenuHandler : MonoBehaviour
         profileSelector.style.display = DisplayStyle.Flex;
         profileDeleter.style.display = DisplayStyle.Flex;
         preBattleMenu.style.display = DisplayStyle.None;
+        setVisibleRecursive(cardsMenu, false);
     }
     
     private void OnProfileDeleteButtonClicked(Profiles profile)
@@ -472,6 +548,38 @@ public class MainMenuHandler : MonoBehaviour
         {
             setVisibleRecursive(cardsMenu, false);
         }
+
+        updateCardIndeckLabel(getCardInDeckCount());
+    }
+
+    private void OnBuyButtonClicked(MainGameLogic.CardTypes cardType)
+    {
+        Debug.Log("Bougth: " + cardType);
+        saveLoadSystem.buyCard(cardType);
+        cardListView.itemsSource = createCardDataList();
+    }
+
+    private void OnUpgradeButtonClicked(MainGameLogic.CardTypes cardType)
+    {
+        Debug.Log("Upgraded: " + cardType);
+        saveLoadSystem.upgradeCard(cardType);
+        cardListView.itemsSource = createCardDataList();
+    }
+
+    private void OnCardAddButtonClicked(MainGameLogic.CardTypes cardType)
+    {
+        Debug.Log("Added card to deck: " + cardType);
+        saveLoadSystem.addCardToDeck(cardType);
+        cardListView.itemsSource = createCardDataList();
+        updateCardIndeckLabel(getCardInDeckCount());
+    }
+
+    private void OnCardRemoveButtonClicked(MainGameLogic.CardTypes cardType)
+    {
+        Debug.Log("Removed card from deck: " + cardType);
+        saveLoadSystem.removeCardFromDeck(cardType);
+        cardListView.itemsSource = createCardDataList();
+        updateCardIndeckLabel(getCardInDeckCount());
     }
     
     private void toggleProfileMenu(bool enabled)
@@ -503,5 +611,25 @@ public class MainMenuHandler : MonoBehaviour
         {
             setVisibleRecursive(child, enabled);
         }
+    }
+
+    private int getCardInDeckCount()
+    {
+        int count = 0;
+
+        foreach (var pair in saveLoadSystem.playerProfileScriptableObject.cards)
+        {
+            for (int i = 0; i < pair.Value.deck; i++)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private void updateCardIndeckLabel(int cardsInDeckCount)
+    {
+        cardInDeckLabel.text = $"Cards in deck: {cardsInDeckCount}/{maxDeckCount}";
     }
 }

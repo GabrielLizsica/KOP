@@ -34,7 +34,7 @@
     <ui:VisualElement name="CardButtons" class="frame" style="flex-grow: 1; position: absolute; left: 83%; top: 11%; width: 15%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; align-self: center; justify-content: space-evenly; align-items: center;">
         <ui:Button text="BUY" name="BuyButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
         <ui:Button text="UPGRADE" name="UpgradeButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-        <ui:VisualElement name="CardButtons" style="flex-grow: 1; flex-direction: row; justify-content: space-between; width: 100%;">
+        <ui:VisualElement name="DeckButtons" style="flex-grow: 1; flex-direction: row; justify-content: space-between; width: 100%;">
             <ui:Button text="-" name="CardRemoveButton" style="width: 50%; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0;" />
             <ui:Button text="+" name="CardAddButton" style="width: 50%; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0;" />
         </ui:VisualElement>
