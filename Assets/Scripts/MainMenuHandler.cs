@@ -33,6 +33,7 @@ public class MainMenuHandler : MonoBehaviour
     private ListView cardListView;
     private Label resetConfirmLabel;
     private Label cardInDeckLabel;
+    private Label playerGoldLabel;
 
     private SceneHandler sceneHandler; 
     private SaveLoadSystem saveLoadSystem;
@@ -85,7 +86,7 @@ public class MainMenuHandler : MonoBehaviour
         public Texture2D texture;
     }
     
-    private struct CardStats
+    private class CardStats
     {
         public CardStats(int _inDeck, int _level, int _owned)
         {
@@ -98,13 +99,25 @@ public class MainMenuHandler : MonoBehaviour
         public int owned { get; }
     }
     
-    private class TowerData : ICardStats
+    private class BaseCardStats : ICardStats
     {
-        public TowerData(int _damage, int _range, float _attackSpeed)
+        public int buyCost { get; }
+        public int upgradeCost { get; }
+
+        protected BaseCardStats(int _buyCost, int _upgradeCost)
         {
-            damage = _damage;
-            range = _range;
-            attackSpeed = _attackSpeed;
+            this.buyCost = _buyCost;
+            this.upgradeCost = _upgradeCost;
+        }
+    }
+
+    private class TowerData : BaseCardStats
+    {
+        public TowerData(int _damage, int _range, float _attackSpeed, int _buyCost, int _upgradeCost) : base(_buyCost, _upgradeCost)
+        {
+            this.damage = _damage;
+            this.range = _range;
+            this.attackSpeed = _attackSpeed;
         }
         
         public int damage { get; }
@@ -112,14 +125,14 @@ public class MainMenuHandler : MonoBehaviour
         public float attackSpeed { get; }
     }
     
-    private class TrapData : ICardStats
+    private class TrapData : BaseCardStats
     {
-        public TrapData (float _damage, int _health, float _effectStrength, float _effectDuration)
+        public TrapData (float _damage, int _health, float _effectStrength, float _effectDuration, int _buyCost, int _upgradeCost)  :base(_buyCost, _upgradeCost)
         {
-            damage = _damage;
-            health = _health;
-            effectStrength = _effectStrength;
-            effectDuration = _effectDuration;
+            this.damage = _damage;
+            this.health = _health;
+            this.effectStrength = _effectStrength;
+            this.effectDuration = _effectDuration;
         }
     
         public float damage { get; }
@@ -128,12 +141,12 @@ public class MainMenuHandler : MonoBehaviour
         public float effectDuration { get; }
     }
     
-    private class SpellData : ICardStats
+    private class SpellData : BaseCardStats
     {
-        public SpellData(float _effectStrength, float _effectDuration)
+        public SpellData(float _effectStrength, float _effectDuration, int _buyCost, int _upgradeCost) : base(_buyCost, _upgradeCost)
         {
-            effectStrength = _effectStrength;
-            effectDuration = _effectDuration;
+            this.effectStrength = _effectStrength;
+            this.effectDuration = _effectDuration;
         }
     
         public float effectStrength { get; }
@@ -160,6 +173,7 @@ public class MainMenuHandler : MonoBehaviour
 
         resetConfirmLabel = resetConfirmMenu.Q<Label>("ConfirmLabel");
         cardInDeckLabel = cardsMenu.Q<VisualElement>("PlayerStats").Q<Label>("DeckCounter");
+        playerGoldLabel = cardsMenu.Q<VisualElement>("PlayerStats").Q<Label>("GoldCounter");
         
         preBattleMenu.style.display = DisplayStyle.None;
         resetConfirmMenu.style.display = DisplayStyle.None;
@@ -185,38 +199,33 @@ public class MainMenuHandler : MonoBehaviour
         MainGameLogic.CardTypes cardType = MainGameLogic.CardTypes.DEFAULT;
         string cardName = "";
         string cardDesc = "";
-        SpellData spellStats = null;
-        TrapData trapStats = null;
-        TowerData towerStats = null;
         Texture2D cardTexture;
+        ICardStats cardStats = null;
 
         for (int i = 1; i < Enum.GetValues(typeof(MainGameLogic.CardTypes)).Length; i++)
         {
             cardType = (MainGameLogic.CardTypes)i;
-            spellStats = null;
-            trapStats = null;
-            towerStats = null;
 
             if (BuildingHandler.spells.Contains(cardType))
             {
                 SpellScriptableObject spellObject = spellScriptableObjects[cardType];
                 cardName = spellObject.title["en"];
                 cardDesc = spellObject.description["en"];
-                spellStats = new SpellData(spellObject.effectstrength, spellObject.effectduration);
+                cardStats = new SpellData(spellObject.effectstrength, spellObject.effectduration, spellObject.costs["buycost"], spellObject.costs["upgradecost"]);
             }
             else if (BuildingHandler.traps.Contains(cardType))
             {
                 TrapScriptableObject trapObject = trapScriptableObjects[cardType];
                 cardName = trapObject.title["en"];
                 cardDesc = trapObject.description["en"];      
-                trapStats = new TrapData(trapObject.damage, trapObject.health, trapObject.effectstrength, trapObject.effectduration);  
+                cardStats = new TrapData(trapObject.damage, trapObject.health, trapObject.effectstrength, trapObject.effectduration, trapObject.costs["buycost"], trapObject.costs["upgradecost"]);  
             }
             else if (cardType == MainGameLogic.CardTypes.TOWER)
             {
                 TowerScriptableObject towerObject = towerScriptableObject;
                 cardName = towerScriptableObject.title["en"];
                 cardDesc = towerScriptableObject.description["en"];
-                towerStats = new TowerData(towerObject.damage, towerObject.range, towerObject.attackspeed);
+                cardStats = new TowerData(towerObject.damage, towerObject.range, towerObject.attackspeed, towerObject.costs["buycost"], towerObject.costs["upgradecost"]);
             }
 
             PlayerProfleScriptableObject profile = saveLoadSystem.playerProfileScriptableObject;
@@ -224,18 +233,7 @@ public class MainMenuHandler : MonoBehaviour
             CardStats cardSaveStats = new CardStats(card.deck, card.level, card.owned);
             cardTexture = saveLoadSystem.cardTexturesScriptableObject.textures[cardType];
 
-            if (spellStats != null)
-            {
-                test.Add(new CardData(cardType, cardName, cardDesc, spellStats, cardSaveStats, cardTexture));
-            } 
-            else if (trapStats != null)
-            {
-                test.Add(new CardData(cardType, cardName, cardDesc, trapStats, cardSaveStats, cardTexture));
-            }
-            else if (towerStats != null)
-            {
-                test.Add(new CardData(cardType, cardName, cardDesc, towerStats, cardSaveStats, cardTexture));
-            }
+            test.Add(new CardData(cardType, cardName, cardDesc, cardStats, cardSaveStats, cardTexture));
         }
 
         return test;
@@ -334,6 +332,8 @@ public class MainMenuHandler : MonoBehaviour
             statValueLabels[1].text = $"{stats.effectDuration}";
             statValueLabels[2].style.display = DisplayStyle.None;
             statValueLabels[3].style.display = DisplayStyle.None;
+
+            
         }
 
         profileStatLabels[0].text = "Owned";
@@ -365,11 +365,15 @@ public class MainMenuHandler : MonoBehaviour
             cardRemoveButton.clicked -= oldCardRemoveCallback;
         }
 
-        Action newBuyCallback = () => OnBuyButtonClicked(data.type);
+        BaseCardStats costStats = data.stats as BaseCardStats;
+
+        Action newBuyCallback = () => OnBuyButtonClicked(data.type, costStats.buyCost);
+        buyButton.text = $"BUY\n({costStats.buyCost} GOLD)";
         buyButton.userData = newBuyCallback;
         buyButton.clicked += newBuyCallback;
 
-        Action newUpgradeCallBack = () => OnUpgradeButtonClicked(data.type);
+        Action newUpgradeCallBack = () => OnUpgradeButtonClicked(data.type, costStats.upgradeCost);
+        upgradeButton.text = $"UPGRADE\n({costStats.upgradeCost} GOLD)";
         upgradeButton.userData = newUpgradeCallBack;
         upgradeButton.clicked += newUpgradeCallBack;
 
@@ -381,13 +385,22 @@ public class MainMenuHandler : MonoBehaviour
         cardRemoveButton.userData = newCardRemoveCallback;
         cardRemoveButton.clicked += newCardRemoveCallback;
 
-        if (data.saveStats.level == 3)
+        if (data.saveStats.level == 3 || data.saveStats.owned == 0 || saveLoadSystem.playerProfileScriptableObject.gold < costStats.upgradeCost)
         {
             setInteractableRecursive(upgradeButton, false, true);
         }
         else
         {
             setInteractableRecursive(upgradeButton, true, true);
+        }
+
+        if (saveLoadSystem.playerProfileScriptableObject.gold < costStats.buyCost)
+        {
+            setInteractableRecursive(buyButton, false, true);
+        }
+        else
+        {
+            setInteractableRecursive(buyButton, true, true);
         }
 
         if (data.saveStats.inDeck < data.saveStats.owned && getCardInDeckCount() < maxDeckCount)
@@ -478,20 +491,8 @@ public class MainMenuHandler : MonoBehaviour
         saveLoadSystem.loadProfile(profile);
         
         towerScriptableObject = saveLoadSystem.towerScriptableObject;
-        trapScriptableObjects = new Dictionary<MainGameLogic.CardTypes, TrapScriptableObject>
-        {
-            {MainGameLogic.CardTypes.BASIC_TRAP, saveLoadSystem.basicTrapScriptableObject},
-            {MainGameLogic.CardTypes.ICE_TRAP, saveLoadSystem.iceTrapScriptableObject},
-            {MainGameLogic.CardTypes.POISON_TRAP, saveLoadSystem.poisonTrapScriptableObject}
-        };
-
-        spellScriptableObjects = new Dictionary<MainGameLogic.CardTypes, SpellScriptableObject>
-        {
-            {MainGameLogic.CardTypes.ATTACK_SPEED_BUFF, saveLoadSystem.attackSpeedBuffScriptableObject},
-            {MainGameLogic.CardTypes.BASE_HEAL, saveLoadSystem.baseHealSciptableObject},
-            {MainGameLogic.CardTypes.DAMAGE_BUFF, saveLoadSystem.damageBuffScriptableObject},
-            {MainGameLogic.CardTypes.RANGE_BUFF, saveLoadSystem.rangeBuffScriptableObject}
-        };
+        trapScriptableObjects = saveLoadSystem.trapScriptableObjects;
+        spellScriptableObjects = saveLoadSystem.spellScriptableObjects;
 
         profileSelector.style.display = DisplayStyle.None;
         profileDeleter.style.display = DisplayStyle.None;
@@ -549,21 +550,25 @@ public class MainMenuHandler : MonoBehaviour
             setVisibleRecursive(cardsMenu, false);
         }
 
-        updateCardIndeckLabel(getCardInDeckCount());
+        updatePlayerStatLabels(getCardInDeckCount(), saveLoadSystem.playerProfileScriptableObject.gold);
     }
 
-    private void OnBuyButtonClicked(MainGameLogic.CardTypes cardType)
+    private void OnBuyButtonClicked(MainGameLogic.CardTypes cardType, int cost)
     {
         Debug.Log("Bougth: " + cardType);
-        saveLoadSystem.buyCard(cardType);
+        saveLoadSystem.buyCard(cardType, cost);
         cardListView.itemsSource = createCardDataList();
+        cardListView.Rebuild();
+        updatePlayerStatLabels(getCardInDeckCount(), saveLoadSystem.playerProfileScriptableObject.gold);
     }
 
-    private void OnUpgradeButtonClicked(MainGameLogic.CardTypes cardType)
+    private void OnUpgradeButtonClicked(MainGameLogic.CardTypes cardType, int cost)
     {
         Debug.Log("Upgraded: " + cardType);
-        saveLoadSystem.upgradeCard(cardType);
+        saveLoadSystem.upgradeCard(cardType, cost);
         cardListView.itemsSource = createCardDataList();
+        cardListView.Rebuild();
+        updatePlayerStatLabels(getCardInDeckCount(), saveLoadSystem.playerProfileScriptableObject.gold);
     }
 
     private void OnCardAddButtonClicked(MainGameLogic.CardTypes cardType)
@@ -571,7 +576,7 @@ public class MainMenuHandler : MonoBehaviour
         Debug.Log("Added card to deck: " + cardType);
         saveLoadSystem.addCardToDeck(cardType);
         cardListView.itemsSource = createCardDataList();
-        updateCardIndeckLabel(getCardInDeckCount());
+        updatePlayerStatLabels(getCardInDeckCount(), saveLoadSystem.playerProfileScriptableObject.gold);
     }
 
     private void OnCardRemoveButtonClicked(MainGameLogic.CardTypes cardType)
@@ -579,7 +584,8 @@ public class MainMenuHandler : MonoBehaviour
         Debug.Log("Removed card from deck: " + cardType);
         saveLoadSystem.removeCardFromDeck(cardType);
         cardListView.itemsSource = createCardDataList();
-        updateCardIndeckLabel(getCardInDeckCount());
+        updatePlayerStatLabels(getCardInDeckCount(), saveLoadSystem.playerProfileScriptableObject.gold);
+        cardListView.Rebuild();
     }
     
     private void toggleProfileMenu(bool enabled)
@@ -628,8 +634,9 @@ public class MainMenuHandler : MonoBehaviour
         return count;
     }
 
-    private void updateCardIndeckLabel(int cardsInDeckCount)
+    private void updatePlayerStatLabels(int cardsInDeckCount, int gold)
     {
         cardInDeckLabel.text = $"Cards in deck: {cardsInDeckCount}/{maxDeckCount}";
+        playerGoldLabel.text = $"Gold: {gold}";
     }
 }

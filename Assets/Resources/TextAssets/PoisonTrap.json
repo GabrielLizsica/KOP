@@ -6,6 +6,10 @@
     "description":{
         "en":"Damages and poisons enemies"
     },
+    "costs":{
+        "buycost":40,
+        "upgradecost":80
+    },
     "stats":{
         "level0":{
             "damage":10,

@@ -7,6 +7,10 @@
         "en":"Poke!",
         "hu":"Szur!"
     },
+    "costs":{
+        "buycost":40,
+        "upgradecost":80
+    },
     "stats":{
         "level0":{
             "damage":10,

@@ -4,12 +4,12 @@
         "TOWER":{
             "level":0,
             "deck":4,
-            "owned":0
+            "owned":4
         },
         "BASIC_TRAP":{
             "level":0,
             "deck":4,
-            "owned":0
+            "owned":4
         },
         "ICE_TRAP":{
             "level":0,
@@ -24,7 +24,7 @@
         "ATTACK_SPEED_BUFF":{
             "level":0,
             "deck":4,
-            "owned":0
+            "owned":4
         },
         "RANGE_BUFF":{
             "level":0,
@@ -34,12 +34,12 @@
         "DAMAGE_BUFF":{
             "level":0,
             "deck":0,
-            "owned":0
+            "owned":4
         },
         "BASE_HEAL":{
             "level":0,
             "deck":4,
-            "owned":0
+            "owned":4
         }
     }
 }

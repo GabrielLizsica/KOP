@@ -6,6 +6,7 @@ public class SpellScriptableObject : ScriptableObject
 {
     public Dictionary<string, string> title;
     public Dictionary<string, string> description;
+    public Dictionary<string, int> costs;
     public float effectstrength;
     public float effectduration;
 
@@ -15,6 +16,7 @@ public class SpellScriptableObject : ScriptableObject
 
         this.title = data.title;
         this.description = data.description;
+        this.costs = data.costs;
         this.effectstrength = stats.effectstrength;
         this.effectduration = stats.effectduration;
     }

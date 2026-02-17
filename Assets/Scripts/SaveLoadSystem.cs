@@ -36,6 +36,9 @@ public class SaveLoadSystem : MonoBehaviour
         {MainGameLogic.CardTypes.BASE_HEAL, null}
     };
 
+    public Dictionary<MainGameLogic.CardTypes, TrapScriptableObject> trapScriptableObjects;
+    public Dictionary<MainGameLogic.CardTypes, SpellScriptableObject> spellScriptableObjects;
+
     public Profile playerProfile;
     private MainMenuHandler.Profiles currentProfile;
     string savePath;
@@ -51,6 +54,7 @@ public class SaveLoadSystem : MonoBehaviour
     {
         public Dictionary<string, string> title;
         public Dictionary<string, string> description;
+        public Dictionary<string, int> costs;
         public Dictionary<string, TowerStats> stats;
     }
     
@@ -58,6 +62,7 @@ public class SaveLoadSystem : MonoBehaviour
     {
         public Dictionary<string, string> title;
         public Dictionary<string, string> description;
+        public Dictionary<string, int> costs;
         public Dictionary<string, TrapStats> stats;
     }
     
@@ -65,6 +70,7 @@ public class SaveLoadSystem : MonoBehaviour
     {
         public Dictionary<string, string> title;
         public Dictionary<string, string> description;
+        public Dictionary<string, int> costs;
         public Dictionary<string, SpellStats> stats;
     }
     
@@ -252,6 +258,21 @@ public class SaveLoadSystem : MonoBehaviour
         cardTextAssets.Add(MainGameLogic.CardTypes.DAMAGE_BUFF, Resources.Load<TextAsset>("TextAssets/DamageBuffSpell"));
         cardTextAssets.Add(MainGameLogic.CardTypes.ATTACK_SPEED_BUFF, Resources.Load<TextAsset>("TextAssets/AttackSpeedBuffSpell"));
 
+        trapScriptableObjects = new Dictionary<MainGameLogic.CardTypes, TrapScriptableObject>
+        {
+            {MainGameLogic.CardTypes.BASIC_TRAP, basicTrapScriptableObject},
+            {MainGameLogic.CardTypes.ICE_TRAP, iceTrapScriptableObject},
+            {MainGameLogic.CardTypes.POISON_TRAP, poisonTrapScriptableObject}
+        };
+
+        spellScriptableObjects = new Dictionary<MainGameLogic.CardTypes, SpellScriptableObject>
+        {
+            {MainGameLogic.CardTypes.ATTACK_SPEED_BUFF, attackSpeedBuffScriptableObject},
+            {MainGameLogic.CardTypes.BASE_HEAL, baseHealSciptableObject},
+            {MainGameLogic.CardTypes.DAMAGE_BUFF, damageBuffScriptableObject},
+            {MainGameLogic.CardTypes.RANGE_BUFF, rangeBuffScriptableObject}
+        };
+
         return cardTextAssets;
     }
     
@@ -269,14 +290,17 @@ public class SaveLoadSystem : MonoBehaviour
         cardTexturesScriptableObject.textures = new Dictionary<MainGameLogic.CardTypes, Texture2D>(cardTextures);
     }
 
-    public void buyCard(MainGameLogic.CardTypes card)
+    public void buyCard(MainGameLogic.CardTypes card, int cost)
     {
         playerProfileScriptableObject.cards[card].owned++;
+        playerProfileScriptableObject.gold -= cost;
+        updateScriptableObjectData();
     }
 
-    public void upgradeCard(MainGameLogic.CardTypes card)
+    public void upgradeCard(MainGameLogic.CardTypes card, int cost)
     {
         playerProfileScriptableObject.cards[card].level++;
+        playerProfileScriptableObject.gold -= cost;
         updateScriptableObjectData();
     }
 

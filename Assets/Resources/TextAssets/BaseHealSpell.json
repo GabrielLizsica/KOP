@@ -6,6 +6,10 @@
     "description":{
         "en":"Heals the base"
     },
+    "costs":{
+        "buycost":40,
+        "upgradecost":80
+    },
     "stats":{
         "level0":{
             "effectstrength":25

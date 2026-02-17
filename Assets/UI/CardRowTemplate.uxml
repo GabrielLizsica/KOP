@@ -2,41 +2,41 @@
     <Style src="project://database/Assets/UI/CardRowTemplate.uss?fileID=7433441132597879392&amp;guid=c3f31fb17cc23864ca5b5848f012a372&amp;type=3#CardRowTemplate" />
     <ui:VisualElement name="Texture" class="frame" style="flex-grow: 1; position: absolute; left: 2.5%; top: 11%; width: 14.9%;" />
     <ui:VisualElement name="NameBox" class="frame" style="flex-grow: 1; left: 20%; top: 11%; flex-direction: column; position: absolute; max-height: initial; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; width: 25%;">
-        <ui:Label text="Name" name="Name" />
-        <ui:Label text="Description&#10;" name="Description" style="height: 81px; white-space: pre-wrap; top: 15%;" />
+        <ui:Label text="Name" name="Name" style="font-size: 20px; -unity-font-style: bold; -unity-text-align: upper-center; white-space: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+        <ui:Label text="Description&#10;" name="Description" style="height: 100px; white-space: pre-wrap; top: 0%;" />
     </ui:VisualElement>
     <ui:VisualElement name="StatsBox" class="frame" style="flex-grow: 1; position: absolute; left: 46%; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; justify-content: space-between; top: 11%; width: 20%; flex-direction: row;">
-        <ui:VisualElement name="StatLabels" class="stat-label" style="flex-grow: 1; justify-content: space-evenly; position: relative;">
-            <ui:Label name="Stat0" />
-            <ui:Label name="Stat1" />
-            <ui:Label name="Stat2" />
-            <ui:Label name="Stat3" />
+        <ui:VisualElement name="StatLabels" class="stat-label-box" style="flex-grow: 1; justify-content: space-evenly; position: relative;">
+            <ui:Label name="Stat0" class="stat-label" />
+            <ui:Label name="Stat1" class="stat-label" />
+            <ui:Label name="Stat2" class="stat-label" />
+            <ui:Label name="Stat3" class="stat-label" />
         </ui:VisualElement>
-        <ui:VisualElement name="StatValueLabels" style="flex-grow: 1; align-self: flex-start; align-items: center; height: 100%; justify-content: space-evenly;">
-            <ui:Label text="Stat 1" name="StatValue0" style="align-self: auto;" />
-            <ui:Label text="Stat 1" name="StatValue1" />
-            <ui:Label text="Stat 1" name="StatValue2" />
-            <ui:Label text="Stat 1" name="StatValue3" />
+        <ui:VisualElement name="StatValueLabels" class="stat-label-box" style="flex-grow: 1; align-self: flex-start; align-items: center; height: 100%; justify-content: space-evenly;">
+            <ui:Label text="Stat 1" name="StatValue0" class="stat-label" style="align-self: auto;" />
+            <ui:Label text="Stat 1" name="StatValue1" class="stat-label" />
+            <ui:Label text="Stat 1" name="StatValue2" class="stat-label" />
+            <ui:Label text="Stat 1" name="StatValue3" class="stat-label" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="ProfileStatsBox" class="frame" style="flex-grow: 1; position: absolute; left: 67%; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; justify-content: space-between; top: 11%; width: 15%; flex-direction: row;">
-        <ui:VisualElement name="ProfileStatLabels" class="stat-label" style="flex-grow: 1; justify-content: space-evenly; position: relative;">
-            <ui:Label text="Stat 1" name="ProfileStat0" />
-            <ui:Label text="Stat 1" name="ProfileStat1" />
-            <ui:Label text="Stat 1" name="ProfileStat2" />
+        <ui:VisualElement name="ProfileStatLabels" class="stat-label-box" style="flex-grow: 1; justify-content: space-evenly; position: relative;">
+            <ui:Label text="Stat 1" name="ProfileStat0" class="stat-label" />
+            <ui:Label text="Stat 1" name="ProfileStat1" class="stat-label" />
+            <ui:Label text="Stat 1" name="ProfileStat2" class="stat-label" />
         </ui:VisualElement>
-        <ui:VisualElement name="ProfileStatValueLabels" class="stat-label" style="flex-grow: 1; justify-content: space-evenly; align-self: flex-start; align-items: center;">
-            <ui:Label text="Stat 1" name="ProfileStatValue0" style="align-self: auto; height: auto;" />
-            <ui:Label text="Stat 1" name="ProfileStatValue1" style="height: auto;" />
-            <ui:Label text="Stat 1" name="ProfileStatValue2" />
+        <ui:VisualElement name="ProfileStatValueLabels" class="stat-label-box" style="flex-grow: 1; justify-content: space-evenly; align-self: flex-start; align-items: center;">
+            <ui:Label text="Stat 1" name="ProfileStatValue0" class="stat-label" style="align-self: auto; height: auto;" />
+            <ui:Label text="Stat 1" name="ProfileStatValue1" class="stat-label" style="height: auto;" />
+            <ui:Label text="Stat 1" name="ProfileStatValue2" class="stat-label" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="CardButtons" class="frame" style="flex-grow: 1; position: absolute; left: 83%; top: 11%; width: 15%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; align-self: center; justify-content: space-evenly; align-items: center;">
-        <ui:Button text="BUY" name="BuyButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-        <ui:Button text="UPGRADE" name="UpgradeButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+        <ui:Button text="BUY" name="BuyButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; white-space: normal;" />
+        <ui:Button text="UPGRADE" name="UpgradeButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: bold; white-space: normal;" />
         <ui:VisualElement name="DeckButtons" style="flex-grow: 1; flex-direction: row; justify-content: space-between; width: 100%;">
-            <ui:Button text="-" name="CardRemoveButton" style="width: 50%; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0;" />
-            <ui:Button text="+" name="CardAddButton" style="width: 50%; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0;" />
+            <ui:Button text="-" name="CardRemoveButton" style="width: 50%; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; font-size: 36px; -unity-font-style: bold;" />
+            <ui:Button text="+" name="CardAddButton" style="width: 50%; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; font-size: 36px; -unity-font-style: bold;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

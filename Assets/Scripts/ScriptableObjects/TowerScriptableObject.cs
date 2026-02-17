@@ -6,6 +6,7 @@ public class TowerScriptableObject : ScriptableObject
 {
     public Dictionary<string, string> title;
     public Dictionary<string, string> description;
+    public Dictionary<string, int> costs;
     public int damage;
     public int range;
     public float attackspeed;
@@ -16,6 +17,7 @@ public class TowerScriptableObject : ScriptableObject
         
         title = data.title;
         description = data.description;
+        costs = data.costs;
         damage = stats.damage;
         range = stats.range;
         attackspeed = stats.attackspeed;

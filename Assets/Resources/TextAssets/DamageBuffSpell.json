@@ -6,6 +6,10 @@
     "description":{
         "en":"Increases damage of building"
     },
+    "costs":{
+        "buycost":40,
+        "upgradecost":80
+    },
     "stats":{
         "level0":{
             "effectstrength":25,

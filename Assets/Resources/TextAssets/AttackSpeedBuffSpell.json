@@ -7,6 +7,10 @@
         "en":"Increase Attack Speed",
         "hu":"Tamadasi sebesseg novelo"
     },
+    "costs":{
+        "buycost":40,
+        "upgradecost":80
+    },
     "stats":{
         "level0":{
             "effectstrength":25,
