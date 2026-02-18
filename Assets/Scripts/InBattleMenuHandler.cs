@@ -13,7 +13,14 @@ public class InBattleMenuHandler : MonoBehaviour
     private DeckHandler deckHandler;
     private VisualElement battleUI;
     private VisualElement handUI;
+    private VisualElement pauseMenu;
+    private Button continueButton;
+    private Button quitButton;
     private Label pauseLabel;
+
+    private bool isPaused;
+    private bool isPauseMenuOpen;
+
     public Dictionary<string, Button> cardButtons = new Dictionary<string, Button>
     {
         {"card0", null},
@@ -32,6 +39,19 @@ public class InBattleMenuHandler : MonoBehaviour
         handUI = battleUI.Q<VisualElement>("hand");
         pauseLabel = battleUI.Q<VisualElement>("PauseElement").Q<Label>("PauseLabel");
         pauseLabel.style.display = DisplayStyle.None;
+
+        pauseMenu = battleUI.Q<VisualElement>("PauseMenu");
+        continueButton = pauseMenu.Q<Button>("ContinueButton");
+        quitButton = pauseMenu.Q<Button>("QuitButton");
+        pauseMenu.style.display = DisplayStyle.None;
+
+        if (continueButton == null)
+        {
+            Debug.LogError("continueButton not found!");
+        }
+
+        continueButton.clicked += OnContinueButtonClicked;
+        quitButton.clicked += OnQuitButtonClicked;
 
         cardButtons["card0"] = handUI.Q<Button>("card0");
         cardButtons["card1"] = handUI.Q<Button>("card1");
@@ -73,9 +93,27 @@ public class InBattleMenuHandler : MonoBehaviour
 
     public void OnPauseButtonPressed(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !isPauseMenuOpen)
         {
-            pauseLabel.style.display = mainGameLogic.togglePause() ? DisplayStyle.Flex : DisplayStyle.None;
+            pauseLabel.style.display = (isPaused = mainGameLogic.togglePause(isPaused)) ? DisplayStyle.Flex : DisplayStyle.None;
         }
+    }
+
+    public void OnPauseMenuButtonPressed(InputAction.CallbackContext context)
+    {
+        if (context.performed && !isPaused)
+        {
+            pauseMenu.style.display = (isPauseMenuOpen = mainGameLogic.togglePause(isPauseMenuOpen)) ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+    }
+
+    private void OnContinueButtonClicked()
+    {
+        pauseMenu.style.display = (isPauseMenuOpen = mainGameLogic.togglePause(isPauseMenuOpen)) ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void OnQuitButtonClicked()
+    {
+        SceneHandler.Instance.changeScene(SceneHandler.Scenes.MAIN_MENU);
     }
 }

@@ -10,4 +10,9 @@
     <ui:VisualElement name="PauseElement" style="flex-grow: 1; top: 0%; position: absolute; width: 100%; height: 25%;">
         <ui:Label text="PAUSED" name="PauseLabel" style="-unity-text-align: upper-center; top: 50%; font-size: 48px; color: rgb(188, 0, 0); -unity-font-style: bold;" />
     </ui:VisualElement>
+    <ui:VisualElement name="PauseMenu" style="flex-grow: 1; position: absolute; top: 30%; left: 40%; width: 20%; height: 40%; background-color: rgb(255, 255, 255); border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px;">
+        <ui:Label text="Paused" name="PauseMenuLabel" style="-unity-text-align: upper-center; top: 7.5%; font-size: 42px;" />
+        <ui:Button text="Continue" name="ContinueButton" style="background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; font-size: 24px; position: absolute; top: 50%; left: 30%; width: 40%;" />
+        <ui:Button text="Give up" name="QuitButton" style="background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; font-size: 24px; position: absolute; top: 70%; left: 30%; width: 40%;" />
+    </ui:VisualElement>
 </ui:UXML>

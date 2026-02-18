@@ -155,6 +155,7 @@ public class MainMenuHandler : MonoBehaviour
 
     private void Start()
     {
+
         sceneHandler = sceneHandlerObject.GetComponent<SceneHandler>();
         saveLoadSystem = sceneHandlerObject.GetComponent<SaveLoadSystem>();
 
@@ -175,9 +176,23 @@ public class MainMenuHandler : MonoBehaviour
         cardInDeckLabel = cardsMenu.Q<VisualElement>("PlayerStats").Q<Label>("DeckCounter");
         playerGoldLabel = cardsMenu.Q<VisualElement>("PlayerStats").Q<Label>("GoldCounter");
         
-        preBattleMenu.style.display = DisplayStyle.None;
-        resetConfirmMenu.style.display = DisplayStyle.None;
-        cardsMenu.style.display = DisplayStyle.None;
+        if (!SceneHandler.Instance.isProfileLoaded)
+        {
+            setVisibleRecursive(profileSelector, true);
+            setVisibleRecursive(profileDeleter, true);
+            setVisibleRecursive(preBattleMenu, false);
+        }
+        else
+        {
+            setVisibleRecursive(profileSelector, false);
+            setVisibleRecursive(profileDeleter, false);
+            setVisibleRecursive(preBattleMenu, true);
+
+            OnProfileButtonClicked(saveLoadSystem.currentProfile);
+        }
+        
+        setVisibleRecursive(resetConfirmMenu, false);
+        setVisibleRecursive(cardsMenu, false);
 
         cardsMenuOpen = false;
 
@@ -483,21 +498,22 @@ public class MainMenuHandler : MonoBehaviour
     
     private void OnStartButtonClicked()
     {
-        sceneHandler.changeScene();
+        sceneHandler.changeScene(SceneHandler.Scenes.IN_GAME);
     }
 
     private void OnProfileButtonClicked(Profiles profile)
     {
         saveLoadSystem.loadProfile(profile);
+        SceneHandler.Instance.isProfileLoaded = true;
         
         towerScriptableObject = saveLoadSystem.towerScriptableObject;
         trapScriptableObjects = saveLoadSystem.trapScriptableObjects;
         spellScriptableObjects = saveLoadSystem.spellScriptableObjects;
 
-        profileSelector.style.display = DisplayStyle.None;
-        profileDeleter.style.display = DisplayStyle.None;
-        cardsMenu.style.display = DisplayStyle.None;
-        preBattleMenu.style.display = DisplayStyle.Flex;
+        setVisibleRecursive(profileSelector, false);
+        setVisibleRecursive(profileDeleter, false);
+        setVisibleRecursive(cardsMenu, false);
+        setVisibleRecursive(preBattleMenu, true);
         
         //List<CardData> testList = createCardDataList();
 
@@ -512,30 +528,30 @@ public class MainMenuHandler : MonoBehaviour
     {
         saveLoadSystem.saveProfile();
         
-        profileSelector.style.display = DisplayStyle.Flex;
-        profileDeleter.style.display = DisplayStyle.Flex;
-        preBattleMenu.style.display = DisplayStyle.None;
+        setVisibleRecursive(profileSelector, true);
+        setVisibleRecursive(profileDeleter, true);
+        setVisibleRecursive(preBattleMenu, false);
         setVisibleRecursive(cardsMenu, false);
     }
     
     private void OnProfileDeleteButtonClicked(Profiles profile)
     {
         toggleProfileMenu(false);
-        resetConfirmMenu.style.display = DisplayStyle.Flex;
+        setVisibleRecursive(resetConfirmMenu, true);
         resetConfirmLabel.text = $"Are you sure you want to reset profile {(int)profile + 1}?";
         profileToReset = profile;
     }
     
     private void OnCancelButtonClicked()
     {
-        resetConfirmMenu.style.display = DisplayStyle.None;
+        setVisibleRecursive(resetConfirmMenu, false);
         toggleProfileMenu(true);
     }
     
     private void OnConfirmButtonClicked()
     {
         saveLoadSystem.resetProfile(profileToReset);
-        resetConfirmMenu.style.display = DisplayStyle.None;
+        setVisibleRecursive(resetConfirmMenu, false);
         toggleProfileMenu(true);
     }
     

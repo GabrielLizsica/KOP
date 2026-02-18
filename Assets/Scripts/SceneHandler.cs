@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
 {
+    public static SceneHandler Instance { get; private set; }
+    public bool isProfileLoaded = false;
     private int currentScene;
     public enum Scenes
     {
@@ -13,6 +15,13 @@ public class SceneHandler : MonoBehaviour
     
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
     
@@ -21,9 +30,9 @@ public class SceneHandler : MonoBehaviour
         currentScene = SceneManager.GetActiveScene().buildIndex;
     }
 
-    public void changeScene()
+    public void changeScene(Scenes scene)
     {
-        SceneManager.LoadScene((int)Scenes.IN_GAME);
+        SceneManager.LoadScene((int)scene);
         currentScene = SceneManager.GetActiveScene().buildIndex;
     }
 }

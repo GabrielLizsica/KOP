@@ -294,6 +294,8 @@ MonoBehaviour:
   playerProfileScriptableObject: {fileID: 11400000, guid: f3578b91d3a30564194a4113db0f979e, type: 2}
   tilemapGround: {fileID: 0}
   baseHealth: 0
+  isPaused: 0
+  isPauseMenuOpen: 0
 --- !u!4 &971234575
 Transform:
   m_ObjectHideFlags: 0
@@ -397,6 +399,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 95fd4520-a278-4ffa-9ae6-ece569d97359
     m_ActionName: 'InBattle/Pause[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 122723918}
+        m_TargetAssemblyTypeName: InBattleMenuHandler, Assembly-CSharp
+        m_MethodName: OnPauseMenuButtonPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 47ca8904-4b04-46ee-b362-69792cc450c2
+    m_ActionName: 'InBattle/PauseMenu[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: InBattle

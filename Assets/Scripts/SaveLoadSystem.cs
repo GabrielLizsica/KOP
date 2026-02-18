@@ -40,8 +40,8 @@ public class SaveLoadSystem : MonoBehaviour
     public Dictionary<MainGameLogic.CardTypes, SpellScriptableObject> spellScriptableObjects;
 
     public Profile playerProfile;
-    private MainMenuHandler.Profiles currentProfile;
-    string savePath;
+    [SerializeField] public MainMenuHandler.Profiles currentProfile;
+    [SerializeField] string savePath;
     
     public class EnemyData
     {
@@ -163,6 +163,8 @@ public class SaveLoadSystem : MonoBehaviour
     public void loadProfile(MainMenuHandler.Profiles profile)
     {
         currentProfile = profile;
+        savePath = Path.Combine(Application.persistentDataPath, "Saves");
+        Debug.Log(savePath);
         ProfileRaw rawProfileData = JsonConvert.DeserializeObject<ProfileRaw>(File.ReadAllText(savePath + $"/Profile{(int)currentProfile}.json"));
         
         playerProfile = new Profile(rawProfileData);
