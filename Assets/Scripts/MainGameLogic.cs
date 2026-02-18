@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
 
 public class MainGameLogic : MonoBehaviour
@@ -19,6 +20,8 @@ public class MainGameLogic : MonoBehaviour
     
     [Header("")]
     [SerializeField] public float baseHealth;
+
+    private bool isPaused;
 
     private DeckHandler deckHandler;
     private List<CardTypes> deck;
@@ -50,6 +53,7 @@ public class MainGameLogic : MonoBehaviour
     
     private void Start()
     {   
+        isPaused = false;
         mapHandler = GetComponent<MapHandler>();
         waveHandler = GetComponent<WaveHandler>();
         deckHandler = GetComponent<DeckHandler>();
@@ -95,5 +99,21 @@ public class MainGameLogic : MonoBehaviour
     public void OnPlace()
     {
         Debug.LogWarning("Placed (LMB)");
+    }
+
+    public bool togglePause()
+    {
+        if (!isPaused)
+        {
+            Time.timeScale = 0f;
+            isPaused = true;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            isPaused = false;
+        }
+        
+        return isPaused;
     }
 }

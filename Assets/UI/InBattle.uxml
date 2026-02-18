@@ -7,4 +7,7 @@
         <ui:Button name="card3" class="card" style="background-image: none; width: 200px; height: 200px;" />
         <ui:Button name="card4" class="card" style="background-image: none; width: 200px; height: 200px;" />
     </ui:VisualElement>
+    <ui:VisualElement name="PauseElement" style="flex-grow: 1; top: 0%; position: absolute; width: 100%; height: 25%;">
+        <ui:Label text="PAUSED" name="PauseLabel" style="-unity-text-align: upper-center; top: 50%; font-size: 48px; color: rgb(188, 0, 0); -unity-font-style: bold;" />
+    </ui:VisualElement>
 </ui:UXML>
