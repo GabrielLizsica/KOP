@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 
 public class SaveLoadSystem : MonoBehaviour
 {
+    public static SaveLoadSystem Instance { get; private set; }
     [Header("Scriptable Objects")]
     [SerializeField] public PlayerProfleScriptableObject playerProfileScriptableObject;
     [SerializeField] public  TowerScriptableObject towerScriptableObject;
@@ -134,6 +135,17 @@ public class SaveLoadSystem : MonoBehaviour
         }
 
         public Profile() { }
+    }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
     }
     
     private void Start()

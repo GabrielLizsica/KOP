@@ -20,6 +20,11 @@ public class MainGameLogic : MonoBehaviour
     
     [Header("")]
     [SerializeField] public float baseHealth;
+    [SerializeField] public float currentHealth;
+    [SerializeField] public int baseEnergy;
+    [SerializeField] public int currentEnergy;
+
+    private SaveLoadSystem saveLoadSystem;
 
     private DeckHandler deckHandler;
     private List<CardTypes> deck;
@@ -48,16 +53,23 @@ public class MainGameLogic : MonoBehaviour
         DAMAGE_BUFF,
         BASE_HEAL
     }
-    
-    private void Start()
-    { 
+
+    private void Awake()
+    {
         mapHandler = GetComponent<MapHandler>();
         waveHandler = GetComponent<WaveHandler>();
         deckHandler = GetComponent<DeckHandler>();
-
+        saveLoadSystem = SaveLoadSystem.Instance;
         tilemapGround = mapHandler.tilemapGround;
+
         baseHealth = 100f;
-        
+        currentHealth = baseHealth;
+        baseEnergy = 20;
+        currentEnergy = baseEnergy;
+    }
+
+    private void Start()
+    { 
         mapHandler.createMap();
         deckHandler.setDeck(createDeck());
         StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
@@ -91,11 +103,6 @@ public class MainGameLogic : MonoBehaviour
         mouseWorldPos.z = 0f;
 
         return mouseWorldPos;
-    }
-    
-    public void OnPlace()
-    {
-        Debug.LogWarning("Placed (LMB)");
     }
 
     public bool togglePause(bool isPaused)

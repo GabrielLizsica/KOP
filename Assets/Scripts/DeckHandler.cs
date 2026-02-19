@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class DeckHandler : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class DeckHandler : MonoBehaviour
     private List<MainGameLogic.CardTypes> deck;
     private List<MainGameLogic.CardTypes> remainingDeck;
     private List<MainGameLogic.CardTypes> hand  = new List<MainGameLogic.CardTypes>( new MainGameLogic.CardTypes[5] );
+    private Dictionary<UnityEngine.UIElements.Button, Action> buttonActions = new Dictionary<UnityEngine.UIElements.Button, Action>();
     private int selectedIndex = -1;
 
     public event EventHandler<OnCardDrawEventArgs> OnCardDraw;
@@ -23,12 +25,15 @@ public class DeckHandler : MonoBehaviour
         public MainGameLogic.CardTypes cardType;
     }
 
-    private void Start()
+    private void Awake()
     {
         mainGameLogic = GetComponent<MainGameLogic>();
         cardHandler = GetComponent<BuildingHandler>();
         battleUI = battleUIObject.GetComponent<InBattleMenuHandler>();
+    }
 
+    private void Start()
+    {
         battleUI.cardButtons["card0"].clicked += () => OnButtonClicked("card0");
         battleUI.cardButtons["card1"].clicked += () => OnButtonClicked("card1");
         battleUI.cardButtons["card2"].clicked += () => OnButtonClicked("card2");
@@ -68,15 +73,11 @@ public class DeckHandler : MonoBehaviour
             setRemainingDeck();
         }
 
-        Debug.LogWarning("Draw index: " + index);
-        //Debug.LogWarning("")
         int cardIndex = UnityEngine.Random.Range(0, remainingDeck.Count);
         hand[index] = remainingDeck[cardIndex];
-        remainingDeck.RemoveAt(cardIndex);
 
         OnCardDraw?.Invoke(this, new OnCardDrawEventArgs {cardID = index, cardType = hand[index]});
-
-        Debug.Log("The " + index + " card is: " + hand[index]);
+        remainingDeck.RemoveAt(cardIndex);
     }
     
     private void selectCard(int index)
@@ -96,7 +97,9 @@ public class DeckHandler : MonoBehaviour
         {
             cardHandler.placeNewBuilding();
             drawCard(selectedIndex);
+            mainGameLogic.currentEnergy -= (int)battleUI.cardButtons[$"card{selectedIndex}"].userData;
             selectedIndex = -1;
+            battleUI.updateLabel(InBattleMenuHandler.displayLabels.ENERGY);
         }
     }
     
@@ -111,27 +114,35 @@ public class DeckHandler : MonoBehaviour
 
     private void OnButtonClicked(string buttonID)
     {
-        switch (buttonID)
+        if ((int)battleUI.cardButtons[buttonID].userData > mainGameLogic.currentEnergy)
         {
-            case "card0":
-                selectCard(0);
-                break;
-            
-            case "card1":
-                selectCard(1);
-                break;
-            
-            case "card2":
-                selectCard(2);
-                break;
-            
-            case "card3":
-                selectCard(3);
-                break;
-            
-            case "card4":
-                selectCard(4);
-                break;
+            Debug.Log("Not enough energy!");
+            StartCoroutine(battleUI.displayEnergyWarning());
+        }
+        else
+        {
+            switch (buttonID)
+            {
+                case "card0":
+                    selectCard(0);
+                    break;
+                
+                case "card1":
+                    selectCard(1);
+                    break;
+                
+                case "card2":
+                    selectCard(2);
+                    break;
+                
+                case "card3":
+                    selectCard(3);
+                    break;
+                
+                case "card4":
+                    selectCard(4);
+                    break;
+            }
         }
     }
 }

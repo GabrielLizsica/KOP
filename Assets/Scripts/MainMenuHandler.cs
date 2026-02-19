@@ -610,7 +610,7 @@ public class MainMenuHandler : MonoBehaviour
         setInteractableRecursive(profileDeleter, enabled, true);
     }
     
-    private void setInteractableRecursive(VisualElement _root, bool enabled, bool touchOpacity)
+    public static void setInteractableRecursive(VisualElement _root, bool enabled, bool touchOpacity)
     {
         _root.pickingMode = enabled ? PickingMode.Position : PickingMode.Ignore;
         

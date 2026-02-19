@@ -21,6 +21,7 @@
     margin-right: 10px;
     transition-delay: 0s, 0s, 0s;
     transition-timing-function: ease, ease, ease;
+    font-size: 0;
 }
 
 .card:hover {
@@ -32,6 +33,9 @@
     transition-delay: 0s, 0s, 0s;
     padding-bottom: 0;
     margin-bottom: 0;
+    font-size: 40px;
+    -unity-font-style: bold;
+    color: rgb(212, 0, 0);
 }
 
 .unity-button {

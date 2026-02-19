@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class WaveHandler : MonoBehaviour
 {
+    [SerializeField] private GameObject battleUIObject;
     [SerializeField] private GameObject enemyObject;
 
     [SerializeField] private MapHandler mapHandler;
 
     [SerializeField] private Enemy enemy;
     private MainGameLogic mainGameLogic;
+    private InBattleMenuHandler battleUI;
+    private int enemyCount;
     
     private void Start()
     {
         mapHandler = GetComponent<MapHandler>();
         mainGameLogic = GetComponent<MainGameLogic>();
+        battleUI = battleUIObject.GetComponent<InBattleMenuHandler>();
+        enemyCount = 0;
     }
     
     public IEnumerator spawnWave(int waveCount, int enemyCount, float timeBetweenWaves, float timeBetweenenemies)
@@ -29,7 +34,9 @@ public class WaveHandler : MonoBehaviour
                 spawnedEnemy.name = "Enemy" + i + "_" + j;
                 enemy = spawnedEnemy.GetComponent<Enemy>();
                 enemy.OnBaseReached += Enemy_OnBasereached;
+                enemy.OnEnemyDeath += Enemy_OnEnemyDeath;
 
+                enemyCount++;
                 yield return new WaitForSeconds(timeBetweenenemies);
             }
             yield return new WaitForSeconds(timeBetweenWaves);
@@ -38,10 +45,19 @@ public class WaveHandler : MonoBehaviour
     
     private void Enemy_OnBasereached(object sender, Enemy.OnBaseReachedEventArgs e)
     {
-        mainGameLogic.baseHealth -= 25f;
+        mainGameLogic.currentHealth -= 25f;
+        enemyCount--;
         Transform enemyParent = e.enemyObject.transform.parent;
         Destroy(e.enemyObject.gameObject);
+        
+        battleUI.updateLabel(InBattleMenuHandler.displayLabels.HEALTH);
         StartCoroutine(DeleteWaveEmpty(enemyParent));
+    }
+
+    private void Enemy_OnEnemyDeath(object sender, Enemy.OnEnemyDeathEventArgs e)
+    {
+        mainGameLogic.currentEnergy += 20;
+        enemyCount--;
     }
     
     private IEnumerator DeleteWaveEmpty(Transform parent)

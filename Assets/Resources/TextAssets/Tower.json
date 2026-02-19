@@ -9,7 +9,8 @@
     },
     "costs":{
         "buycost":40,
-        "upgradecost":80
+        "upgradecost":80,
+        "energy":40
     },
     "stats":{
         "level0":{
