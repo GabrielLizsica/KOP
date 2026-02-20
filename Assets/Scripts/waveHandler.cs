@@ -12,18 +12,21 @@ public class WaveHandler : MonoBehaviour
     [SerializeField] private Enemy enemy;
     private MainGameLogic mainGameLogic;
     private InBattleMenuHandler battleUI;
-    private int enemyCount;
+    public int aliveEnemies { private set; get; }
+    public int remainingEnemies { private set; get; }
     
     private void Start()
     {
         mapHandler = GetComponent<MapHandler>();
         mainGameLogic = GetComponent<MainGameLogic>();
         battleUI = battleUIObject.GetComponent<InBattleMenuHandler>();
-        enemyCount = 0;
+        aliveEnemies = 1;
     }
     
     public IEnumerator spawnWave(int waveCount, int enemyCount, float timeBetweenWaves, float timeBetweenenemies)
     {
+        remainingEnemies = waveCount * enemyCount;
+
         for (int i = 0; i < waveCount; i++)
         {
             GameObject newWave = new GameObject($"Wave{i}");
@@ -36,7 +39,8 @@ public class WaveHandler : MonoBehaviour
                 enemy.OnBaseReached += Enemy_OnBasereached;
                 enemy.OnEnemyDeath += Enemy_OnEnemyDeath;
 
-                enemyCount++;
+                aliveEnemies++;
+                remainingEnemies--;
                 yield return new WaitForSeconds(timeBetweenenemies);
             }
             yield return new WaitForSeconds(timeBetweenWaves);
@@ -46,7 +50,7 @@ public class WaveHandler : MonoBehaviour
     private void Enemy_OnBasereached(object sender, Enemy.OnBaseReachedEventArgs e)
     {
         mainGameLogic.currentHealth -= 25f;
-        enemyCount--;
+        aliveEnemies--;
         Transform enemyParent = e.enemyObject.transform.parent;
         Destroy(e.enemyObject.gameObject);
         
@@ -57,7 +61,8 @@ public class WaveHandler : MonoBehaviour
     private void Enemy_OnEnemyDeath(object sender, Enemy.OnEnemyDeathEventArgs e)
     {
         mainGameLogic.currentEnergy += 20;
-        enemyCount--;
+        battleUI.updateLabel(InBattleMenuHandler.displayLabels.ENERGY);
+        aliveEnemies--;
     }
     
     private IEnumerator DeleteWaveEmpty(Transform parent)

@@ -187,7 +187,7 @@ public class MainMenuHandler : MonoBehaviour
             setVisibleRecursive(profileSelector, false);
             setVisibleRecursive(profileDeleter, false);
             setVisibleRecursive(preBattleMenu, true);
-
+            
             OnProfileButtonClicked(saveLoadSystem.currentProfile);
         }
         
@@ -495,6 +495,11 @@ public class MainMenuHandler : MonoBehaviour
         preBattleButtons[PreGameButtons.SAVE_EXIT].clicked += OnSaveButtonClicked;
         preBattleButtons[PreGameButtons.CARDS].clicked += OnCardsMenuButtonClicked;
     }
+
+    private void initializePrebattleMenu()
+    {
+        
+    }
     
     private void OnStartButtonClicked()
     {
@@ -505,7 +510,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         saveLoadSystem.loadProfile(profile);
         SceneHandler.Instance.isProfileLoaded = true;
-        
+
         towerScriptableObject = saveLoadSystem.towerScriptableObject;
         trapScriptableObjects = saveLoadSystem.trapScriptableObjects;
         spellScriptableObjects = saveLoadSystem.spellScriptableObjects;

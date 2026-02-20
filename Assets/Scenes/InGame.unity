@@ -292,11 +292,14 @@ MonoBehaviour:
   mapHandler: {fileID: 971234573}
   waveHandler: {fileID: 971234576}
   playerProfileScriptableObject: {fileID: 11400000, guid: f3578b91d3a30564194a4113db0f979e, type: 2}
+  battleUIObject: {fileID: 122723915}
   tilemapGround: {fileID: 0}
-  baseHealth: 0
+  baseHealth: 100
   currentHealth: 0
-  baseEnergy: 0
+  baseEnergy: 60
   currentEnergy: 0
+  rewardDefeat: 30
+  rewardVictory: 60
 --- !u!4 &971234575
 Transform:
   m_ObjectHideFlags: 0

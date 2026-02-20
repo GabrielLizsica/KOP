@@ -22,4 +22,9 @@
         <ui:Label text="HP: 100" name="HealthLabel" style="font-size: 24px; -unity-text-align: upper-center; -unity-font-style: bold;" />
         <ui:Label text="Energy: 60" name="EnergyLabel" style="font-size: 24px; -unity-font-style: bold; -unity-text-align: upper-center;" />
     </ui:VisualElement>
+    <ui:VisualElement name="FinishMenu" style="flex-grow: 1; position: absolute; top: 30%; left: 40%; width: 20%; height: 40%; background-color: rgb(255, 255, 255); border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px;">
+        <ui:Label text="VICTORY!" name="FinishMenuLabel" style="-unity-text-align: upper-center; top: 7.5%; font-size: 64px; -unity-font-style: bold;" />
+        <ui:Label text="Gold +30" name="RewardLabel" style="top: 40%; position: absolute; -unity-text-align: upper-center; width: 100%; font-size: 32px;" />
+        <ui:Button text="Continue" name="FinishButton" style="background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; font-size: 24px; position: absolute; top: 75%; left: 30%; width: 40%;" />
+    </ui:VisualElement>
 </ui:UXML>

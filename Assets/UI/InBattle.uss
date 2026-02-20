@@ -3,6 +3,7 @@
     transition-property: top;
     transition-duration: 0.25s;
     align-items: center;
+    transition-timing-function: ease;
 }
 
 .hand:hover {

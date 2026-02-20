@@ -14,6 +14,7 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] private MapHandler mapHandler;
     [SerializeField] private WaveHandler waveHandler;
     [SerializeField] private PlayerProfleScriptableObject playerProfileScriptableObject;
+    [SerializeField] private GameObject battleUIObject;
 
     [Header("Grid")]
     [SerializeField] private Tilemap tilemapGround;
@@ -23,10 +24,11 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] public float currentHealth;
     [SerializeField] public int baseEnergy;
     [SerializeField] public int currentEnergy;
-
-    private SaveLoadSystem saveLoadSystem;
-
+    [SerializeField] private int rewardDefeat;
+    [SerializeField] private int rewardVictory;
     private DeckHandler deckHandler;
+    private InBattleMenuHandler battleUI;
+    private SaveLoadSystem saveLoadSystem;
     private List<CardTypes> deck;
 
     private Vector3 mousePosTile;
@@ -59,12 +61,11 @@ public class MainGameLogic : MonoBehaviour
         mapHandler = GetComponent<MapHandler>();
         waveHandler = GetComponent<WaveHandler>();
         deckHandler = GetComponent<DeckHandler>();
-        saveLoadSystem = SaveLoadSystem.Instance;
         tilemapGround = mapHandler.tilemapGround;
+        saveLoadSystem = SaveLoadSystem.Instance;
+        battleUI = battleUIObject.GetComponent<InBattleMenuHandler>();
 
-        baseHealth = 100f;
         currentHealth = baseHealth;
-        baseEnergy = 20;
         currentEnergy = baseEnergy;
     }
 
@@ -72,14 +73,29 @@ public class MainGameLogic : MonoBehaviour
     { 
         mapHandler.createMap();
         deckHandler.setDeck(createDeck());
-        StartCoroutine(waveHandler.spawnWave(2, 5, 5f, 1.5f));
+        StartCoroutine(waveHandler.spawnWave(2, 2, 5f, 1.5f));
     }
     
     private void Update()
     {
         mousePosTile = tilemapGround.WorldToCell(getMousePosTile());
 
-        //Debug.Log(mousePosTile);
+        if (currentHealth <= 0 && !battleUI.isfinishMenuOpen)
+        {
+            Time.timeScale = 0f;
+            battleUI.displayFinishMenu(false, rewardDefeat);
+            saveLoadSystem.playerProfileScriptableObject.gold += rewardDefeat;
+            
+            saveLoadSystem.saveProfile();
+        }
+        else if (waveHandler.remainingEnemies == 0 && waveHandler.aliveEnemies == 0 && !battleUI.isfinishMenuOpen)
+        {
+            Time.timeScale = 0f;
+            battleUI.displayFinishMenu(true, rewardVictory);
+            saveLoadSystem.playerProfileScriptableObject.gold += rewardVictory;
+            
+            saveLoadSystem.saveProfile();
+        }
     }
 
     private List<CardTypes> createDeck()

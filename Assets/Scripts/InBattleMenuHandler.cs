@@ -16,15 +16,20 @@ public class InBattleMenuHandler : MonoBehaviour
     private VisualElement battleUI;
     private VisualElement handUI;
     private VisualElement pauseMenu;
+    private VisualElement finishMenu;
     private Button continueButton;
     private Button quitButton;
+    private Button finishButton;
     private Label pauseLabel;
     private Label energyWarningLabel;
     private Label healthLabel;
     private Label energyLabel;
+    private Label finishMenuLabel;
+    private Label rewardLabel;
 
     private bool isPaused;
     private bool isPauseMenuOpen;
+    public bool isfinishMenuOpen { private set; get; }
 
     public enum displayLabels
     {
@@ -60,6 +65,11 @@ public class InBattleMenuHandler : MonoBehaviour
         continueButton = pauseMenu.Q<Button>("ContinueButton");
         quitButton = pauseMenu.Q<Button>("QuitButton");
 
+        finishMenu = battleUI.Q<VisualElement>("FinishMenu");
+        finishButton = finishMenu.Q<Button>("FinishButton");
+        finishMenuLabel = finishMenu.Q<Label>("FinishMenuLabel");
+        rewardLabel = finishMenu.Q<Label>("RewardLabel");
+
         for (int i = 0; i < cardButtons.Count; i++)
         {
             cardButtons[$"card{i}"] = handUI.Q<Button>($"card{i}");
@@ -70,16 +80,23 @@ public class InBattleMenuHandler : MonoBehaviour
         pauseLabel.style.display = DisplayStyle.None;
         pauseMenu.style.display = DisplayStyle.None;
         energyWarningLabel.style.display = DisplayStyle.None;
+        finishMenu.style.display = DisplayStyle.None;
 
         continueButton.clicked += OnContinueButtonClicked;
         quitButton.clicked += OnQuitButtonClicked;
+        finishButton.clicked += OnQuitButtonClicked;
         deckHandler.OnCardDraw += Deck_OnCardDraw;
+
+        isPaused = false;
+        isPauseMenuOpen = false;
+        isfinishMenuOpen = false;
     }
 
     private void Start()
     {
         updateLabel(displayLabels.HEALTH);
         updateLabel(displayLabels.ENERGY);
+        Time.timeScale = 1f;
     }
 
     public void updateLabel(displayLabels label)
@@ -102,6 +119,23 @@ public class InBattleMenuHandler : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         energyWarningLabel.style.display = DisplayStyle.None;
+    }
+
+    public void displayFinishMenu(bool victory, int reward)
+    {
+        isfinishMenuOpen = true;
+
+        if (victory)
+        {
+            finishMenuLabel.text = "VICTORY!";
+        }
+        else
+        {
+            finishMenuLabel.text = "DEFEAT!";
+        }
+
+        rewardLabel.text = $"Gold: +{reward}";
+        finishMenu.style.display = DisplayStyle.Flex;
     }
 
     private void Deck_OnCardDraw(object sender, DeckHandler.OnCardDrawEventArgs e)
@@ -128,7 +162,7 @@ public class InBattleMenuHandler : MonoBehaviour
 
     public void OnPauseButtonPressed(InputAction.CallbackContext context)
     {
-        if (context.performed && !isPauseMenuOpen)
+        if (context.performed && !isPauseMenuOpen && !isfinishMenuOpen)
         {
             pauseLabel.style.display = (isPaused = mainGameLogic.togglePause(isPaused)) ? DisplayStyle.Flex : DisplayStyle.None;
         }
@@ -136,7 +170,7 @@ public class InBattleMenuHandler : MonoBehaviour
 
     public void OnPauseMenuButtonPressed(InputAction.CallbackContext context)
     {
-        if (context.performed && !isPaused)
+        if (context.performed && !isPaused && !isfinishMenuOpen)
         {
             pauseMenu.style.display = (isPauseMenuOpen = mainGameLogic.togglePause(isPauseMenuOpen)) ? DisplayStyle.Flex : DisplayStyle.None;
         }
