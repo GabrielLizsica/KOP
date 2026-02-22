@@ -73,7 +73,7 @@ public class MainGameLogic : MonoBehaviour
     { 
         mapHandler.createMap();
         deckHandler.setDeck(createDeck());
-        StartCoroutine(waveHandler.spawnWave(2, 2, 5f, 1.5f));
+        StartCoroutine(waveHandler.spawnWave(UnityEngine.Random.Range(5, 10), UnityEngine.Random.Range(3, 5), UnityEngine.Random.Range(3f, 6f), UnityEngine.Random.Range(1f, 3f)));
     }
     
     private void Update()
