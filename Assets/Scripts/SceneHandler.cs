@@ -6,7 +6,6 @@ public class SceneHandler : MonoBehaviour
 {
     public static SceneHandler Instance { get; private set; }
     public bool isProfileLoaded = false;
-    private int currentScene;
     public enum Scenes
     {
         MAIN_MENU = 0,
@@ -24,15 +23,9 @@ public class SceneHandler : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    
-    private void Start()
-    {
-        currentScene = SceneManager.GetActiveScene().buildIndex;
-    }
 
     public void changeScene(Scenes scene)
     {
         SceneManager.LoadScene((int)scene);
-        currentScene = SceneManager.GetActiveScene().buildIndex;
     }
 }

@@ -187,6 +187,7 @@ public class MapHandler : MonoBehaviour
 
         do
         {
+            path.Clear();
             //Debug.LogWarning("Waypoints count: " + waypoints.Count);
             for (int i = 0; i < waypoints.Count - 1; i++)
             {

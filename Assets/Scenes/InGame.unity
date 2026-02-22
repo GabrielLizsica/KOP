@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 971234575}
   - component: {fileID: 971234578}
   - component: {fileID: 971234574}
+  - component: {fileID: 971234581}
   - component: {fileID: 971234573}
   - component: {fileID: 971234576}
   - component: {fileID: 971234579}
@@ -464,6 +465,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleUIObject: {fileID: 122723915}
+--- !u!114 &971234581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971234572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d901d5df4e042fe4fb84d91773ea644c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleUIObject: {fileID: 122723915}
+  enemyObject: {fileID: 2809751106004314397, guid: b5ada1a65e80d0c48bac50e7ad88d505, type: 3}
+  mapHandler: {fileID: 971234573}
+  enemy: {fileID: 0}
 --- !u!1 &2133834326
 GameObject:
   m_ObjectHideFlags: 0
