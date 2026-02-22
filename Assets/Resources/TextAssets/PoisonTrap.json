@@ -4,7 +4,7 @@
         "hu":"Mergezo csapda"
     },
     "description":{
-        "en":"Damages and poisons enemies"
+        "en":"Damages and poisons (increases the wakness of) enemies that step onto it. Can be placed anywhere on the enemies' path."
     },
     "costs":{
         "buycost":40,

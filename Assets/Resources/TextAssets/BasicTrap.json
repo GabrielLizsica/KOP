@@ -4,7 +4,7 @@
         "hu":"Csapda"
     },
     "description":{
-        "en":"Poke!",
+        "en":"Damages enemies that step onto it. Can be placed anywhere on the enemies' path.",
         "hu":"Szur!"
     },
     "costs":{

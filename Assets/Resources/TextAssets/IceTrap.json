@@ -4,7 +4,7 @@
         "hu":"Jeges csapda"
     },
     "description":{
-        "en":"Damages and slows enemies"
+        "en":"Damages and slows enemies that step onto it. Can be placed anywhere on the enemies' path."
     },
     "costs":{
         "buycost":40,

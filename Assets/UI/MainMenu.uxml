@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=98a3bb71a4273424b9c2d9f1c5b8c977&amp;type=3#MainMenu" />
     <ui:VisualElement name="Root" style="flex-grow: 1;">
         <ui:VisualElement name="MainMenu" class="mainMenu" style="flex-grow: 1; align-content: flex-start; align-items: center; border-right-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-width: 5px; border-left-width: 5px;">
-            <ui:Label text="KARTYAVARAK" class="mainTitle" style="top: 15%; align-self: auto; align-content: auto; justify-content: center; align-items: auto; width: 50%; position: relative; left: auto; -unity-text-align: upper-center; font-size: 60px;" />
+            <ui:Label text="KÁRTYAVÁRAK" class="mainTitle" style="top: 15%; align-self: auto; align-content: auto; justify-content: center; align-items: auto; width: 50%; position: relative; left: auto; -unity-text-align: upper-center; font-size: 60px;" />
             <ui:VisualElement name="ProfileDeleter" class="button-list" style="flex-grow: 1; width: 25%; align-self: flex-end; position: absolute; justify-content: flex-start; overflow: visible; visibility: visible;">
                 <ui:Button text="Reset" name="ProfileDeleteButton0" />
                 <ui:Button text="Reset" name="ProfileDeleteButton1" />

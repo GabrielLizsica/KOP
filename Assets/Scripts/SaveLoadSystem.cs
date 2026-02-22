@@ -296,7 +296,7 @@ public class SaveLoadSystem : MonoBehaviour
         cardTextures[MainGameLogic.CardTypes.BASIC_TRAP] = Resources.Load<Texture2D>("Cards/CardTrapBasic");
         cardTextures[MainGameLogic.CardTypes.ICE_TRAP] = Resources.Load<Texture2D>("Cards/CardTrapIce");
         cardTextures[MainGameLogic.CardTypes.POISON_TRAP] = Resources.Load<Texture2D>("Cards/CardTrapPoison");
-        cardTextures[MainGameLogic.CardTypes.ATTACK_SPEED_BUFF] = null;
+        cardTextures[MainGameLogic.CardTypes.ATTACK_SPEED_BUFF] = Resources.Load<Texture2D>("Cards/CardAttackSpeedBuff");
         cardTextures[MainGameLogic.CardTypes.DAMAGE_BUFF] = Resources.Load<Texture2D>("Cards/CardDamageBuff");
         cardTextures[MainGameLogic.CardTypes.RANGE_BUFF] = Resources.Load<Texture2D>("Cards/CardRangeBuff");
         cardTextures[MainGameLogic.CardTypes.BASE_HEAL] = Resources.Load<Texture2D>("Cards/CardBaseHeal");

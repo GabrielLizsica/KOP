@@ -1,10 +1,10 @@
 {
     "title":{
-        "en":"Increase Attack Speed",
+        "en":"Attack Speed Buff",
         "hu":"Tamadasi sebesseg novelo"
     },
     "description":{
-        "en":"Increase Attack Speed",
+        "en":"ITemporarily increases the Attack Speed of an existing tower. Can only be casted onto towers. ",
         "hu":"Tamadasi sebesseg novelo"
     },
     "costs":{
@@ -16,6 +16,18 @@
         "level0":{
             "effectstrength":25,
             "effectduration":5.0
+        },
+        "level1":{
+            "effectstrength":40,
+            "effectduration":7.0
+        },
+        "level2":{
+            "effectstrength":55,
+            "effectduration":9.0
+        },
+        "level3":{
+            "effectstrength":70,
+            "effectduration":11.0
         } 
     }
 }

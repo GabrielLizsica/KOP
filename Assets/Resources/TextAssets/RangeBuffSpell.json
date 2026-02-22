@@ -1,10 +1,10 @@
 {
     "title":{
-        "en":"Range increase",
+        "en":"Range Buff",
         "hu":"Hatotav novelese"
     },
     "description":{
-        "en":"Range increase"
+        "en":"Temporarily increases the range of an existing tower. Can only be casted onto towers."
     },
     "costs":{
         "buycost":40,
@@ -15,6 +15,18 @@
         "level0":{
             "effectstrength":25,
             "effectduration":5.0
+        },
+        "level1":{
+            "effectstrength":40,
+            "effectduration":7.0
+        },
+        "level2":{
+            "effectstrength":55,
+            "effectduration":9.0
+        },
+        "level3":{
+            "effectstrength":70,
+            "effectduration":11.0
         } 
     }
 }

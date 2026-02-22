@@ -1,10 +1,10 @@
 {
     "title":{
-        "en":"Increase Damage",
+        "en":"Damage Buff",
         "hu":"Sebzes novelo"
     },
     "description":{
-        "en":"Increases damage of building"
+        "en":"Temporarily increases the damage of the building it is casted onto. Can be casted onto a tower or any type of trap."
     },
     "costs":{
         "buycost":40,
@@ -15,6 +15,18 @@
         "level0":{
             "effectstrength":25,
             "effectduration":5.0
+        },
+        "level1":{
+            "effectstrength":40,
+            "effectduration":7.0
+        },
+        "level2":{
+            "effectstrength":55,
+            "effectduration":9.0
+        },
+        "level3":{
+            "effectstrength":70,
+            "effectduration":11.0
         } 
     }
 }

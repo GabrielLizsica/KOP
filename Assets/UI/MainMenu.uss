@@ -28,7 +28,7 @@
 }
 
 .unity-button {
-    width: 75%;
+    width: 85%;
     margin-top: 20px;
     margin-bottom: 20px;
     align-self: auto;
@@ -43,4 +43,12 @@
 
 .blur {
     background-color: rgba(255, 255, 255, 0);
+}
+
+.unity-button:hover {
+    background-image: url("project://database/Assets/Prefabs/Sprites/Button.png?fileID=649223268058989734&guid=14b63f871a5ae7e42af6120d36070773&type=3#Button_0");
+}
+
+.unity-list-view__item:hover {
+    background-color: transparent;
 }

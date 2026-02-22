@@ -4,7 +4,7 @@
         "hu":"Torony"
     },
     "description":{
-        "en":"The best defense is offense!",
+        "en":"Repeatedly shoots a projectile at the enemy that first entered it's range. The projectile deals damage on impact. Can be placed anywhere outside the enemies' path.",
         "hu":"A legjobb vedekezes a atamdas!"
     },
     "costs":{
