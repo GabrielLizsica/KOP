@@ -24,8 +24,6 @@ public class MainGameLogic : MonoBehaviour
     [SerializeField] public float currentHealth;
     [SerializeField] public int baseEnergy;
     [SerializeField] public int currentEnergy;
-    private float prevHealth = -1;
-    private int prevEnergy = -1;
     [SerializeField] private int rewardDefeat;
     [SerializeField] private int rewardVictory;
     private DeckHandler deckHandler;
@@ -35,7 +33,7 @@ public class MainGameLogic : MonoBehaviour
 
     private Vector3 mousePosTile;
 
-    public Vector3 MousePosTile { get; }
+    public Vector3 MousePosTile { get { return mousePosTile; } }
     
     public enum TrapEffects
     {
@@ -82,19 +80,6 @@ public class MainGameLogic : MonoBehaviour
     {
         mousePosTile = tilemapGround.WorldToCell(getMousePosTile());
 
-        if (prevHealth != currentHealth)
-        {
-            battleUI.updateLabel(InBattleMenuHandler.displayLabels.HEALTH);
-            prevHealth = currentHealth;
-        }
-        if (prevEnergy != currentEnergy)
-        {
-            battleUI.updateLabel(InBattleMenuHandler.displayLabels.ENERGY);
-            prevEnergy = currentEnergy;
-        }
-        
-        
-
         if (currentHealth <= 0 && !battleUI.isfinishMenuOpen)
         {
             Time.timeScale = 0f;
@@ -113,6 +98,8 @@ public class MainGameLogic : MonoBehaviour
         }
 
         
+        battleUI.updateLabel(InBattleMenuHandler.displayLabels.HEALTH);
+        battleUI.updateLabel(InBattleMenuHandler.displayLabels.ENERGY);
     }
 
     private List<CardTypes> createDeck()

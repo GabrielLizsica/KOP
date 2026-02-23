@@ -417,7 +417,7 @@ public class BuildingHandler : MonoBehaviour
             {
                 if (buildingType == MainGameLogic.CardTypes.BASE_HEAL)
                 {
-                    mainGameLogic.baseHealth += ((mainGameLogic.baseHealth + spell.effectstrength) > 100) ? 100 - mainGameLogic.baseHealth : spell.effectstrength;
+                    mainGameLogic.currentHealth += ((mainGameLogic.currentHealth + spell.effectstrength) > 100) ? 100 - mainGameLogic.currentHealth : spell.effectstrength;
                 }
                 else
                 {

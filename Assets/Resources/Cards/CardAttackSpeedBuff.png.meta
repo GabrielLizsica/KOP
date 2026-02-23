@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CardAttackSpeedBuff_0: 5101135126068695274
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
