@@ -34,6 +34,7 @@ public class DeckHandler : MonoBehaviour
 
     private void Start()
     {
+        //Set all of the card buttons to my click event with the corresponding value to the button as an argument
         battleUI.cardButtons["card0"].clicked += () => OnButtonClicked("card0");
         battleUI.cardButtons["card1"].clicked += () => OnButtonClicked("card1");
         battleUI.cardButtons["card2"].clicked += () => OnButtonClicked("card2");
@@ -41,23 +42,27 @@ public class DeckHandler : MonoBehaviour
         battleUI.cardButtons["card4"].clicked += () => OnButtonClicked("card4");
     }
     
+    //Creates the deck list
     public void setDeck(List<MainGameLogic.CardTypes> _deck)
     {
         deck = new List<MainGameLogic.CardTypes>(_deck);
         initialize();
     }
     
+    //Sets the remaining deck based on the full loaded deck and draws the 5 initial cards at the start of the game
     private void initialize()
     {
         setRemainingDeck();
         drawInitialCards();
     }
     
+    //Sets the remaining cards to the full loaded deck
     private void setRemainingDeck()
     {
         remainingDeck = new List<MainGameLogic.CardTypes>(deck);
     }
     
+    //Draws the 5 initial cards at the start of the game
     private void drawInitialCards()
     {
         for (int i = 0; i < 5; i++)
@@ -66,6 +71,7 @@ public class DeckHandler : MonoBehaviour
         }
     }
     
+    //Draws a new card and handles the changes coming with it in the remaining cards list
     private void drawCard(int index)
     {   
         if (remainingDeck.Count == 0)
@@ -80,6 +86,7 @@ public class DeckHandler : MonoBehaviour
         remainingDeck.RemoveAt(cardIndex);
     }
     
+    //When a card is selected, it calls the corresponding function in the BuildingHandler
     private void selectCard(int index)
     {
         if (selectedIndex != -1)
@@ -91,6 +98,7 @@ public class DeckHandler : MonoBehaviour
         selectedIndex = index;
     }
     
+    //When a card is used calls the corresponding function in the BUildingHandler and handles changes related to the use of the card
     public void castCard(InputAction.CallbackContext context)
     {
         if (context.performed && selectedIndex != -1)
@@ -103,6 +111,7 @@ public class DeckHandler : MonoBehaviour
         }
     }
     
+    //Clears the selected card from memory
     public void cancelCast(InputAction.CallbackContext context)
     {
         if (context.performed && selectedIndex != -1)
@@ -112,6 +121,7 @@ public class DeckHandler : MonoBehaviour
         }
     }
 
+    //When a card button is clicked, calls the selectCard function with the correct button ID
     private void OnButtonClicked(string buttonID)
     {
         if ((int)battleUI.cardButtons[buttonID].userData > mainGameLogic.currentEnergy)

@@ -72,6 +72,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //Moves the object towards the next tile in the path
     private void moveAlongPath(Vector3 targetPos)
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime * speed);

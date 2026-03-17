@@ -11,6 +11,7 @@ public class TowerScriptableObject : ScriptableObject
     public int range;
     public float attackspeed;
 
+    //Initialize all values of this object
     public void Init(SaveLoadSystem.TowerData data, int level)
     {   
         SaveLoadSystem.TowerStats stats = data.stats[$"level{level}"];

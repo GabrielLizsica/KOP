@@ -93,59 +93,19 @@ public class BuildingHandler : MonoBehaviour
     
     private void Update()
     {
-        /*
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.TOWER);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha2) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.BASIC_TRAP);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha3) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.ICE_TRAP);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha4) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.POISON_TRAP);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha5) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.ATTACK_SPEED_BUFF);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha6) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.RANGE_BUFF);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha7) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.DAMAGE_BUFF);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha8) && !isBuilding)
-        {
-            usedBlueprints = beginBuilding(MainGameLogic.CardTypes.BASE_HEAL);
-        }
-        */
-        
         if (isBuilding)
         {
             updateBlueprint(usedBlueprints);
         }
     }
     
+    //Is called when the player selects a card to use. Enters building mode
     public void cardSelected(MainGameLogic.CardTypes type)
     {
         usedBlueprints = beginBuilding(type);
     }
     
+    //Chooses which card to use, and sets the objects storing the blueprints based on the card
     private Dictionary<BuildingAssetType, GameObject> beginBuilding(MainGameLogic.CardTypes toBuild)
     {
         isBuilding = true;
@@ -164,6 +124,7 @@ public class BuildingHandler : MonoBehaviour
         return new Dictionary<BuildingAssetType, GameObject> { { BuildingAssetType.BLUEPRINT_INVALID, blueprintInvalid }, { BuildingAssetType.BLUEPRINT_VALID, blueprintValid } };
     }
     
+    //Sets the actual blueprints to the corresponding blueprint assets
     private void setBuilding(MainGameLogic.CardTypes type)
     {
         switch (type)
@@ -260,6 +221,7 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
+    //Sets the blueprints visible or invisible based on the rules defined for the selected card
     private void updateBlueprint(Dictionary<BuildingAssetType, GameObject> usedBlueprints)
     {
         Vector2Int mouseTile = new Vector2Int((int)mainGameLogic.MousePosTile.x, (int)mainGameLogic.MousePosTile.y);
@@ -389,6 +351,7 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
+    //Checks if the tile the mouse is hovering over is already occupied by a building
     private MainGameLogic.CardTypes checkOccupied(Vector2Int pos)
     {
         for (int i = 0; i < occupiedTiles.Count; i++)
@@ -403,6 +366,7 @@ public class BuildingHandler : MonoBehaviour
         return MainGameLogic.CardTypes.DEFAULT;
     }
     
+    //Uses the card. Executes the cards functionality based on the card type.
     public void placeNewBuilding()
     {
         if (canBuild && isBuilding)
@@ -447,6 +411,7 @@ public class BuildingHandler : MonoBehaviour
         }
     }
     
+    //Resets temp variables and quits out of building mode.
     public void finishBuilding()
     {
         newBuildingAssets = null;

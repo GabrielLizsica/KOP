@@ -18,7 +18,6 @@
             </ui:VisualElement>
             <ui:VisualElement name="PreBattleMenu" enabled="true" class="button-list" style="flex-grow: 1; width: 50%;">
                 <ui:Button text="Start" name="StartButton" />
-                <ui:Button text="Deck" name="DeckButton" />
                 <ui:Button text="Cards" name="CardsButton" />
                 <ui:Button text="Save &amp; Exit" name="SaveExitButton" />
             </ui:VisualElement>

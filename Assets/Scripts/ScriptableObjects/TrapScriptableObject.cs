@@ -13,6 +13,7 @@ public class TrapScriptableObject : ScriptableObject
     public float effectstrength;
     public float effectduration;
 
+    //Initialize all values of this object
     public void Init(SaveLoadSystem.TrapData data, int level)
     {
         SaveLoadSystem.TrapStats stats = data.stats[$"level{level}"];

@@ -10,6 +10,7 @@ public class SpellScriptableObject : ScriptableObject
     public float effectstrength;
     public float effectduration;
 
+    //Initialize all values of this object
     public void Init(SaveLoadSystem.SpellData data, int level)
     {
         SaveLoadSystem.SpellStats stats = data.stats[$"level{level}"];

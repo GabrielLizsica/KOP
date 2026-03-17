@@ -55,6 +55,7 @@ public class MapHandler : MonoBehaviour
         BOTTOM
     }
     
+    //Initialize the map and call all nessessssary methods for map creation
     public void createMap()
     {
         for (int i = 0; i < mapSize.y; i++)
@@ -74,7 +75,6 @@ public class MapHandler : MonoBehaviour
 
         tilemapGround.SetTile(new Vector3Int(baseTilePos.x, baseTilePos.y, 0), tileBase);
         tilemapGround.SetTile(new Vector3Int(enemyTilePos.x, enemyTilePos.y, 0), tileEnemy);
-        //Debug.Log("Base quarter: " + baseQuarter);
 
         generatePath();
         UnityEngine.Vector3 adjustedChoords = new UnityEngine.Vector3(path[0].x + 0.5f, path[0].y + 0.5f, 0f);
@@ -84,6 +84,7 @@ public class MapHandler : MonoBehaviour
         baseBuildingObject = Instantiate(baseBuildingAsset, adjustedChoords, UnityEngine.Quaternion.identity);
     }
     
+    //Finds which querter of the map the choordinates passed in as an argument are in
     private mapQuarters getMapQuarter(Vector2Int tileChoords)
     {
         mapQuarters quarter = mapQuarters.DEFAULT;
@@ -109,6 +110,7 @@ public class MapHandler : MonoBehaviour
         return quarter;
     }
     
+    //Selects a random tile for the player's base location
     private void selectBaseTile()
     {
         int xPos = UnityEngine.Random.Range(0, mapSize.x);
@@ -117,6 +119,7 @@ public class MapHandler : MonoBehaviour
         baseTilePos = new Vector2Int(xPos, yPos);
     }
     
+    //Selects the location of the enemy spawner tile in relation to the quarter in which the player's base tile is located in
     private void selectEnemyTile()
     {
         int selectSide = UnityEngine.Random.Range(0, 2);
@@ -180,6 +183,7 @@ public class MapHandler : MonoBehaviour
         }
     }
     
+    //Calls the path generation function for every waypoint-to-waypoint section of the complete path (from enemy spawner to player's base).
     private void generatePath()
     {
         path.Clear();
@@ -188,19 +192,12 @@ public class MapHandler : MonoBehaviour
         do
         {
             path.Clear();
-            //Debug.LogWarning("Waypoints count: " + waypoints.Count);
+            
             for (int i = 0; i < waypoints.Count - 1; i++)
             {
-                //Debug.LogWarning("Waypoint " + i + ": " + waypoints[i]);
                 createPath(waypoints[i], waypoints[i + 1]);
             }
-
-            //Debug.LogWarning("Waypoints count: " + waypoints.Count);
-            
-            //if (path[path.Count - 1] != enemyTilePos) { Debug.LogError("Dead End - regenerating path!"); }
         } while (path[path.Count - 1] != baseTilePos);
-        
-        
         
         foreach (var tile in path)
         {
@@ -208,6 +205,7 @@ public class MapHandler : MonoBehaviour
         }
     }
     
+    //Main worker function for generating a path between point 'A' and point 'B'
     private void createPath(Vector2Int pathStartPos, Vector2Int pathEndPos)
     {
         Vector2Int currentTile = pathStartPos;
@@ -244,12 +242,10 @@ public class MapHandler : MonoBehaviour
 
             if (freeNeighbors.Count == 2)
             {
-                //Debug.Log("Exactly 2 neighbors of tile: " + currentTile.x + ", " + currentTile.y);
                 nextTile = freeNeighbors[Random.Range(0, 2)];
             }
             else if (freeNeighbors.Count == 1)
             {
-                //Debug.Log("Exactly 1 neighbor of tile: " + currentTile.x + ", " + currentTile.y);
                 nextTile = freeNeighbors[0];
             }
             else if (freeNeighbors.Count == 0)
@@ -263,7 +259,6 @@ public class MapHandler : MonoBehaviour
                 }
                 else
                 {
-                    //Debug.LogWarning("Dead end. Cannot continue path.");
                     break;
                 }
             }
@@ -271,10 +266,9 @@ public class MapHandler : MonoBehaviour
             path.Add(nextTile);
             currentTile = nextTile;
         }
-
-        //Debug.LogWarning("Finished generation");
     }
 
+    //Generates a random coordinate in all quarters not occupied, by the spawner or enemy base, of the map, than stores the choordinates as the two middle waypoints
     private List<Vector2Int> createPathWaypoints()
     {
         List<Vector2Int> _waypoints = new List<Vector2Int>();
@@ -301,6 +295,7 @@ public class MapHandler : MonoBehaviour
         return _waypoints;
     }
     
+    //Chooses a random coordinate pair in the selected quarter of the map (passed in as an argument)
     private Vector2Int placePathWaypoint(mapQuarters quarter)
     {
         Vector2Int waypoint = new Vector2Int();
@@ -325,6 +320,7 @@ public class MapHandler : MonoBehaviour
         return waypoint;
     }
     
+    //Checks if the tiles in the selected directions from the current tile are a viable step, based on further logic
     private List<Vector2Int> checkFreeDir(Vector2Int currentTile, Vector2Int[] dirs)
     {
         List<Vector2Int> freeNeighbors = new List<Vector2Int>();
@@ -345,7 +341,8 @@ public class MapHandler : MonoBehaviour
 
         return freeNeighbors;
     }
-
+    
+    //Checks if the selected tile is out of bounds of the map
     private bool checkOutOfBounds(Vector2Int tile)
     {
         if (tile.x > mapSize.x - 1 || tile.y > mapSize.y - 1 || tile.x < 0 || tile.y < 0)
@@ -358,6 +355,7 @@ public class MapHandler : MonoBehaviour
         }
     }
     
+    //Checks if the selected tile has enough valid options for further steps AND has fewer than 2 neighbors already used in the path generation
     private bool tileHasEscape(Vector2Int tile)
     {
         int escapes = 0;

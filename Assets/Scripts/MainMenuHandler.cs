@@ -494,11 +494,6 @@ public class MainMenuHandler : MonoBehaviour
         preBattleButtons[PreGameButtons.SAVE_EXIT].clicked += OnSaveButtonClicked;
         preBattleButtons[PreGameButtons.CARDS].clicked += OnCardsMenuButtonClicked;
     }
-
-    private void initializePrebattleMenu()
-    {
-        
-    }
     
     private void OnStartButtonClicked()
     {
@@ -518,8 +513,6 @@ public class MainMenuHandler : MonoBehaviour
         setVisibleRecursive(profileDeleter, false);
         setVisibleRecursive(cardsMenu, false);
         setVisibleRecursive(preBattleMenu, true);
-        
-        //List<CardData> testList = createCardDataList();
 
         cardListView = cardsMenu.Q<ListView>("Cards");
         cardListView.fixedItemHeight = Screen.height * 0.1777f;

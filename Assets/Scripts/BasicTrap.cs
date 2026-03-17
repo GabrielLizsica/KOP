@@ -23,6 +23,7 @@ public class BasicTrap : Trap
         }
     }
     
+    //Applies selected effect onto this object
     public override void applyEffect(MainGameLogic.CardTypes effect, float effectStrength, float effectDuration) 
     {
         if (effect == MainGameLogic.CardTypes.DAMAGE_BUFF)
@@ -33,6 +34,7 @@ public class BasicTrap : Trap
         StartCoroutine(resetEffect(effectDuration));
     }
     
+    //Resets effects on this object
     private IEnumerator resetEffect(float duration)
     {
         yield return new WaitForSeconds(duration);
